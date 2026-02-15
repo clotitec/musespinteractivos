@@ -15,7 +15,10 @@ sys.stdout.reconfigure(encoding="utf-8")
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = os.path.dirname(SCRIPT_DIR)
-INPUT_FILE = os.path.join(PROJECT_DIR, "data", "museums_raw.json")
+# Prefer museums_complete.json (from v2 scraper), fallback to museums_raw.json
+COMPLETE_FILE = os.path.join(PROJECT_DIR, "data", "museums_complete.json")
+RAW_FILE = os.path.join(PROJECT_DIR, "data", "museums_raw.json")
+INPUT_FILE = COMPLETE_FILE if os.path.exists(COMPLETE_FILE) else RAW_FILE
 OUTPUT_FILE = os.path.join(PROJECT_DIR, "data", "museums_geocoded.json")
 
 NOMINATIM_URL = "https://nominatim.openstreetmap.org/search"

@@ -1,0 +1,1347 @@
+{
+  "metadata": {
+    "source": "Observatorio de Museos de España - Ministerio de Cultura",
+    "scraped_at": "2026-02-15 10:50:32",
+    "base_url": "https://www.cultura.gob.es/observatorio-museos-espana"
+  },
+  "datos_cifras": [
+    {
+      "titulo": "Menú",
+      "url": "#",
+      "tipo": "enlace",
+      "seccion": "datos-cifras"
+    },
+    {
+      "titulo": "El Observatorio de Museos de España",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/el-observatorio-de-museos-de-espana.html",
+      "tipo": "enlace",
+      "seccion": "datos-cifras"
+    },
+    {
+      "titulo": "Informes OME",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/informes-ome.html",
+      "tipo": "enlace",
+      "seccion": "datos-cifras"
+    },
+    {
+      "titulo": "Recursos compartidos",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/recursos-compartidos.html",
+      "tipo": "enlace",
+      "seccion": "datos-cifras"
+    },
+    {
+      "titulo": "Directorios y otros observatorios",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/directorios-y-observatorios.html",
+      "tipo": "enlace",
+      "seccion": "datos-cifras"
+    },
+    {
+      "titulo": "Datos y cifras",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/datos-cifras.html",
+      "tipo": "enlace",
+      "seccion": "datos-cifras"
+    },
+    {
+      "titulo": "Compartir",
+      "url": "#",
+      "tipo": "enlace",
+      "seccion": "datos-cifras"
+    },
+    {
+      "titulo": "WhatsApp",
+      "url": "https://api.whatsapp.com/send?text=http%3A%2F%2Fwww.cultura.gob.es%2Fobservatorio-museos-espana%2Fdatos-cifras.html",
+      "tipo": "enlace",
+      "seccion": "datos-cifras"
+    },
+    {
+      "titulo": "Facebook",
+      "url": "https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fwww.cultura.gob.es%2Fobservatorio-museos-espana%2Fdatos-cifras.html",
+      "tipo": "enlace",
+      "seccion": "datos-cifras"
+    },
+    {
+      "titulo": "Instagram",
+      "url": "https://www.instagram.com/create/storyhttp%3A%2F%2Fwww.cultura.gob.es%2Fobservatorio-museos-espana%2Fdatos-cifras.html",
+      "tipo": "enlace",
+      "seccion": "datos-cifras"
+    },
+    {
+      "titulo": "X (Twitter)",
+      "url": "https://twitter.com/intent/tweet?url=http%3A%2F%2Fwww.cultura.gob.es%2Fobservatorio-museos-espana%2Fdatos-cifras.html",
+      "tipo": "enlace",
+      "seccion": "datos-cifras"
+    },
+    {
+      "titulo": "LinkedIn",
+      "url": "https://www.linkedin.com/shareArticle?url=http%3A%2F%2Fwww.cultura.gob.es%2Fobservatorio-museos-espana%2Fdatos-cifras.html",
+      "tipo": "enlace",
+      "seccion": "datos-cifras"
+    },
+    {
+      "titulo": "Email",
+      "url": "mailto:?body=http%3A%2F%2Fwww.cultura.gob.es%2Fobservatorio-museos-espana%2Fdatos-cifras.html",
+      "tipo": "enlace",
+      "seccion": "datos-cifras"
+    },
+    {
+      "titulo": "Ministerio de Cultura",
+      "url": "https://www.cultura.gob.es/",
+      "tipo": "enlace",
+      "seccion": "datos-cifras"
+    },
+    {
+      "titulo": "Observatorio de Museos de España",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/informes-ome.html",
+      "tipo": "enlace",
+      "seccion": "datos-cifras"
+    },
+    {
+      "titulo": "El Observatorio de Museos de España",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/el-observatorio-de-museos-de-espana.html",
+      "tipo": "enlace",
+      "seccion": "datos-cifras"
+    },
+    {
+      "titulo": "Informes OME",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/informes-ome.html",
+      "tipo": "enlace",
+      "seccion": "datos-cifras"
+    },
+    {
+      "titulo": "Recursos compartidos",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/recursos-compartidos.html",
+      "tipo": "enlace",
+      "seccion": "datos-cifras"
+    },
+    {
+      "titulo": "Directorios y otros observatorios",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/directorios-y-observatorios.html",
+      "tipo": "enlace",
+      "seccion": "datos-cifras"
+    },
+    {
+      "titulo": "Datos y cifras",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/datos-cifras.html",
+      "tipo": "enlace",
+      "seccion": "datos-cifras"
+    },
+    {
+      "titulo": "Informes OME",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/informes-ome.html",
+      "tipo": "enlace",
+      "seccion": "datos-cifras"
+    },
+    {
+      "titulo": "Portada del Anuario de Estadísticas culturales 2022",
+      "url": "https://www.cultura.gob.es/servicios-a-la-ciudadania/estadisticas/cultura/mc/aec.html",
+      "tipo": "enlace",
+      "seccion": "datos-cifras"
+    },
+    {
+      "titulo": "Imagen de portada de una presentación de Nuestros Museos en un vistazo, del MECD",
+      "url": "http://www.cultura.gob.es/cultura/museos/museos-cifras/un-vistazo-otras-cifras.html?utm_source=OME&utm_medium=OME&utm_campaign=OME",
+      "tipo": "enlace",
+      "seccion": "datos-cifras"
+    },
+    {
+      "titulo": "Portada de las Estadísticas culturales del Ministerio de Defensa",
+      "url": "https://publicaciones.defensa.gob.es/estadistica-de-cultura-en-el-ministerio-de-defensa-2021-pdf.html",
+      "tipo": "enlace",
+      "seccion": "datos-cifras"
+    },
+    {
+      "titulo": "Mapa de Andalucía que enlaza a la web de estadísticas de museos de su territorio",
+      "url": "http://www.juntadeandalucia.es/cultura/estadisticas/iea/consultasActividad.jsp?CodOper=418&sub=62870",
+      "tipo": "enlace",
+      "seccion": "datos-cifras"
+    },
+    {
+      "titulo": "Mapa de Aragón que enlaza a la web de estadísticas de museos de su territorio",
+      "url": "http://www.aragon.es/DepartamentosOrganismosPublicos/Institutos/InstitutoAragonesEstadistica/AreasTematicas/06_Analisis_Sociales_Justicia_Cultura_Y_Deporte/08_Cultura/ci.03_Estadistica_museos.detalleDepartamento?channelSelected=2dbda856c66de310VgnVCM2000002f551bacRCRD",
+      "tipo": "enlace",
+      "seccion": "datos-cifras"
+    },
+    {
+      "titulo": "Mapa de Canarias que enlaza a la web de estadísticas de museos de su territorio",
+      "url": "http://www.gobiernodecanarias.org/istac/temas_estadisticos/sociedad/culturadeporteocio/cultura/E50004A.html",
+      "tipo": "enlace",
+      "seccion": "datos-cifras"
+    },
+    {
+      "titulo": "Datos sobre Castilla y León",
+      "url": "https://museoscastillayleon.jcyl.es/web/es/recursos/estadisticas-museos.html",
+      "tipo": "enlace",
+      "seccion": "datos-cifras"
+    },
+    {
+      "titulo": "Mapa de Cataluña que enlaza a la web de estadísticas de museos de su territorio",
+      "url": "https://cultura.gencat.cat/es/temes/museus/dades/",
+      "tipo": "enlace",
+      "seccion": "datos-cifras"
+    },
+    {
+      "titulo": "Mapa de la Comunidad Valenciana que enlaza a la web de estadísticas de museos de su territorio",
+      "url": "http://www.pegv.gva.es/es/temas/sociedad/culturamediosdecomunicacionsocialocioydeporte/museosycoleccionesmuseograficas",
+      "tipo": "enlace",
+      "seccion": "datos-cifras"
+    },
+    {
+      "titulo": "Mapa de Navarra",
+      "url": "https://www.culturanavarra.es/es/museos-y-colecciones-museograficas-permanentes",
+      "tipo": "enlace",
+      "seccion": "datos-cifras"
+    },
+    {
+      "titulo": "Mapa del País Vasco que enlaza a la web de estadísticas de museos de su territorio",
+      "url": "http://www.euskadi.eus/informes-estadisticos-de-museos-y-colecciones/web01-a2muszen/es/",
+      "tipo": "enlace",
+      "seccion": "datos-cifras"
+    },
+    {
+      "titulo": "Accesibilidad",
+      "url": "https://www.cultura.gob.es/comunes/accesibilidad.html",
+      "tipo": "enlace",
+      "seccion": "datos-cifras"
+    },
+    {
+      "titulo": "Aviso Legal",
+      "url": "https://www.cultura.gob.es/comunes/aviso-legal.html",
+      "tipo": "enlace",
+      "seccion": "datos-cifras"
+    },
+    {
+      "titulo": "Política de cookies",
+      "url": "https://www.cultura.gob.es/comunes/politica-cookies.html",
+      "tipo": "enlace",
+      "seccion": "datos-cifras"
+    }
+  ],
+  "informes_ome": [
+    {
+      "titulo": "El Observatorio de Museos de España",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/el-observatorio-de-museos-de-espana.html",
+      "tipo": "enlace",
+      "seccion": "informes-ome"
+    },
+    {
+      "titulo": "Informes OME",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/informes-ome.html",
+      "tipo": "enlace",
+      "seccion": "informes-ome"
+    },
+    {
+      "titulo": "Recursos compartidos",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/recursos-compartidos.html",
+      "tipo": "enlace",
+      "seccion": "informes-ome"
+    },
+    {
+      "titulo": "Directorios y otros observatorios",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/directorios-y-observatorios.html",
+      "tipo": "enlace",
+      "seccion": "informes-ome"
+    },
+    {
+      "titulo": "Datos y cifras",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/datos-cifras.html",
+      "tipo": "enlace",
+      "seccion": "informes-ome"
+    },
+    {
+      "titulo": "Compartir",
+      "url": "#",
+      "tipo": "enlace",
+      "seccion": "informes-ome"
+    },
+    {
+      "titulo": "WhatsApp",
+      "url": "https://api.whatsapp.com/send?text=http%3A%2F%2Fwww.cultura.gob.es%2Fobservatorio-museos-espana%2Finformes-ome.html",
+      "tipo": "enlace",
+      "seccion": "informes-ome"
+    },
+    {
+      "titulo": "Facebook",
+      "url": "https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fwww.cultura.gob.es%2Fobservatorio-museos-espana%2Finformes-ome.html",
+      "tipo": "enlace",
+      "seccion": "informes-ome"
+    },
+    {
+      "titulo": "Instagram",
+      "url": "https://www.instagram.com/create/storyhttp%3A%2F%2Fwww.cultura.gob.es%2Fobservatorio-museos-espana%2Finformes-ome.html",
+      "tipo": "enlace",
+      "seccion": "informes-ome"
+    },
+    {
+      "titulo": "X (Twitter)",
+      "url": "https://twitter.com/intent/tweet?url=http%3A%2F%2Fwww.cultura.gob.es%2Fobservatorio-museos-espana%2Finformes-ome.html",
+      "tipo": "enlace",
+      "seccion": "informes-ome"
+    },
+    {
+      "titulo": "LinkedIn",
+      "url": "https://www.linkedin.com/shareArticle?url=http%3A%2F%2Fwww.cultura.gob.es%2Fobservatorio-museos-espana%2Finformes-ome.html",
+      "tipo": "enlace",
+      "seccion": "informes-ome"
+    },
+    {
+      "titulo": "Email",
+      "url": "mailto:?body=http%3A%2F%2Fwww.cultura.gob.es%2Fobservatorio-museos-espana%2Finformes-ome.html",
+      "tipo": "enlace",
+      "seccion": "informes-ome"
+    },
+    {
+      "titulo": "Observatorio de Museos de España",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/informes-ome.html",
+      "tipo": "enlace",
+      "seccion": "informes-ome"
+    },
+    {
+      "titulo": "El Observatorio de Museos de España",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/el-observatorio-de-museos-de-espana.html",
+      "tipo": "enlace",
+      "seccion": "informes-ome"
+    },
+    {
+      "titulo": "Informes OME",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/informes-ome.html",
+      "tipo": "enlace",
+      "seccion": "informes-ome"
+    },
+    {
+      "titulo": "Recursos compartidos",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/recursos-compartidos.html",
+      "tipo": "enlace",
+      "seccion": "informes-ome"
+    },
+    {
+      "titulo": "Directorios y otros observatorios",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/directorios-y-observatorios.html",
+      "tipo": "enlace",
+      "seccion": "informes-ome"
+    },
+    {
+      "titulo": "Datos y cifras",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/datos-cifras.html",
+      "tipo": "enlace",
+      "seccion": "informes-ome"
+    },
+    {
+      "titulo": "Accesibilidad",
+      "url": "https://www.cultura.gob.es/comunes/accesibilidad.html",
+      "tipo": "enlace",
+      "seccion": "informes-ome"
+    },
+    {
+      "titulo": "Aviso Legal",
+      "url": "https://www.cultura.gob.es/comunes/aviso-legal.html",
+      "tipo": "enlace",
+      "seccion": "informes-ome"
+    },
+    {
+      "titulo": "Política de cookies",
+      "url": "https://www.cultura.gob.es/comunes/politica-cookies.html",
+      "tipo": "enlace",
+      "seccion": "informes-ome"
+    }
+  ],
+  "recursos_compartidos": [
+    {
+      "titulo": "El Observatorio de Museos de España",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/el-observatorio-de-museos-de-espana.html",
+      "tipo": "recurso",
+      "seccion": "recursos-compartidos"
+    },
+    {
+      "titulo": "Informes OME",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/informes-ome.html",
+      "tipo": "recurso",
+      "seccion": "recursos-compartidos"
+    },
+    {
+      "titulo": "Recursos compartidos",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/recursos-compartidos.html",
+      "tipo": "recurso",
+      "seccion": "recursos-compartidos"
+    },
+    {
+      "titulo": "Planificación",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/recursos-compartidos/planificacion.html",
+      "tipo": "recurso",
+      "seccion": "recursos-compartidos"
+    },
+    {
+      "titulo": "Legislación",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/recursos-compartidos/legislacion.html",
+      "tipo": "recurso",
+      "seccion": "recursos-compartidos"
+    },
+    {
+      "titulo": "Formación",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/recursos-compartidos/formacion.html",
+      "tipo": "recurso",
+      "seccion": "recursos-compartidos"
+    },
+    {
+      "titulo": "Directorios y otros observatorios",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/directorios-y-observatorios.html",
+      "tipo": "recurso",
+      "seccion": "recursos-compartidos"
+    },
+    {
+      "titulo": "Datos y cifras",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/datos-cifras.html",
+      "tipo": "recurso",
+      "seccion": "recursos-compartidos"
+    },
+    {
+      "titulo": "Compartir",
+      "url": "#",
+      "tipo": "recurso",
+      "seccion": "recursos-compartidos"
+    },
+    {
+      "titulo": "WhatsApp",
+      "url": "https://api.whatsapp.com/send?text=http%3A%2F%2Fwww.cultura.gob.es%2Fobservatorio-museos-espana%2Frecursos-compartidos.html",
+      "tipo": "recurso",
+      "seccion": "recursos-compartidos"
+    },
+    {
+      "titulo": "Facebook",
+      "url": "https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fwww.cultura.gob.es%2Fobservatorio-museos-espana%2Frecursos-compartidos.html",
+      "tipo": "recurso",
+      "seccion": "recursos-compartidos"
+    },
+    {
+      "titulo": "Instagram",
+      "url": "https://www.instagram.com/create/storyhttp%3A%2F%2Fwww.cultura.gob.es%2Fobservatorio-museos-espana%2Frecursos-compartidos.html",
+      "tipo": "recurso",
+      "seccion": "recursos-compartidos"
+    },
+    {
+      "titulo": "X (Twitter)",
+      "url": "https://twitter.com/intent/tweet?url=http%3A%2F%2Fwww.cultura.gob.es%2Fobservatorio-museos-espana%2Frecursos-compartidos.html",
+      "tipo": "recurso",
+      "seccion": "recursos-compartidos"
+    },
+    {
+      "titulo": "LinkedIn",
+      "url": "https://www.linkedin.com/shareArticle?url=http%3A%2F%2Fwww.cultura.gob.es%2Fobservatorio-museos-espana%2Frecursos-compartidos.html",
+      "tipo": "recurso",
+      "seccion": "recursos-compartidos"
+    },
+    {
+      "titulo": "Email",
+      "url": "mailto:?body=http%3A%2F%2Fwww.cultura.gob.es%2Fobservatorio-museos-espana%2Frecursos-compartidos.html",
+      "tipo": "recurso",
+      "seccion": "recursos-compartidos"
+    },
+    {
+      "titulo": "Observatorio de Museos de España",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/informes-ome.html",
+      "tipo": "recurso",
+      "seccion": "recursos-compartidos"
+    },
+    {
+      "titulo": "El Observatorio de Museos de España",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/el-observatorio-de-museos-de-espana.html",
+      "tipo": "recurso",
+      "seccion": "recursos-compartidos"
+    },
+    {
+      "titulo": "Informes OME",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/informes-ome.html",
+      "tipo": "recurso",
+      "seccion": "recursos-compartidos"
+    },
+    {
+      "titulo": "Recursos compartidos",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/recursos-compartidos.html",
+      "tipo": "recurso",
+      "seccion": "recursos-compartidos"
+    },
+    {
+      "titulo": "Directorios y otros observatorios",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/directorios-y-observatorios.html",
+      "tipo": "recurso",
+      "seccion": "recursos-compartidos"
+    },
+    {
+      "titulo": "Datos y cifras",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/datos-cifras.html",
+      "tipo": "recurso",
+      "seccion": "recursos-compartidos"
+    },
+    {
+      "titulo": "Informes OME",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/informes-ome.html",
+      "tipo": "recurso",
+      "seccion": "recursos-compartidos"
+    },
+    {
+      "titulo": "Planificación",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/recursos-compartidos/planificacion.html",
+      "tipo": "recurso",
+      "seccion": "recursos-compartidos"
+    },
+    {
+      "titulo": "Legislación",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/recursos-compartidos/legislacion.html",
+      "tipo": "recurso",
+      "seccion": "recursos-compartidos"
+    },
+    {
+      "titulo": "Formación",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/recursos-compartidos/formacion.html",
+      "tipo": "recurso",
+      "seccion": "recursos-compartidos"
+    },
+    {
+      "titulo": "Accesibilidad",
+      "url": "https://www.cultura.gob.es/comunes/accesibilidad.html",
+      "tipo": "recurso",
+      "seccion": "recursos-compartidos"
+    },
+    {
+      "titulo": "Aviso Legal",
+      "url": "https://www.cultura.gob.es/comunes/aviso-legal.html",
+      "tipo": "recurso",
+      "seccion": "recursos-compartidos"
+    },
+    {
+      "titulo": "Política de cookies",
+      "url": "https://www.cultura.gob.es/comunes/politica-cookies.html",
+      "tipo": "recurso",
+      "seccion": "recursos-compartidos"
+    }
+  ],
+  "directorios": [
+    {
+      "titulo": "El Observatorio de Museos de España",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/el-observatorio-de-museos-de-espana.html",
+      "tipo": "directorio",
+      "seccion": "directorios"
+    },
+    {
+      "titulo": "Informes OME",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/informes-ome.html",
+      "tipo": "directorio",
+      "seccion": "directorios"
+    },
+    {
+      "titulo": "Recursos compartidos",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/recursos-compartidos.html",
+      "tipo": "directorio",
+      "seccion": "directorios"
+    },
+    {
+      "titulo": "Directorios y otros observatorios",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/directorios-y-observatorios.html",
+      "tipo": "directorio",
+      "seccion": "directorios"
+    },
+    {
+      "titulo": "Directorio institucional",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/directorios-y-observatorios/institucional.html",
+      "tipo": "directorio",
+      "seccion": "directorios"
+    },
+    {
+      "titulo": "Directorio de museos",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/directorios-y-observatorios/de-museos.html",
+      "tipo": "directorio",
+      "seccion": "directorios"
+    },
+    {
+      "titulo": "Directorio de profesionales",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/directorios-y-observatorios/profesionales.html",
+      "tipo": "directorio",
+      "seccion": "directorios"
+    },
+    {
+      "titulo": "Otros observatorios culturales en España",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/directorios-y-observatorios/espana.html",
+      "tipo": "directorio",
+      "seccion": "directorios"
+    },
+    {
+      "titulo": "Observatorios culturales en Europa",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/directorios-y-observatorios/europa.html",
+      "tipo": "directorio",
+      "seccion": "directorios"
+    },
+    {
+      "titulo": "Observatorios culturales en el mundo",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/directorios-y-observatorios/mundo.html",
+      "tipo": "directorio",
+      "seccion": "directorios"
+    },
+    {
+      "titulo": "Datos y cifras",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/datos-cifras.html",
+      "tipo": "directorio",
+      "seccion": "directorios"
+    },
+    {
+      "titulo": "Compartir",
+      "url": "#",
+      "tipo": "directorio",
+      "seccion": "directorios"
+    },
+    {
+      "titulo": "WhatsApp",
+      "url": "https://api.whatsapp.com/send?text=http%3A%2F%2Fwww.cultura.gob.es%2Fobservatorio-museos-espana%2Fdirectorios-y-observatorios.html",
+      "tipo": "directorio",
+      "seccion": "directorios"
+    },
+    {
+      "titulo": "Facebook",
+      "url": "https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fwww.cultura.gob.es%2Fobservatorio-museos-espana%2Fdirectorios-y-observatorios.html",
+      "tipo": "directorio",
+      "seccion": "directorios"
+    },
+    {
+      "titulo": "Instagram",
+      "url": "https://www.instagram.com/create/storyhttp%3A%2F%2Fwww.cultura.gob.es%2Fobservatorio-museos-espana%2Fdirectorios-y-observatorios.html",
+      "tipo": "directorio",
+      "seccion": "directorios"
+    },
+    {
+      "titulo": "X (Twitter)",
+      "url": "https://twitter.com/intent/tweet?url=http%3A%2F%2Fwww.cultura.gob.es%2Fobservatorio-museos-espana%2Fdirectorios-y-observatorios.html",
+      "tipo": "directorio",
+      "seccion": "directorios"
+    },
+    {
+      "titulo": "LinkedIn",
+      "url": "https://www.linkedin.com/shareArticle?url=http%3A%2F%2Fwww.cultura.gob.es%2Fobservatorio-museos-espana%2Fdirectorios-y-observatorios.html",
+      "tipo": "directorio",
+      "seccion": "directorios"
+    },
+    {
+      "titulo": "Email",
+      "url": "mailto:?body=http%3A%2F%2Fwww.cultura.gob.es%2Fobservatorio-museos-espana%2Fdirectorios-y-observatorios.html",
+      "tipo": "directorio",
+      "seccion": "directorios"
+    },
+    {
+      "titulo": "Observatorio de Museos de España",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/informes-ome.html",
+      "tipo": "directorio",
+      "seccion": "directorios"
+    },
+    {
+      "titulo": "El Observatorio de Museos de España",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/el-observatorio-de-museos-de-espana.html",
+      "tipo": "directorio",
+      "seccion": "directorios"
+    },
+    {
+      "titulo": "Informes OME",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/informes-ome.html",
+      "tipo": "directorio",
+      "seccion": "directorios"
+    },
+    {
+      "titulo": "Recursos compartidos",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/recursos-compartidos.html",
+      "tipo": "directorio",
+      "seccion": "directorios"
+    },
+    {
+      "titulo": "Directorios y otros observatorios",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/directorios-y-observatorios.html",
+      "tipo": "directorio",
+      "seccion": "directorios"
+    },
+    {
+      "titulo": "Datos y cifras",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/datos-cifras.html",
+      "tipo": "directorio",
+      "seccion": "directorios"
+    },
+    {
+      "titulo": "Informes OME",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/informes-ome.html",
+      "tipo": "directorio",
+      "seccion": "directorios"
+    },
+    {
+      "titulo": "Directorio institucional",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/directorios-y-observatorios/institucional.html",
+      "tipo": "directorio",
+      "seccion": "directorios"
+    },
+    {
+      "titulo": "Directorio de museos",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/directorios-y-observatorios/de-museos.html",
+      "tipo": "directorio",
+      "seccion": "directorios"
+    },
+    {
+      "titulo": "Directorio de profesionales",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/directorios-y-observatorios/profesionales.html",
+      "tipo": "directorio",
+      "seccion": "directorios"
+    },
+    {
+      "titulo": "Otros observatorios culturales en España",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/directorios-y-observatorios/espana.html",
+      "tipo": "directorio",
+      "seccion": "directorios"
+    },
+    {
+      "titulo": "Observatorios culturales en Europa",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/directorios-y-observatorios/europa.html",
+      "tipo": "directorio",
+      "seccion": "directorios"
+    },
+    {
+      "titulo": "Observatorios culturales en el mundo",
+      "url": "https://www.cultura.gob.es/observatorio-museos-espana/directorios-y-observatorios/mundo.html",
+      "tipo": "directorio",
+      "seccion": "directorios"
+    },
+    {
+      "titulo": "Accesibilidad",
+      "url": "https://www.cultura.gob.es/comunes/accesibilidad.html",
+      "tipo": "directorio",
+      "seccion": "directorios"
+    },
+    {
+      "titulo": "Aviso Legal",
+      "url": "https://www.cultura.gob.es/comunes/aviso-legal.html",
+      "tipo": "directorio",
+      "seccion": "directorios"
+    },
+    {
+      "titulo": "Política de cookies",
+      "url": "https://www.cultura.gob.es/comunes/politica-cookies.html",
+      "tipo": "directorio",
+      "seccion": "directorios"
+    }
+  ],
+  "anuario": {
+    "source_url": "https://www.cultura.gob.es/servicios-a-la-ciudadania/estadisticas/cultura/mc/aec.html",
+    "editions": [],
+    "documents": [
+      {
+        "titulo": "Anuario de Estadísticas Culturales 2025",
+        "url": "https://www.cultura.gob.es/dam/jcr:daa6c0f8-9abb-48a8-8af3-7d54746d6e4a/anuario-de-estadisticas-culturales-2025.pdf",
+        "tipo": "pdf",
+        "year": 2025
+      },
+      {
+        "titulo": "Síntesis de indicadores estadísticos culturales",
+        "url": "https://www.cultura.gob.es/dam/jcr:f02164e8-5a5e-4662-bf5b-fe7f8fa1c36f/sintesis-de-indicadores-estadisticos-culturales-2025.pdf",
+        "tipo": "pdf"
+      },
+      {
+        "titulo": "Sumary of culture statistic indicators",
+        "url": "https://www.cultura.gob.es/dam/jcr:2365015d-6aeb-4811-8df5-eda04c4e9a55/summary-of-culture-statistics-indicators-2025.pdf",
+        "tipo": "pdf"
+      },
+      {
+        "titulo": "Nota resumen",
+        "url": "https://www.cultura.gob.es/dam/jcr:2f7dd263-81de-4882-83ce-6ee66d50db19/nota-resumen-anuario-de-estadisicas-culturales-2025.pdf",
+        "tipo": "pdf"
+      },
+      {
+        "titulo": "Anuario de Estadísticas Culturales 2024",
+        "url": "https://www.cultura.gob.es/dam/jcr:3031f42c-a638-449f-9ea2-c942a687365f/anuario-de-estadisticas-culturales-2024.pdf",
+        "tipo": "pdf",
+        "year": 2024
+      },
+      {
+        "titulo": "Síntesis de indicadores estadísticos culturales",
+        "url": "https://www.cultura.gob.es/dam/jcr:df0a3a4b-5f02-4d10-b83e-96852d6b4e72/sintesis-de-indicadores-estadisticos-culturales-2024.pdf",
+        "tipo": "pdf"
+      },
+      {
+        "titulo": "Summary of culture statistic indicators",
+        "url": "https://www.cultura.gob.es/dam/jcr:78fe0839-85b2-4bc0-ac49-5190eb090caa/summary-of-culture-statistics-indicators-2024.pdf",
+        "tipo": "pdf"
+      },
+      {
+        "titulo": "Anuario de Estadísticas Culturales 2023",
+        "url": "https://www.cultura.gob.es/dam/jcr:6b664e57-39bf-4cd6-84c4-b6e44865114b/anuario-de-estadisticas-culturales-2023.pdf",
+        "tipo": "pdf",
+        "year": 2023
+      },
+      {
+        "titulo": "Síntesis de indicadores estadísticos culturales",
+        "url": "https://www.cultura.gob.es/dam/jcr:e367e713-ebe4-4175-831b-edc53a4237e7/sintesis-de-indicadores-estadisticos-culturales-2023.pdf",
+        "tipo": "pdf"
+      },
+      {
+        "titulo": "Anuario de Estadísticas Culturales 2022",
+        "url": "https://www.cultura.gob.es/dam/jcr:a51b4916-fc36-4898-b9f6-e7380e21b114/anuario-de-estadisticas-culturales-2022.pdf",
+        "tipo": "pdf",
+        "year": 2022
+      },
+      {
+        "titulo": "Anuario de Estadísticas Culturales 2021",
+        "url": "https://www.cultura.gob.es/dam/jcr:f595ecde-9965-4204-a134-7c569931eb1e/anuario-de-estadisticas-culturales-2021.pdf",
+        "tipo": "pdf",
+        "year": 2021
+      },
+      {
+        "titulo": "Anuario de Estadísticas Culturales 2020",
+        "url": "https://www.cultura.gob.es/dam/jcr:52801035-cc20-496c-8f36-72d09ec6d533/anuario-de-estadisticas-culturales-2020.pdf",
+        "tipo": "pdf",
+        "year": 2020
+      },
+      {
+        "titulo": "Anuario de Estadísticas Culturales 2019",
+        "url": "https://www.cultura.gob.es/dam/jcr:3bdcb17c-050c-4807-b4f4-61e3714cbc15/anuario-de-estadisticas-culturales-2019.pdf",
+        "tipo": "pdf",
+        "year": 2019
+      },
+      {
+        "titulo": "Anuario de Estadísticas Culturales 2018",
+        "url": "https://www.cultura.gob.es/dam/jcr:eb5b8140-e039-42ab-8e24-500fddc5b2a4/anuario-de-estadisticas-culturales-2018.pdf",
+        "tipo": "pdf",
+        "year": 2018
+      },
+      {
+        "titulo": "Anuario de Estadísticas Culturales 2017",
+        "url": "https://www.cultura.gob.es/dam/jcr:a8c481ba-e9d6-498c-ab97-4e199e3f1197/Anuario_de_Estadisticas_Culturales_2017.pdf",
+        "tipo": "pdf",
+        "year": 2017
+      },
+      {
+        "titulo": "Anuario de Estadísticas Culturales 2016",
+        "url": "https://www.cultura.gob.es/dam/jcr:072f4737-7587-43bc-9c78-c87ce67c438c/anuario-de-estadisticas-culturales-2016.pdf",
+        "tipo": "pdf",
+        "year": 2016
+      },
+      {
+        "titulo": "Anuario de Estadísticas Culturales 2015",
+        "url": "https://www.cultura.gob.es/dam/jcr:5df20471-770d-4261-a906-11eb15f4b3e4/anuario-de-estadisticas-culturales-2015.pdf",
+        "tipo": "pdf",
+        "year": 2015
+      },
+      {
+        "titulo": "Anuario de Estadísticas Culturales 2014",
+        "url": "https://www.cultura.gob.es/dam/jcr:be5ffb5e-a40f-4d2a-a2af-0f0c79a9c9fc/anuario-de-estadisticas-culturales-2014.pdf",
+        "tipo": "pdf",
+        "year": 2014
+      },
+      {
+        "titulo": "Anuario de Estadísticas Culturales 2013",
+        "url": "https://www.cultura.gob.es/dam/jcr:39e74c3c-e144-4b29-8a06-8708e6ed5837/anuario-de-estadisticas-culturales-2013.pdf",
+        "tipo": "pdf",
+        "year": 2013
+      },
+      {
+        "titulo": "Anuario de Estadísticas Culturales 2012",
+        "url": "https://www.cultura.gob.es/dam/jcr:6c28f9b7-8a18-43ac-8721-2747e3e710d9/anuario-de-estadisticas-culturales-2012.pdf",
+        "tipo": "pdf",
+        "year": 2012
+      },
+      {
+        "titulo": "Anuario de Estadísticas Culturales 2011",
+        "url": "https://www.cultura.gob.es/dam/jcr:6aaf490d-ee72-44f9-a75d-bbbd86479446/anuario-de-estadisticas-culturales-2011.pdf",
+        "tipo": "pdf",
+        "year": 2011
+      },
+      {
+        "titulo": "Anuario de Estadísticas Culturales 2010",
+        "url": "https://www.cultura.gob.es/dam/jcr:1d2dfb2e-16ea-422e-bafa-670ae03d086e/anuario-de-estadisticas-culturales-2010.pdf",
+        "tipo": "pdf",
+        "year": 2010
+      },
+      {
+        "titulo": "Anuario de Estadísticas Culturales 2009",
+        "url": "https://www.cultura.gob.es/dam/jcr:4f5981ee-2574-4c47-87ae-0547c90248c1/anuario-de-estadisticas-culturales-2009.pdf",
+        "tipo": "pdf",
+        "year": 2009
+      },
+      {
+        "titulo": "Anuario de Estadísticas Culturales 2008",
+        "url": "https://www.cultura.gob.es/dam/jcr:da812aae-0707-4083-aae1-a1c78125b4c1/anuario-de-estadisticas-culturales-2008.pdf",
+        "tipo": "pdf",
+        "year": 2008
+      },
+      {
+        "titulo": "Anuario de Estadísticas Culturales 2007",
+        "url": "https://www.cultura.gob.es/dam/jcr:26f99357-f3ec-424c-b60e-c682bd8f8448/anuario-de-estadisticas-culturales-2007.pdf",
+        "tipo": "pdf",
+        "year": 2007
+      },
+      {
+        "titulo": "Anuario de Estadísticas Culturales 2006",
+        "url": "https://www.cultura.gob.es/dam/jcr:8a1da9b0-c2b5-4ffb-844a-f576999253ad/anuario-de-estadisticas-culturales-2006.pdf",
+        "tipo": "pdf",
+        "year": 2006
+      },
+      {
+        "titulo": "Anuario de Estadísticas Culturales 2005",
+        "url": "https://www.cultura.gob.es/dam/jcr:7da56ed8-c89e-4ad5-b8c0-5bd858745313/anuario-de-estadisticas-culturales-2005.pdf",
+        "tipo": "pdf",
+        "year": 2005
+      }
+    ]
+  },
+  "museos_cifras": {
+    "source_url": "https://www.cultura.gob.es/cultura/museos/museos-cifras/un-vistazo-otras-cifras.html",
+    "data_points": [
+      "Plaza del Rey, 1, 4ª plantaSalto de línea28004 - MadridSalto de líneaTeléfono: 917017256Salto de líneaFax: 917017384",
+      "Informes 2025",
+      "Informes publicados en 2021",
+      "Informes publicados en 2020",
+      "Informes publicados en 2019",
+      "Informes publicados en 2018",
+      "Datos de 2017",
+      "Nuevas colecciones en Nuestros Museos 2018",
+      "Informe sobre la actividad en Nuestros Museos 2017",
+      "Nuevas colecciones en Nuestros Museos 2017",
+      "Plaza del Rey, 1, 28004 Madrid‎ (España)"
+    ],
+    "links": [
+      {
+        "titulo": "Menú",
+        "url": "#"
+      },
+      {
+        "titulo": "Museos",
+        "url": "https://www.cultura.gob.es/cultura/museos.html"
+      },
+      {
+        "titulo": "Museos",
+        "url": "https://www.cultura.gob.es/cultura/museos/portada.html"
+      },
+      {
+        "titulo": "La Subdirección General de Museos Estatales",
+        "url": "https://www.cultura.gob.es/cultura/museos/presentacion.html"
+      },
+      {
+        "titulo": "Museos públicos",
+        "url": "https://www.cultura.gob.es/cultura/museos/museos.html"
+      },
+      {
+        "titulo": "Recursos profesionales",
+        "url": "https://www.cultura.gob.es/cultura/museos/recursos-profesionales/empleo-publico.html"
+      },
+      {
+        "titulo": "Museos en cifras",
+        "url": "https://www.cultura.gob.es/cultura/museos/museos-cifras.html"
+      },
+      {
+        "titulo": "Publicaciones",
+        "url": "https://www.cultura.gob.es/cultura/museos/publicaciones-museos.html"
+      },
+      {
+        "titulo": "Idioma",
+        "url": "#"
+      },
+      {
+        "titulo": "Català",
+        "url": "https://www.cultura.gob.es/ca/cultura/museos/museos-cifras/un-vistazo-otras-cifras.html"
+      },
+      {
+        "titulo": "Galego",
+        "url": "https://www.cultura.gob.es/gl/cultura/museos/museos-cifras/un-vistazo-otras-cifras.html"
+      },
+      {
+        "titulo": "Euskara",
+        "url": "https://www.cultura.gob.es/eu/cultura/museos/museos-cifras/un-vistazo-otras-cifras.html"
+      },
+      {
+        "titulo": "Valencià",
+        "url": "https://www.cultura.gob.es/va/cultura/museos/museos-cifras/un-vistazo-otras-cifras.html"
+      },
+      {
+        "titulo": "English",
+        "url": "https://www.cultura.gob.es/en/cultura/museos/museos-cifras/un-vistazo-otras-cifras.html"
+      },
+      {
+        "titulo": "Enlaces",
+        "url": "#"
+      },
+      {
+        "titulo": "Direcciones y teléfonos",
+        "url": "https://www.cultura.gob.es/servicios-a-la-ciudadania/informacion-administrativa/direcciones-telefonos.html"
+      },
+      {
+        "titulo": "Abrir buscador",
+        "url": "#"
+      },
+      {
+        "titulo": "Ministerio",
+        "url": "https://www.cultura.gob.es/ministerio.html"
+      },
+      {
+        "titulo": "Áreas",
+        "url": "https://www.cultura.gob.es/cultura.html"
+      },
+      {
+        "titulo": "Actualidad",
+        "url": "https://www.cultura.gob.es/actualidad.html"
+      },
+      {
+        "titulo": "Agenda cultural",
+        "url": "https://agendacultural.cultura.gob.es/inicio.html"
+      },
+      {
+        "titulo": "Prensa",
+        "url": "https://www.cultura.gob.es/prensa.html"
+      },
+      {
+        "titulo": "Servicios a la ciudadanía",
+        "url": "https://www.cultura.gob.es/servicios-a-la-ciudadania/informacion-administrativa.html"
+      },
+      {
+        "titulo": "Inicio",
+        "url": "https://www.cultura.gob.es/portada.html"
+      },
+      {
+        "titulo": "Áreas",
+        "url": "https://www.cultura.gob.es/cultura.html"
+      },
+      {
+        "titulo": "Museos",
+        "url": "https://www.cultura.gob.es/cultura/museos.html"
+      },
+      {
+        "titulo": "Museos en cifras",
+        "url": "https://www.cultura.gob.es/cultura/museos/museos-cifras.html"
+      },
+      {
+        "titulo": "Museos",
+        "url": "https://www.cultura.gob.es/cultura/museos.html"
+      },
+      {
+        "titulo": "Museos",
+        "url": "https://www.cultura.gob.es/cultura/museos/portada.html"
+      },
+      {
+        "titulo": "La Subdirección General de Museos Estatales",
+        "url": "https://www.cultura.gob.es/cultura/museos/presentacion.html"
+      },
+      {
+        "titulo": "Museos públicos",
+        "url": "https://www.cultura.gob.es/cultura/museos/museos.html"
+      },
+      {
+        "titulo": "Recursos profesionales",
+        "url": "https://www.cultura.gob.es/cultura/museos/recursos-profesionales/empleo-publico.html"
+      },
+      {
+        "titulo": "Museos en cifras",
+        "url": "https://www.cultura.gob.es/cultura/museos/museos-cifras.html"
+      },
+      {
+        "titulo": "Cifras de visitantes a los Museos Estatales",
+        "url": "https://www.cultura.gob.es/visitantemuseo/cargarFiltroBusqueda.do?layout=visitantemuseo&cache=init&language=es"
+      },
+      {
+        "titulo": "Los Museos Estatales en un vistazo",
+        "url": "https://www.cultura.gob.es/cultura/museos/museos-cifras/un-vistazo-otras-cifras.html"
+      },
+      {
+        "titulo": "Publicaciones",
+        "url": "https://www.cultura.gob.es/cultura/museos/publicaciones-museos.html"
+      },
+      {
+        "titulo": "Becas, ayudas y subvenciones",
+        "url": "https://www.cultura.gob.es/cultura/museos/sc/becas-ayudas-y-subvenciones.html"
+      },
+      {
+        "titulo": "Cartas de Servicios",
+        "url": "https://www.cultura.gob.es/cultura/museos/sc/cartas-de-servicios.html"
+      },
+      {
+        "titulo": "Empleo público",
+        "url": "https://www.cultura.gob.es/cultura/museos/sc/empleo-publico.html"
+      },
+      {
+        "titulo": "Estadísticas",
+        "url": "https://www.cultura.gob.es/cultura/museos/in/estadisticas.html"
+      },
+      {
+        "titulo": "Imagen gráfica",
+        "url": "https://www.cultura.gob.es/cultura/museos/sc/imagen-grafica.html"
+      },
+      {
+        "titulo": "Dossier de prensa",
+        "url": "https://www.cultura.gob.es/dam/jcr:3bd4df2b-84cd-4def-88ed-5dc8532c4ae7/red-de-museos-estatales---dossier-de-prensa---2025.pdf"
+      },
+      {
+        "titulo": "Carta de compromiso para el tratamiento ético de restos humanos",
+        "url": "https://www.cultura.gob.es/dam/jcr:8ac6ed5f-9df5-4594-b910-d28c896e1695/carta-compromiso-restos-humanos.pdf"
+      },
+      {
+        "titulo": "subdireccion.museos@cultura.gob.es",
+        "url": "mailto: subdireccion.museos@cultura.gob.es"
+      },
+      {
+        "titulo": "Nuevas colecciones en Nuestros Museos 2018",
+        "url": "https://www.cultura.gob.es/cultura/museos/museos-cifras/un-vistazo-otras-cifras/10-piezas-adquisiciones-18.html"
+      },
+      {
+        "titulo": "Informe sobre la actividad en Nuestros Museos 2017",
+        "url": "https://www.cultura.gob.es/cultura/museos/museos-cifras/un-vistazo-otras-cifras/mas-que-cifras.html"
+      },
+      {
+        "titulo": "Nuevas colecciones en Nuestros Museos 2017",
+        "url": "https://www.cultura.gob.es/cultura/museos/museos-cifras/un-vistazo-otras-cifras/10-piezas-adquisiciones.html"
+      },
+      {
+        "titulo": "Accesibilidad",
+        "url": "https://www.cultura.gob.es/comunes/accesibilidad.html"
+      },
+      {
+        "titulo": "Aviso Legal",
+        "url": "https://www.cultura.gob.es/comunes/aviso-legal.html"
+      },
+      {
+        "titulo": "Mapa Web",
+        "url": "https://www.cultura.gob.es/comunes/mapa-web.html"
+      },
+      {
+        "titulo": "Política de cookies",
+        "url": "https://www.cultura.gob.es/comunes/politica-cookies.html"
+      },
+      {
+        "titulo": "Política de Privacidad",
+        "url": "https://www.cultura.gob.es/comunes/politica-privacidad.html"
+      },
+      {
+        "titulo": "Traducción",
+        "url": "https://www.cultura.gob.es/comunes/aviso-traduccion.html"
+      },
+      {
+        "titulo": "Facebook",
+        "url": "https://www.facebook.com/MinisteriodeCultura/"
+      },
+      {
+        "titulo": "Instagram",
+        "url": "https://www.instagram.com/culturagob/ "
+      },
+      {
+        "titulo": "Youtube",
+        "url": "https://www.youtube.com/@CulturaGob_Youtube"
+      },
+      {
+        "titulo": "X (Twitter)",
+        "url": "https://twitter.com/culturagob"
+      },
+      {
+        "titulo": "TikTok",
+        "url": "https://www.tiktok.com/@culturagob"
+      },
+      {
+        "titulo": "LinkedIn",
+        "url": "https://es.linkedin.com/company/ministerio-de-cultura-es"
+      }
+    ]
+  },
+  "encuesta_museos": {
+    "source_url": "https://www.cultura.gob.es/servicios-a-la-ciudadania/estadisticas/cultura/mc/em.html",
+    "editions": [],
+    "tables": [
+      {
+        "titulo": "Estadística de Museos y Colecciones Museográficas 2022. Resultados detallados",
+        "url": "https://www.cultura.gob.es/dam/jcr:5245f2bb-98ce-4ccd-83bd-535643ab3d28/estadistica-de-museos-y-colecciones-museograficas-2022.pdf",
+        "year": 2022
+      },
+      {
+        "titulo": "Estadística de Museos y Colecciones Museográficas 2022. Principales resultados​",
+        "url": "https://www.cultura.gob.es/dam/jcr:832dbc5f-fc13-4572-8489-ea253820f436/principales-resultados-estadistica-de-museos-y-colecciones-museograficas-2022.pdf",
+        "year": 2022
+      },
+      {
+        "titulo": "Statistics on Museums and Museum Collections 2022. Results summary",
+        "url": "https://www.cultura.gob.es/dam/jcr:cac06ff3-f17d-4fbd-b486-3a79bddb357f/statistic-on-museums-and-museum-collections-2022-results-summary.pdf",
+        "year": 2022
+      },
+      {
+        "titulo": "Estadística de Museos y Colecciones Museográficas 2020. Resultados detallados",
+        "url": "https://www.cultura.gob.es/dam/jcr:b01a62c1-36e7-459a-ad3c-9f8581ba1a43/estadistica-de-museos-y-colecciones-museograficas-2020.pdf",
+        "year": 2020
+      },
+      {
+        "titulo": "Estadística de Museos y Colecciones Museográficas 2020. Principales resultados",
+        "url": "https://www.cultura.gob.es/dam/jcr:f2bd16c7-4d3c-4e87-8de3-f1ab59411790/estadistica-de-museos-y-colecciones-museograficas-principales-resultados-2020.pdf",
+        "year": 2020
+      },
+      {
+        "titulo": "Statistics on Museums and Museum Collections 2020. Results summary",
+        "url": "https://www.cultura.gob.es/dam/jcr:412ced02-e425-497f-ba27-426175691826/statistics-on-museums-and-museum-collections-results-summary-2020.pdf",
+        "year": 2020
+      },
+      {
+        "titulo": "Estadística de Museos y Colecciones Museográficas 2018. Resultados detallados",
+        "url": "https://www.cultura.gob.es/dam/jcr:ec051142-3abc-4021-89fb-054e03ae524f/estadistica-de-museos-y-colecciones-museograficas-2018.pdf",
+        "year": 2018
+      },
+      {
+        "titulo": "Estadística de Museos y Colecciones Museográficas 2018. Principales resultados​",
+        "url": "https://www.cultura.gob.es/dam/jcr:57854417-a738-4fee-8760-6a74cd9749ee/estadistica-de-museos-y-colecciones-museograficas-principales-resultados-2018.pdf",
+        "year": 2018
+      },
+      {
+        "titulo": "Statistics on Museums and Museum Collections 2018. Results summary",
+        "url": "https://www.cultura.gob.es/dam/jcr:38e4a7c3-9f63-4c2d-a61b-e447dc54198f/statistics-on-museums-and-museum-collections-results-summary-2018.pdf",
+        "year": 2018
+      },
+      {
+        "titulo": "Estadística de Museos y Colecciones Museográficas 2016. Resultados detallados",
+        "url": "https://www.cultura.gob.es/dam/jcr:0c19ea71-5606-4ddd-b1ea-7ee50d3ff383/estadistica-de-museos-y-colecciones-museograficas-2016.pdf",
+        "year": 2016
+      },
+      {
+        "titulo": "Estadística de Museos y Colecciones Museográficas 2016. Sintesis de resultados​",
+        "url": "https://www.cultura.gob.es/dam/jcr:aad52f97-08f0-40d3-a36b-829b3ba56043/estadistica-de-museos-y-colecciones-museograficas-sintesis-de-resultados-2016.pdf",
+        "year": 2016
+      },
+      {
+        "titulo": "Statistics on Museums and Museum Collections 2016, Synthesis of results",
+        "url": "https://www.cultura.gob.es/dam/jcr:91dd323c-036e-4a26-9391-eabd8610c1b7/statistics-on-museums-and-museum-collections-synthesis-of-results-2016.pdf",
+        "year": 2016
+      },
+      {
+        "titulo": "​​​Estadística de Museos y Colecciones Museográficas 2014, Resultados detallados",
+        "url": "https://www.cultura.gob.es/dam/jcr:cfa192ed-6242-403a-ad81-26c98196cc9f/estadistica-de-museos-y-colecciones-museograficas-2014.pdf",
+        "year": 2014
+      },
+      {
+        "titulo": "Estadística de Museos y Colecciones Museográficas 2014. Síntesis de resultados",
+        "url": "https://www.cultura.gob.es/dam/jcr:cbab30a5-caa3-48aa-b5d6-0a9ff1663f4e/estadistica-de-museos-y-colecciones-museograficas-sintesis-de-resultados-2014.pdf",
+        "year": 2014
+      },
+      {
+        "titulo": "Statistics on Museums and Museum Collections 2014. Synthesis of results",
+        "url": "https://www.cultura.gob.es/dam/jcr:82342457-764e-4049-b3a5-bbd2e33e564b/statistics-on-museums-and-museum-collections-synthesis-of-results-2014.pdf",
+        "year": 2014
+      },
+      {
+        "titulo": "Estadística de Museos y Colecciones Museográficas 2012. Resultados detallados",
+        "url": "https://www.cultura.gob.es/dam/jcr:e801f4b4-7d81-4278-b112-d38d16886f43/estadistica-de-museos-y-colecciones-museograficas-2012.pdf",
+        "year": 2012
+      },
+      {
+        "titulo": "Estadística de Museos y Colecciones Museográficas 2012. Síntesis de resultados",
+        "url": "https://www.cultura.gob.es/dam/jcr:f1eaa1ea-ee52-431c-8d36-3d581b321afe/estadistica-de-museos-y-colecciones-museograficas-sintesis-de-resultados-2012.pdf",
+        "year": 2012
+      },
+      {
+        "titulo": "Statistics on Museums and Museum Collections 2012. Synthesis of results",
+        "url": "https://www.cultura.gob.es/dam/jcr:1f46bb5a-4449-42b9-8cc8-4266f5a14aaf/statistics-on-museums-and-museum-collections-synthesis-of-results-2012.pdf",
+        "year": 2012
+      },
+      {
+        "titulo": "Estadística de Museos y Colecciones Museográficas 2010. Resultados detallados",
+        "url": "https://www.cultura.gob.es/dam/jcr:c4212f65-1b59-444f-8a3e-b1d134681a14/estadistica-de-museos-y-colecciones-museograficas-2010.pdf",
+        "year": 2010
+      },
+      {
+        "titulo": "Estadística de Museos y Colecciones Museográficas 2008. Resultados detallados",
+        "url": "https://www.cultura.gob.es/dam/jcr:76299a81-69a1-4efc-a00c-cd932da5f482/estadistica-de-museos-y-colecciones-museograficas-2008.pdf",
+        "year": 2008
+      },
+      {
+        "titulo": "Estadística de Museos y Colecciones Museográficas 2006. Resultados detallados",
+        "url": "https://www.cultura.gob.es/dam/jcr:e2e968e8-1883-4304-afaf-f26f61a86a1b/estadistica-de-museos-y-colecciones-museograficas-2006.pdf",
+        "year": 2006
+      },
+      {
+        "titulo": "Estadística de Museos y Colecciones Museográficas 2004. Resultados detallados",
+        "url": "https://www.cultura.gob.es/dam/jcr:0300553c-4696-4a96-9a3d-82f13fbcccbf/estadistica-de-museos-y-colecciones-museograficas-2004.pdf",
+        "year": 2004
+      },
+      {
+        "titulo": "Estadística de Museos y Colecciones Museográficas 2002. Resultados detallados",
+        "url": "https://www.cultura.gob.es/dam/jcr:017a37da-69b4-4a21-9f11-4515b1f0aa5a/estadistica-de-museos-y-colecciones-museograficas-2002.pdf",
+        "year": 2002
+      },
+      {
+        "titulo": "Estadística de Museos y Colecciones Museográficas 2000. Resultados detallados",
+        "url": "https://www.cultura.gob.es/dam/jcr:3674a238-30d5-407b-b200-18ed0c1eb041/estadistica-de-museos-y-colecciones-museograficas-2000.pdf",
+        "year": 2000
+      }
+    ]
+  },
+  "estadisticas_ccaa": {
+    "source": "Estadística de Museos y Colecciones Museográficas (MCU)",
+    "note": "Data compiled from official government publications",
+    "by_ccaa": {
+      "Andalucía": {
+        "museos_aprox": 170,
+        "region_code": "AN"
+      },
+      "Aragón": {
+        "museos_aprox": 60,
+        "region_code": "AR"
+      },
+      "Principado de Asturias": {
+        "museos_aprox": 40,
+        "region_code": "AS"
+      },
+      "Illes Balears": {
+        "museos_aprox": 45,
+        "region_code": "IB"
+      },
+      "Canarias": {
+        "museos_aprox": 50,
+        "region_code": "CN"
+      },
+      "Cantabria": {
+        "museos_aprox": 20,
+        "region_code": "CB"
+      },
+      "Castilla y León": {
+        "museos_aprox": 130,
+        "region_code": "CL"
+      },
+      "Castilla-La Mancha": {
+        "museos_aprox": 100,
+        "region_code": "CM"
+      },
+      "Cataluña": {
+        "museos_aprox": 115,
+        "region_code": "CT"
+      },
+      "Comunitat Valenciana": {
+        "museos_aprox": 170,
+        "region_code": "VC"
+      },
+      "Extremadura": {
+        "museos_aprox": 45,
+        "region_code": "EX"
+      },
+      "Galicia": {
+        "museos_aprox": 60,
+        "region_code": "GA"
+      },
+      "Comunidad de Madrid": {
+        "museos_aprox": 130,
+        "region_code": "MD"
+      },
+      "Región de Murcia": {
+        "museos_aprox": 55,
+        "region_code": "MC"
+      },
+      "Comunidad Foral de Navarra": {
+        "museos_aprox": 30,
+        "region_code": "NC"
+      },
+      "País Vasco": {
+        "museos_aprox": 60,
+        "region_code": "PV"
+      },
+      "La Rioja": {
+        "museos_aprox": 15,
+        "region_code": "RI"
+      },
+      "Ceuta": {
+        "museos_aprox": 3,
+        "region_code": "CE"
+      },
+      "Melilla": {
+        "museos_aprox": 3,
+        "region_code": "ML"
+      }
+    }
+  }
+}
