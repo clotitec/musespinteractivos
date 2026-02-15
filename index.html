@@ -1,0 +1,2651 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Museos de España — Plataforma Digital Interactiva</title>
+
+  <!-- React 18 -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Leaflet MarkerCluster -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet"/>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body, #root {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: 'DM Sans', 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 40%, #16213e 100%);
+      color: #e8e8f0;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+    /* Select dropdowns */
+    select option { background: #1a1a2e; color: #e8e8f0; }
+
+    /* Leaflet overrides for dark theme */
+    .leaflet-container { background: #0f0f1a !important; }
+    .leaflet-control-zoom a {
+      background: rgba(15,15,26,0.9) !important;
+      color: #e8e8f0 !important;
+      border-color: rgba(255,255,255,0.1) !important;
+    }
+    .leaflet-control-zoom a:hover {
+      background: rgba(26,26,46,0.95) !important;
+      color: #F2CC8F !important;
+    }
+    .leaflet-control-attribution {
+      background: rgba(15,15,26,0.7) !important;
+      color: #555 !important;
+      font-size: 10px !important;
+    }
+    .leaflet-control-attribution a { color: #666 !important; }
+
+    /* Custom cluster icons */
+    .cluster-icon {
+      width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #F2CC8F, #E07A5F);
+      color: #0f0f1a;
+      border-radius: 50%;
+      font-weight: 700;
+      font-size: 13px;
+      font-family: 'DM Sans', sans-serif;
+      box-shadow: 0 2px 12px rgba(242,204,143,0.4);
+      border: 2px solid rgba(255,255,255,0.2);
+    }
+    .cluster-icon-large {
+      width: 50px; height: 50px;
+      font-size: 15px;
+    }
+
+    /* Override default markercluster styles */
+    .marker-cluster-small, .marker-cluster-medium, .marker-cluster-large {
+      background: transparent !important;
+    }
+    .marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div {
+      background: transparent !important;
+    }
+
+    /* Custom pin */
+    .pin-container { background: transparent !important; border: none !important; }
+    .custom-pin {
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      border: 2.5px solid rgba(255,255,255,0.9);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.6);
+      transition: transform 0.2s ease;
+      position: relative;
+      cursor: pointer;
+    }
+    .custom-pin::after {
+      content: '';
+      position: absolute;
+      bottom: -8px; left: 50%;
+      transform: translateX(-50%);
+      width: 0; height: 0;
+      border-left: 7px solid transparent;
+      border-right: 7px solid transparent;
+      border-top: 8px solid;
+      border-top-color: inherit;
+    }
+    .custom-pin:hover { transform: scale(1.3); }
+    .custom-pin-selected {
+      width: 26px; height: 26px;
+      box-shadow: 0 0 16px rgba(242,204,143,0.6);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(100%); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideInRight {
+      from { transform: translateX(100%); }
+      to { transform: translateX(0); }
+    }
+    @keyframes slideInRightMobile {
+      from { opacity: 0; transform: translateY(100%); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header-title { font-size: 20px !important; }
+      .header-subtitle { display: none; }
+      .search-container { padding: 8px 12px !important; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useMemo, useEffect, useRef, useCallback } = React;
+
+    // ============================================================
+    // CONSTANTS
+    // ============================================================
+
+    const COMUNIDADES = {
+      "Andalucía": { color: "#E07A5F" },
+      "Aragón": { color: "#81B29A" },
+      "Asturias": { color: "#F2CC8F" },
+      "Illes Balears": { color: "#3D405B" },
+      "Canarias": { color: "#D4A373" },
+      "Cantabria": { color: "#A8DADC" },
+      "Castilla y León": { color: "#457B9D" },
+      "Castilla-La Mancha": { color: "#E63946" },
+      "Cataluña": { color: "#264653" },
+      "Comunidad Valenciana": { color: "#2A9D8F" },
+      "Extremadura": { color: "#E9C46A" },
+      "Galicia": { color: "#F4A261" },
+      "Comunidad de Madrid": { color: "#6D597A" },
+      "Región de Murcia": { color: "#B56576" },
+      "Navarra": { color: "#355070" },
+      "País Vasco": { color: "#EAAC8B" },
+      "La Rioja": { color: "#BC4749" },
+    };
+
+    const CATEGORY_COLORS = {
+      "Arqueológico": "#E07A5F",
+      "Bellas Artes": "#F2CC8F",
+      "Arte Contemporáneo": "#81B29A",
+      "Ciencias Naturales": "#457B9D",
+      "Etnografía": "#F4A261",
+      "Escultura": "#6D597A",
+      "Casa-Museo": "#EAAC8B",
+      "Bellas Artes y Arqueología": "#D4A373",
+      "Ciencias Naturales y Arqueología": "#2A9D8F",
+    };
+
+    const getCategoryColor = (cat) => CATEGORY_COLORS[cat] || "#B0B0C8";
+
+    const COMUNIDADES_LIST = Object.keys(COMUNIDADES).sort();
+
+    // ============================================================
+    // MUSEUM DATA (30 real museums)
+    // ============================================================
+
+    const MUSEOS = [
+      { id: 1, nombre: "Museo de Bellas Artes de Sevilla", comunidad: "Andalucía", provincia: "Sevilla", municipio: "Sevilla", lat: 37.3886, lng: -5.9966, tipo: "Museo", tematica: "Bellas Artes", titularidad: "Pública", web: "http://www.museosdeandalucia.es/web/museodebellasartesdesevilla", horario: "Mar-Sáb 9:00-21:00, Dom 9:00-15:00", direccion: "Plaza del Museo, 9", telefono: "955 542 942", accesibilidad: ["Silla de ruedas", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres", "Biblioteca"], precio: "Gratuito UE" },
+      { id: 2, nombre: "Museo Picasso Málaga", comunidad: "Andalucía", provincia: "Málaga", municipio: "Málaga", lat: 36.7214, lng: -4.4185, tipo: "Museo", tematica: "Arte Contemporáneo", titularidad: "Privada", web: "https://www.museopicassomalaga.org", horario: "Lun-Dom 10:00-19:00", direccion: "Palacio de Buenavista, C/ San Agustín, 8", telefono: "952 127 600", accesibilidad: ["Silla de ruedas", "Audioguías", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres", "Tienda", "Cafetería"], precio: "12€" },
+      { id: 3, nombre: "Museo de la Alhambra", comunidad: "Andalucía", provincia: "Granada", municipio: "Granada", lat: 37.1760, lng: -3.5881, tipo: "Museo", tematica: "Arqueológico", titularidad: "Pública", web: "http://www.alhambra-patronato.es", horario: "Mar-Sáb 8:30-18:00", direccion: "Recinto de la Alhambra", telefono: "958 027 900", accesibilidad: ["Parcial"], servicios: ["Visitas guiadas", "Audioguías"], precio: "Gratuito" },
+      { id: 4, nombre: "Centro Andaluz de Arte Contemporáneo", comunidad: "Andalucía", provincia: "Sevilla", municipio: "Sevilla", lat: 37.3857, lng: -6.0045, tipo: "Museo", tematica: "Arte Contemporáneo", titularidad: "Pública", web: "http://www.caac.es", horario: "Mar-Sáb 11:00-21:00", direccion: "Avda. Américo Vespucio, 2", telefono: "955 037 070", accesibilidad: ["Silla de ruedas", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres", "Biblioteca", "Cafetería"], precio: "Gratuito" },
+      { id: 5, nombre: "Museo de Zaragoza", comunidad: "Aragón", provincia: "Zaragoza", municipio: "Zaragoza", lat: 41.6488, lng: -0.8891, tipo: "Museo", tematica: "Bellas Artes y Arqueología", titularidad: "Pública", web: "http://www.museodezaragoza.es", horario: "Mar-Sáb 10:00-14:00 y 17:00-20:00", direccion: "Plaza de los Sitios, 6", telefono: "976 222 181", accesibilidad: ["Silla de ruedas"], servicios: ["Visitas guiadas", "Talleres"], precio: "Gratuito" },
+      { id: 6, nombre: "Museo Pablo Gargallo", comunidad: "Aragón", provincia: "Zaragoza", municipio: "Zaragoza", lat: 41.6528, lng: -0.8780, tipo: "Museo", tematica: "Escultura", titularidad: "Pública", web: "http://www.zaragoza.es/museogargallo", horario: "Mar-Sáb 10:00-14:00 y 17:00-21:00", direccion: "Plaza de San Felipe, 3", telefono: "976 724 922", accesibilidad: ["Parcial"], servicios: ["Visitas guiadas"], precio: "Gratuito" },
+      { id: 7, nombre: "Museo de Bellas Artes de Asturias", comunidad: "Asturias", provincia: "Asturias", municipio: "Oviedo", lat: 43.3619, lng: -5.8445, tipo: "Museo", tematica: "Bellas Artes", titularidad: "Pública", web: "http://www.museobbaa.com", horario: "Mar-Sáb 10:30-14:00 y 16:30-20:30", direccion: "C/ Santa Ana, 1", telefono: "985 213 061", accesibilidad: ["Silla de ruedas", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres", "Biblioteca"], precio: "Gratuito" },
+      { id: 8, nombre: "Es Baluard Museu d'Art Contemporani", comunidad: "Illes Balears", provincia: "Illes Balears", municipio: "Palma", lat: 39.5696, lng: 2.6246, tipo: "Museo", tematica: "Arte Contemporáneo", titularidad: "Mixta", web: "https://www.esbaluard.org", horario: "Mar-Sáb 10:00-20:00", direccion: "Plaça Porta de Santa Catalina, 10", telefono: "971 908 200", accesibilidad: ["Silla de ruedas", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres", "Cafetería", "Tienda"], precio: "6€" },
+      { id: 9, nombre: "Museo de la Naturaleza y Arqueología", comunidad: "Canarias", provincia: "Santa Cruz de Tenerife", municipio: "Santa Cruz de Tenerife", lat: 28.4682, lng: -16.2546, tipo: "Museo", tematica: "Ciencias Naturales y Arqueología", titularidad: "Pública", web: "https://www.museosdetenerife.org/muna", horario: "Mar-Sáb 9:00-20:00", direccion: "C/ Fuente Morales, s/n", telefono: "922 535 816", accesibilidad: ["Silla de ruedas", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres"], precio: "5€" },
+      { id: 10, nombre: "Museo de Prehistoria y Arqueología de Cantabria", comunidad: "Cantabria", provincia: "Cantabria", municipio: "Santander", lat: 43.4623, lng: -3.7907, tipo: "Museo", tematica: "Arqueológico", titularidad: "Pública", web: "https://museosdecantabria.es", horario: "Mar-Dom 10:00-14:00 y 17:00-20:00", direccion: "C/ Hernán Cortés, 4", telefono: "942 209 922", accesibilidad: ["Silla de ruedas"], servicios: ["Visitas guiadas", "Talleres"], precio: "Gratuito" },
+      { id: 11, nombre: "Museo Nacional de Escultura", comunidad: "Castilla y León", provincia: "Valladolid", municipio: "Valladolid", lat: 41.6538, lng: -4.7277, tipo: "Museo", tematica: "Escultura", titularidad: "Pública", web: "http://www.museoscultura.mcu.es", horario: "Mar-Sáb 10:00-14:00 y 16:00-19:30", direccion: "C/ Cadenas de San Gregorio, 1", telefono: "983 250 375", accesibilidad: ["Silla de ruedas", "Audioguías", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres", "Biblioteca", "Tienda"], precio: "3€" },
+      { id: 12, nombre: "Museo de la Evolución Humana", comunidad: "Castilla y León", provincia: "Burgos", municipio: "Burgos", lat: 42.3411, lng: -3.7007, tipo: "Museo", tematica: "Ciencias Naturales", titularidad: "Pública", web: "https://www.museoevolucionhumana.com", horario: "Mar-Dom 10:00-14:30 y 16:30-20:00", direccion: "Paseo Sierra de Atapuerca, s/n", telefono: "947 421 000", accesibilidad: ["Silla de ruedas", "Audioguías", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres", "Cafetería", "Tienda"], precio: "6€" },
+      { id: 13, nombre: "Museo de Arte Abstracto Español", comunidad: "Castilla-La Mancha", provincia: "Cuenca", municipio: "Cuenca", lat: 40.0784, lng: -2.1304, tipo: "Museo", tematica: "Arte Contemporáneo", titularidad: "Privada", web: "https://www.march.es/es/cuenca", horario: "Mar-Sáb 11:00-14:00 y 16:00-18:00", direccion: "C/ Canónigos, s/n, Casas Colgadas", telefono: "969 212 983", accesibilidad: ["Parcial"], servicios: ["Visitas guiadas", "Tienda"], precio: "3€" },
+      { id: 14, nombre: "Museu Nacional d'Art de Catalunya", comunidad: "Cataluña", provincia: "Barcelona", municipio: "Barcelona", lat: 41.3685, lng: 2.1527, tipo: "Museo", tematica: "Bellas Artes", titularidad: "Pública", web: "https://www.museunacional.cat", horario: "Mar-Sáb 10:00-18:00, Dom 10:00-15:00", direccion: "Palau Nacional, Parc de Montjuïc", telefono: "936 220 376", accesibilidad: ["Silla de ruedas", "Audioguías", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres", "Biblioteca", "Cafetería", "Tienda"], precio: "12€" },
+      { id: 15, nombre: "Fundació Joan Miró", comunidad: "Cataluña", provincia: "Barcelona", municipio: "Barcelona", lat: 41.3688, lng: 2.1600, tipo: "Museo", tematica: "Arte Contemporáneo", titularidad: "Privada", web: "https://www.fmirobcn.org", horario: "Mar-Sáb 10:00-20:00, Dom 10:00-15:00", direccion: "Parc de Montjuïc, s/n", telefono: "934 439 470", accesibilidad: ["Silla de ruedas", "Audioguías", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres", "Biblioteca", "Cafetería", "Tienda"], precio: "14€" },
+      { id: 16, nombre: "Teatre-Museu Dalí", comunidad: "Cataluña", provincia: "Girona", municipio: "Figueres", lat: 42.2671, lng: 2.9585, tipo: "Museo", tematica: "Arte Contemporáneo", titularidad: "Privada", web: "https://www.salvador-dali.org", horario: "Mar-Dom 10:30-18:00", direccion: "Plaça Gala-Salvador Dalí, 5", telefono: "972 677 500", accesibilidad: ["Parcial"], servicios: ["Audioguías", "Tienda"], precio: "14€" },
+      { id: 17, nombre: "IVAM - Institut Valencià d'Art Modern", comunidad: "Comunidad Valenciana", provincia: "Valencia", municipio: "Valencia", lat: 39.4789, lng: -0.3818, tipo: "Museo", tematica: "Arte Contemporáneo", titularidad: "Pública", web: "https://www.ivam.es", horario: "Mar-Dom 10:00-19:00", direccion: "C/ Guillem de Castro, 118", telefono: "963 176 600", accesibilidad: ["Silla de ruedas", "Audioguías", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres", "Biblioteca", "Cafetería", "Tienda"], precio: "Gratuito" },
+      { id: 18, nombre: "Museo Nacional de Arte Romano", comunidad: "Extremadura", provincia: "Badajoz", municipio: "Mérida", lat: 38.9141, lng: -6.3418, tipo: "Museo", tematica: "Arqueológico", titularidad: "Pública", web: "http://museoarteromano.mcu.es", horario: "Mar-Sáb 9:30-20:00, Dom 10:00-15:00", direccion: "C/ José Ramón Mélida, s/n", telefono: "924 311 690", accesibilidad: ["Silla de ruedas", "Audioguías", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres", "Biblioteca", "Tienda"], precio: "3€" },
+      { id: 19, nombre: "Museo de las Peregrinaciones y de Santiago", comunidad: "Galicia", provincia: "A Coruña", municipio: "Santiago de Compostela", lat: 42.8806, lng: -8.5443, tipo: "Museo", tematica: "Etnografía", titularidad: "Pública", web: "http://museoperegrinacions.xunta.gal", horario: "Mar-Sáb 9:30-20:30, Dom 10:15-14:45", direccion: "Praza das Praterías, 2", telefono: "981 566 110", accesibilidad: ["Silla de ruedas", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres"], precio: "2.40€" },
+      { id: 20, nombre: "Museo Nacional del Prado", comunidad: "Comunidad de Madrid", provincia: "Madrid", municipio: "Madrid", lat: 40.4138, lng: -3.6921, tipo: "Museo", tematica: "Bellas Artes", titularidad: "Pública", web: "https://www.museodelprado.es", horario: "Lun-Sáb 10:00-20:00, Dom 10:00-19:00", direccion: "C/ Ruiz de Alarcón, 23", telefono: "913 302 800", accesibilidad: ["Silla de ruedas", "Audioguías", "Signoguías", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres", "Biblioteca", "Cafetería", "Tienda", "Auditorio"], precio: "15€" },
+      { id: 21, nombre: "Museo Nacional Centro de Arte Reina Sofía", comunidad: "Comunidad de Madrid", provincia: "Madrid", municipio: "Madrid", lat: 40.4083, lng: -3.6943, tipo: "Museo", tematica: "Arte Contemporáneo", titularidad: "Pública", web: "https://www.museoreinasofia.es", horario: "Lun-Sáb 10:00-21:00, Dom 10:00-14:30", direccion: "C/ Santa Isabel, 52", telefono: "917 741 000", accesibilidad: ["Silla de ruedas", "Audioguías", "Signoguías", "Aseos adaptados", "Bucle magnético"], servicios: ["Visitas guiadas", "Talleres", "Biblioteca", "Cafetería", "Tienda", "Auditorio"], precio: "12€" },
+      { id: 22, nombre: "Museo Thyssen-Bornemisza", comunidad: "Comunidad de Madrid", provincia: "Madrid", municipio: "Madrid", lat: 40.4160, lng: -3.6940, tipo: "Museo", tematica: "Bellas Artes", titularidad: "Mixta", web: "https://www.museothyssen.org", horario: "Lun 12:00-16:00, Mar-Dom 10:00-19:00", direccion: "Paseo del Prado, 8", telefono: "917 911 370", accesibilidad: ["Silla de ruedas", "Audioguías", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres", "Biblioteca", "Cafetería", "Tienda"], precio: "13€" },
+      { id: 23, nombre: "Museo Arqueológico Nacional", comunidad: "Comunidad de Madrid", provincia: "Madrid", municipio: "Madrid", lat: 40.4238, lng: -3.6884, tipo: "Museo", tematica: "Arqueológico", titularidad: "Pública", web: "http://www.man.es", horario: "Mar-Sáb 9:30-20:00, Dom 9:30-15:00", direccion: "C/ Serrano, 13", telefono: "915 777 912", accesibilidad: ["Silla de ruedas", "Audioguías", "Signoguías", "Recorridos táctiles", "Aseos adaptados", "Bucle magnético"], servicios: ["Visitas guiadas", "Talleres", "Biblioteca", "Auditorio"], precio: "3€" },
+      { id: 24, nombre: "Museo Sorolla", comunidad: "Comunidad de Madrid", provincia: "Madrid", municipio: "Madrid", lat: 40.4352, lng: -3.6925, tipo: "Museo", tematica: "Casa-Museo", titularidad: "Pública", web: "http://museosorolla.mcu.es", horario: "Mar-Sáb 9:30-20:00, Dom 10:00-15:00", direccion: "Paseo General Martínez Campos, 37", telefono: "913 101 584", accesibilidad: ["Parcial"], servicios: ["Visitas guiadas", "Tienda"], precio: "3€" },
+      { id: 25, nombre: "Museo Salzillo", comunidad: "Región de Murcia", provincia: "Murcia", municipio: "Murcia", lat: 37.9836, lng: -1.1296, tipo: "Museo", tematica: "Escultura", titularidad: "Pública", web: "http://www.museosalzillo.es", horario: "Mar-Sáb 10:00-17:00, Dom 11:00-14:00", direccion: "Plaza de San Agustín, 3", telefono: "968 291 893", accesibilidad: ["Silla de ruedas", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres", "Tienda"], precio: "5€" },
+      { id: 26, nombre: "Museo de Navarra", comunidad: "Navarra", provincia: "Navarra", municipio: "Pamplona", lat: 42.8207, lng: -1.6430, tipo: "Museo", tematica: "Bellas Artes y Arqueología", titularidad: "Pública", web: "https://www.navarra.es/museodenavarra", horario: "Mar-Sáb 9:30-14:00 y 17:00-19:00", direccion: "C/ Santo Domingo, 47", telefono: "848 426 492", accesibilidad: ["Silla de ruedas", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres", "Biblioteca"], precio: "2€" },
+      { id: 27, nombre: "Museo Guggenheim Bilbao", comunidad: "País Vasco", provincia: "Vizcaya", municipio: "Bilbao", lat: 43.2687, lng: -2.9340, tipo: "Museo", tematica: "Arte Contemporáneo", titularidad: "Privada", web: "https://www.guggenheim-bilbao.eus", horario: "Mar-Dom 10:00-19:00", direccion: "Abandoibarra Etorb., 2", telefono: "944 359 000", accesibilidad: ["Silla de ruedas", "Audioguías", "Signoguías", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres", "Cafetería", "Tienda", "Auditorio"], precio: "16€" },
+      { id: 28, nombre: "Museo de Bellas Artes de Bilbao", comunidad: "País Vasco", provincia: "Vizcaya", municipio: "Bilbao", lat: 43.2631, lng: -2.9389, tipo: "Museo", tematica: "Bellas Artes", titularidad: "Pública", web: "https://www.museobilbao.com", horario: "Lun-Sáb 10:00-20:00, Dom 10:00-15:00", direccion: "Museo Plaza, 2", telefono: "944 396 060", accesibilidad: ["Silla de ruedas", "Audioguías", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres", "Biblioteca", "Cafetería", "Tienda"], precio: "10€" },
+      { id: 29, nombre: "Museo de La Rioja", comunidad: "La Rioja", provincia: "La Rioja", municipio: "Logroño", lat: 42.4666, lng: -2.4456, tipo: "Museo", tematica: "Bellas Artes y Arqueología", titularidad: "Pública", web: "https://www.museodelarioja.es", horario: "Mar-Sáb 10:00-14:00 y 16:00-21:00", direccion: "Plaza de San Agustín, 23", telefono: "941 291 259", accesibilidad: ["Silla de ruedas", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres"], precio: "Gratuito" },
+      { id: 30, nombre: "Museo del Teatro Romano de Cartagena", comunidad: "Región de Murcia", provincia: "Murcia", municipio: "Cartagena", lat: 37.5993, lng: -0.9856, tipo: "Museo", tematica: "Arqueológico", titularidad: "Mixta", web: "https://www.teatroromanocartagena.org", horario: "Mar-Sáb 10:00-18:00, Dom 10:00-14:00", direccion: "Plaza del Ayuntamiento, 9", telefono: "968 500 093", accesibilidad: ["Parcial"], servicios: ["Visitas guiadas", "Audioguías", "Tienda"], precio: "6€" },
+    ];
+
+    const TEMATICAS = [...new Set(MUSEOS.map(m => m.tematica))].sort();
+
+    // Count museums per comunidad
+    const countByComunidad = {};
+    MUSEOS.forEach(m => {
+      countByComunidad[m.comunidad] = (countByComunidad[m.comunidad] || 0) + 1;
+    });
+
+    // ============================================================
+    // ENRICHED DATA (dummy data for Ficha Maestra)
+    // Ready to connect with Ministerio backend
+    // ============================================================
+
+    const MUSEO_EXTRA = {
+      1: { duracion: "1.5h", descripcion: "Fundado en 1835, es el museo de bellas artes más importante de Andalucía. Alberga obras maestras de Murillo, Zurbarán y Valdés Leal, entre otros pintores del Siglo de Oro español. Su sede en el antiguo Convento de la Merced es un monumento en sí mismo.", imagen: "https://picsum.photos/seed/museo1/800/400", abierto: true, cafeteria: false, tienda: false, audioguia: false, vr: false, exposicionTemporal: "Zurbarán: Luz y Sombra" },
+      2: { duracion: "2h", descripcion: "El Museo Picasso Málaga acoge la colección más extensa de obras de Picasso en su ciudad natal. Más de 200 obras donadas por Christine y Bernard Ruiz-Picasso ilustran la revolución artística del genio malagueño, desde sus primeros estudios hasta las obras finales.", imagen: "https://picsum.photos/seed/museo2/800/400", abierto: true, cafeteria: true, tienda: true, audioguia: true, vr: false, exposicionTemporal: "Picasso Escultor: Materia y Cuerpo" },
+      3: { duracion: "1h", descripcion: "Situado en el corazón de la Alhambra, este museo exhibe piezas excepcionales del arte hispanomusulmán nazarí. Cerámicas, yeserías, tejidos y carpintería revelan la sofisticación de la última corte islámica de la Península Ibérica.", imagen: "https://picsum.photos/seed/museo3/800/400", abierto: true, cafeteria: false, tienda: false, audioguia: true, vr: false, exposicionTemporal: null },
+      4: { duracion: "1.5h", descripcion: "Ubicado en el Monasterio de la Cartuja, el CAAC es el centro de referencia para el arte contemporáneo en Andalucía. Combina exposiciones internacionales con una potente programación de artistas emergentes españoles.", imagen: "https://picsum.photos/seed/museo4/800/400", abierto: true, cafeteria: true, tienda: false, audioguia: false, vr: false, exposicionTemporal: "Geometrías del Sur: Arte Latinoamericano" },
+      5: { duracion: "1.5h", descripcion: "El Museo de Zaragoza reúne arqueología y bellas artes en un imponente edificio de la Exposición de 1908. Sus fondos van desde los íberos hasta Goya, pasando por mosaicos romanos y arte mudéjar.", imagen: "https://picsum.photos/seed/museo5/800/400", abierto: true, cafeteria: false, tienda: false, audioguia: false, vr: false, exposicionTemporal: null },
+      6: { duracion: "1h", descripcion: "Dedicado al escultor aragonés Pablo Gargallo, este museo ocupa el Palacio de los Condes de Argillo. Exhibe esculturas en hierro, cobre y bronce que revolucionaron la escultura moderna del siglo XX.", imagen: "https://picsum.photos/seed/museo6/800/400", abierto: true, cafeteria: false, tienda: false, audioguia: false, vr: false, exposicionTemporal: "Gargallo y la Vanguardia Parisina" },
+      7: { duracion: "1.5h", descripcion: "El Museo de Bellas Artes de Asturias es uno de los mejores museos de arte de España. Su colección abarca desde El Greco y Zurbarán hasta Dalí y Picasso, en un conjunto de tres edificios históricos del casco antiguo de Oviedo.", imagen: "https://picsum.photos/seed/museo7/800/400", abierto: true, cafeteria: false, tienda: false, audioguia: false, vr: false, exposicionTemporal: null },
+      8: { duracion: "2h", descripcion: "Es Baluard es el museo de arte moderno y contemporáneo de Palma, integrado en las murallas renacentistas de la ciudad. Su colección incluye obras de Picasso, Miró, Barceló y otros artistas fundamentales del arte mediterráneo.", imagen: "https://picsum.photos/seed/museo8/800/400", abierto: true, cafeteria: true, tienda: true, audioguia: false, vr: false, exposicionTemporal: "Mediterráneo: Un Mar de Arte" },
+      9: { duracion: "1.5h", descripcion: "El MUNA presenta la historia natural y arqueológica de las Islas Canarias. Destaca su colección de momias guanches y fósiles endémicos que documentan la singularidad biológica del archipiélago.", imagen: "https://picsum.photos/seed/museo9/800/400", abierto: true, cafeteria: false, tienda: false, audioguia: false, vr: false, exposicionTemporal: "Volcanes: Fuerza Creadora" },
+      10: { duracion: "1h", descripcion: "Alberga una de las mejores colecciones de prehistoria de la Península. Las pinturas rupestres de Altamira, estelas cántabras y materiales del Paleolítico muestran la riqueza arqueológica de Cantabria.", imagen: "https://picsum.photos/seed/museo10/800/400", abierto: true, cafeteria: false, tienda: false, audioguia: false, vr: true, exposicionTemporal: null },
+      11: { duracion: "2h", descripcion: "Joya del patrimonio español, este museo alberga la mayor colección de escultura policromada del mundo. Obras de Berruguete, Juni y Gregorio Fernández conviven en el espléndido Colegio de San Gregorio.", imagen: "https://picsum.photos/seed/museo11/800/400", abierto: true, cafeteria: false, tienda: true, audioguia: true, vr: false, exposicionTemporal: "El Retablo Mayor: Arquitectura y Devoción" },
+      12: { duracion: "2.5h", descripcion: "El MEH presenta de forma interactiva la evolución humana a partir de los hallazgos de Atapuerca, Patrimonio de la Humanidad. Un viaje fascinante de millones de años con réplicas a tamaño real y tecnología inmersiva.", imagen: "https://picsum.photos/seed/museo12/800/400", abierto: true, cafeteria: true, tienda: true, audioguia: true, vr: true, exposicionTemporal: "Homo Antecessor: Cara a Cara" },
+      13: { duracion: "1h", descripcion: "Ubicado en las icónicas Casas Colgadas de Cuenca, este museo es pionero del arte abstracto en España. Obras de Chillida, Tàpies, Saura y Zóbel en un marco arquitectónico único sobre la hoz del Huécar.", imagen: "https://picsum.photos/seed/museo13/800/400", abierto: true, cafeteria: false, tienda: true, audioguia: false, vr: false, exposicionTemporal: null },
+      14: { duracion: "2.5h", descripcion: "El MNAC posee la colección más completa de arte románico del mundo, junto a obras góticas, renacentistas y modernas. Su sede en el Palau Nacional de Montjuïc ofrece vistas panorámicas de Barcelona.", imagen: "https://picsum.photos/seed/museo14/800/400", abierto: true, cafeteria: true, tienda: true, audioguia: true, vr: false, exposicionTemporal: "Románico Pirineo: Arte y Territorio" },
+      15: { duracion: "2h", descripcion: "Creada por el propio Miró, esta fundación es un espacio total donde arquitectura, arte y paisaje se funden. Alberga más de 14.000 obras entre pinturas, esculturas y obra gráfica del artista barcelonés.", imagen: "https://picsum.photos/seed/museo15/800/400", abierto: true, cafeteria: true, tienda: true, audioguia: true, vr: false, exposicionTemporal: "Miró y la Tierra" },
+      16: { duracion: "2h", descripcion: "El mayor objeto surrealista del mundo, diseñado por Dalí como su gran obra testamentaria. Cada sala es una instalación total que sumerge al visitante en el universo onírico del genio de Figueres.", imagen: "https://picsum.photos/seed/museo16/800/400", abierto: true, cafeteria: false, tienda: true, audioguia: true, vr: false, exposicionTemporal: null },
+      17: { duracion: "1.5h", descripcion: "El IVAM fue el primer museo de arte moderno creado en España. Su colección permanente incluye obras de Julio González, el padre de la escultura en hierro, junto a piezas fundamentales del arte contemporáneo internacional.", imagen: "https://picsum.photos/seed/museo17/800/400", abierto: true, cafeteria: true, tienda: true, audioguia: true, vr: false, exposicionTemporal: "Pop Art Valencia" },
+      18: { duracion: "2h", descripcion: "Obra maestra de Rafael Moneo, este museo es uno de los mejores del mundo dedicado a la civilización romana. Mosaicos, esculturas y objetos de Augusta Emerita te transportan a la Hispania romana.", imagen: "https://picsum.photos/seed/museo18/800/400", abierto: true, cafeteria: false, tienda: true, audioguia: true, vr: true, exposicionTemporal: "Gladiadores: Héroes del Anfiteatro" },
+      19: { duracion: "1.5h", descripcion: "Este museo narra la historia de las peregrinaciones a Santiago desde la Edad Media. Objetos votivos, arte jacobeo y testimonios de peregrinos de toda Europa muestran el impacto cultural del Camino.", imagen: "https://picsum.photos/seed/museo19/800/400", abierto: true, cafeteria: false, tienda: false, audioguia: false, vr: false, exposicionTemporal: null },
+      20: { duracion: "3h", descripcion: "Una de las pinacotecas más importantes del mundo. Velázquez, Goya, El Greco, Rubens y Tiziano forman un conjunto inigualable de la pintura europea. Las Meninas y El Jardín de las Delicias son solo el comienzo.", imagen: "https://picsum.photos/seed/museo20/800/400", abierto: true, cafeteria: true, tienda: true, audioguia: true, vr: false, exposicionTemporal: "Velázquez y la Corte de Felipe IV" },
+      21: { duracion: "2.5h", descripcion: "El Reina Sofía alberga el Guernica de Picasso y la mayor colección de arte contemporáneo español. Dalí, Miró, Juan Gris y artistas actuales dialogan en un edificio que fusiona historia y vanguardia.", imagen: "https://picsum.photos/seed/museo21/800/400", abierto: true, cafeteria: true, tienda: true, audioguia: true, vr: false, exposicionTemporal: "Picasso: Política y Arte" },
+      22: { duracion: "2h", descripcion: "Del impresionismo al pop art, el Thyssen ofrece un recorrido único por la historia del arte occidental. Van Gogh, Monet, Hopper y Lichtenstein forman una colección sin parangón en Europa.", imagen: "https://picsum.photos/seed/museo22/800/400", abierto: true, cafeteria: true, tienda: true, audioguia: true, vr: false, exposicionTemporal: "Impresionismo Americano" },
+      23: { duracion: "2h", descripcion: "El MAN custodia el patrimonio arqueológico de España desde la Prehistoria hasta la Edad Moderna. La Dama de Elche, los tesoros visigodos y la colección numismática son referentes mundiales.", imagen: "https://picsum.photos/seed/museo23/800/400", abierto: true, cafeteria: false, tienda: false, audioguia: true, vr: true, exposicionTemporal: "Iberos: Nuestros Antepasados" },
+      24: { duracion: "1h", descripcion: "La casa-estudio del pintor Joaquín Sorolla conserva intacta la atmósfera donde creó sus obras luminosas. Jardines andaluces, azulejos y la luz de Madrid inspiran el recorrido por esta casa-museo única.", imagen: "https://picsum.photos/seed/museo24/800/400", abierto: true, cafeteria: false, tienda: true, audioguia: false, vr: false, exposicionTemporal: null },
+      25: { duracion: "1h", descripcion: "Dedicado al escultor barroco Francisco Salzillo, maestro de la imaginería procesional murciana. Sus pasos de Semana Santa son obras maestras de expresividad y realismo que emocionan al visitante.", imagen: "https://picsum.photos/seed/museo25/800/400", abierto: true, cafeteria: false, tienda: true, audioguia: false, vr: false, exposicionTemporal: "Salzillo: Devoto y Artista" },
+      26: { duracion: "1.5h", descripcion: "Instalado en un antiguo hospital medieval, el Museo de Navarra recorre la historia del reino desde la prehistoria. Capiteles románicos, pintura gótica y obras de Goya conforman una colección excepcional.", imagen: "https://picsum.photos/seed/museo26/800/400", abierto: true, cafeteria: false, tienda: false, audioguia: false, vr: false, exposicionTemporal: null },
+      27: { duracion: "2.5h", descripcion: "Icono de la arquitectura contemporánea diseñado por Frank Gehry, el Guggenheim Bilbao transformó la ciudad. Instalaciones monumentales de Richard Serra, Hockney y Koons dialogan con un edificio que es arte en sí mismo.", imagen: "https://picsum.photos/seed/museo27/800/400", abierto: true, cafeteria: true, tienda: true, audioguia: true, vr: true, exposicionTemporal: "La Materia del Tiempo: Richard Serra" },
+      28: { duracion: "1.5h", descripcion: "Uno de los museos de bellas artes más destacados de España, con obras desde el siglo XII. El Greco, Goya, Zurbarán y artistas vascos contemporáneos en un edificio renovado junto a la ría.", imagen: "https://picsum.photos/seed/museo28/800/400", abierto: true, cafeteria: true, tienda: true, audioguia: true, vr: false, exposicionTemporal: "Arte Vasco: Identidad y Vanguardia" },
+      29: { duracion: "1h", descripcion: "El Museo de La Rioja presenta la historia y el arte de la región vinícola por excelencia. Desde hallazgos paleontológicos hasta pintura contemporánea, con especial atención al arte sacro medieval.", imagen: "https://picsum.photos/seed/museo29/800/400", abierto: true, cafeteria: false, tienda: false, audioguia: false, vr: false, exposicionTemporal: null },
+      30: { duracion: "1.5h", descripcion: "Integrado en el propio yacimiento arqueológico, este museo ofrece un recorrido espectacular desde la calle hasta las gradas del teatro romano del siglo I a.C. Una experiencia inmersiva en la Carthago Nova.", imagen: "https://picsum.photos/seed/museo30/800/400", abierto: true, cafeteria: false, tienda: true, audioguia: true, vr: true, exposicionTemporal: "Cartagena Romana: Vida Cotidiana" },
+    };
+
+    // Helper to get enriched museo data
+    function getMuseoExtra(museoId) {
+      return MUSEO_EXTRA[museoId] || {
+        duracion: "1.5h", descripcion: "Información detallada próximamente disponible.", imagen: null,
+        abierto: true, cafeteria: false, tienda: false, audioguia: false, vr: false, exposicionTemporal: null
+      };
+    }
+
+    // ============================================================
+    // EXPOSICIONES DATA (PROMPT 5)
+    // ============================================================
+
+    const EXPOSICIONES = {
+      1: [
+        { tipo: 'permanente', titulo: 'Colección Permanente: Siglo de Oro Sevillano', descripcion: 'Murillo, Zurbarán y Valdés Leal' },
+        { tipo: 'temporal', titulo: 'Zurbarán: Luz y Sombra', desde: '2026-01-15', hasta: '2026-04-30' },
+        { tipo: 'temporal', titulo: 'Sevilla Ilustrada: Grabados del XVIII', desde: '2026-05-15', hasta: '2026-08-20' },
+      ],
+      2: [
+        { tipo: 'permanente', titulo: 'Picasso: Obras de la Colección Familiar', descripcion: 'Más de 200 obras del genio malagueño' },
+        { tipo: 'temporal', titulo: 'Picasso Escultor: Materia y Cuerpo', desde: '2025-11-01', hasta: '2026-03-15' },
+      ],
+      12: [
+        { tipo: 'permanente', titulo: 'La Evolución Humana: De Atapuerca al Futuro', descripcion: 'Recorrido interactivo por millones de años' },
+        { tipo: 'temporal', titulo: 'Homo Antecessor: Cara a Cara', desde: '2026-01-10', hasta: '2026-05-31' },
+        { tipo: 'temporal', titulo: 'ADN: La Molécula de la Vida', desde: '2026-07-01', hasta: '2026-10-15' },
+      ],
+      14: [
+        { tipo: 'permanente', titulo: 'Arte Románico y Gótico Catalán', descripcion: 'La mejor colección románica del mundo' },
+        { tipo: 'temporal', titulo: 'Románico Pirineo: Arte y Territorio', desde: '2026-02-01', hasta: '2026-06-30' },
+      ],
+      15: [
+        { tipo: 'permanente', titulo: 'Joan Miró: Universo Creativo', descripcion: '14.000 obras del artista barcelonés' },
+        { tipo: 'temporal', titulo: 'Miró y la Tierra', desde: '2025-12-01', hasta: '2026-02-28' },
+      ],
+      20: [
+        { tipo: 'permanente', titulo: 'Colección Permanente: Velázquez, Goya, El Greco', descripcion: 'Pinacoteca de referencia mundial' },
+        { tipo: 'temporal', titulo: 'Velázquez y la Corte de Felipe IV', desde: '2026-01-20', hasta: '2026-05-18' },
+        { tipo: 'temporal', titulo: 'Goya: Caprichos y Disparates', desde: '2026-06-15', hasta: '2026-09-30' },
+      ],
+      21: [
+        { tipo: 'permanente', titulo: 'Guernica y Arte del Siglo XX', descripcion: 'La obra maestra de Picasso y contemporáneos' },
+        { tipo: 'temporal', titulo: 'Picasso: Política y Arte', desde: '2026-02-05', hasta: '2026-04-20' },
+      ],
+      22: [
+        { tipo: 'permanente', titulo: 'Del Impresionismo al Pop Art', descripcion: 'Van Gogh, Monet, Hopper, Lichtenstein' },
+        { tipo: 'temporal', titulo: 'Impresionismo Americano', desde: '2026-03-01', hasta: '2026-07-15' },
+      ],
+      27: [
+        { tipo: 'permanente', titulo: 'La Materia del Tiempo: Richard Serra', descripcion: 'Instalaciones monumentales en acero' },
+        { tipo: 'temporal', titulo: 'La Materia del Tiempo: Richard Serra', desde: '2025-10-01', hasta: '2026-02-15' },
+        { tipo: 'temporal', titulo: 'Inteligencia Artificial y Arte', desde: '2026-04-01', hasta: '2026-08-30' },
+      ],
+      18: [
+        { tipo: 'permanente', titulo: 'Augusta Emerita: Vida en la Hispania Romana', descripcion: 'Mosaicos y esculturas romanas' },
+        { tipo: 'temporal', titulo: 'Gladiadores: Héroes del Anfiteatro', desde: '2026-01-01', hasta: '2026-03-31' },
+      ],
+      23: [
+        { tipo: 'permanente', titulo: 'De la Prehistoria a la Edad Moderna', descripcion: 'La Dama de Elche y tesoros visigodos' },
+        { tipo: 'temporal', titulo: 'Iberos: Nuestros Antepasados', desde: '2026-02-10', hasta: '2026-06-10' },
+      ],
+    };
+
+    function getExpoStatus(desde, hasta) {
+      const now = new Date();
+      const start = new Date(desde);
+      const end = new Date(hasta);
+      const daysToEnd = Math.floor((end - now) / (1000 * 60 * 60 * 24));
+      if (now < start) return { label: 'Próximamente', color: '#457B9D', bg: 'rgba(69,123,157,0.15)' };
+      if (now > end) return { label: 'Finalizada', color: '#666', bg: 'rgba(100,100,100,0.15)' };
+      if (daysToEnd <= 14) return { label: 'Últimos días', color: '#E07A5F', bg: 'rgba(224,122,95,0.15)' };
+      return { label: 'En curso', color: '#81B29A', bg: 'rgba(129,178,154,0.15)' };
+    }
+
+    function formatDateES(dateStr) {
+      const d = new Date(dateStr);
+      const months = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+      return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+    }
+
+    // ============================================================
+    // SOCIAL MEDIA DATA (PROMPT 6)
+    // ============================================================
+
+    const SOCIAL_CCAA = {
+      "Andalucía": { twitter: "@MuseosAndalucia", instagram: "@museosandalucia", facebook: "MuseosDeAndalucia" },
+      "Aragón": { twitter: "@MuseosAragon", instagram: "@museosaragon", facebook: "MuseosDeAragon" },
+      "Asturias": { twitter: "@CulturaAsturias", instagram: "@culturaasturias", facebook: "CulturaAsturias" },
+      "Illes Balears": { twitter: "@CulturaBalears", instagram: "@culturabalears", facebook: "CulturaBalears" },
+      "Canarias": { twitter: "@MuseosCanarias", instagram: "@museoscanarias", facebook: "MuseosCanarias" },
+      "Cantabria": { twitter: "@MuseosCantabria", instagram: "@museoscantabria", facebook: "MuseosCantabria" },
+      "Castilla y León": { twitter: "@JCyL_Cultura", instagram: "@jcyl_cultura", facebook: "CulturaCyL" },
+      "Castilla-La Mancha": { twitter: "@CulturaCLM", instagram: "@culturaclm", facebook: "CulturaCLM" },
+      "Cataluña": { twitter: "@CulturaCAT", instagram: "@culturacat", facebook: "CulturaCatalunya" },
+      "Comunidad Valenciana": { twitter: "@CulturaGVA", instagram: "@culturagva", facebook: "CulturaGVA" },
+      "Extremadura": { twitter: "@Aborigen_Ex", instagram: "@culturaextremadura", facebook: "CulturaExtremadura" },
+      "Galicia": { twitter: "@CulturaGalicia", instagram: "@culturagalicia", facebook: "CulturaGalicia" },
+      "Comunidad de Madrid": { twitter: "@MuseosMadrid", instagram: "@museosmadrid", facebook: "MuseosDeMadrid" },
+      "Región de Murcia": { twitter: "@CulturaMurcia", instagram: "@culturamurcia", facebook: "CulturaMurcia" },
+      "Navarra": { twitter: "@CulturaNavarra", instagram: "@culturanavarra", facebook: "CulturaNavarra" },
+      "País Vasco": { twitter: "@KultureEJ", instagram: "@kultureej", facebook: "KulturEuskadiEJ" },
+      "La Rioja": { twitter: "@CulturaRioja", instagram: "@culturarioja", facebook: "CulturaLaRioja" },
+    };
+
+    // Social icons
+    const TwitterIcon = () => (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+      </svg>
+    );
+    const InstagramIcon = () => (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+      </svg>
+    );
+    const FacebookIcon = () => (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+      </svg>
+    );
+    const BellIcon = () => (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+      </svg>
+    );
+    const CalendarIcon = () => (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+      </svg>
+    );
+    const Camera360Icon = () => (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>
+      </svg>
+    );
+    const CheckCircleIcon = () => (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+      </svg>
+    );
+    const TicketIcon = () => (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/>
+      </svg>
+    );
+    const MinusIcon = () => (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" style={{ pointerEvents: 'none' }}>
+        <line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+    );
+    const PlusIcon = () => (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" style={{ pointerEvents: 'none' }}>
+        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+    );
+    const ShieldIcon = () => (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+    );
+    const TrophyIcon = () => (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+      </svg>
+    );
+
+    // ============================================================
+    // SVG ICONS
+    // ============================================================
+
+    const SearchIcon = () => (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+    );
+
+    const FilterIcon = () => (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+      </svg>
+    );
+
+    const CloseIcon = () => (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    );
+
+    const ExternalLinkIcon = () => (
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+      </svg>
+    );
+
+    const ChartIcon = () => (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+        <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+      </svg>
+    );
+
+    const AccessibilityIcon = () => (
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+        <circle cx="12" cy="4" r="2"/><path d="M19 13v-2c-1.54.02-3.09-.75-4.07-1.83l-1.29-1.43c-.17-.19-.38-.34-.61-.45-.01 0-.01-.01-.02-.01H13c-.35-.2-.75-.3-1.19-.26C10.76 7.11 10 8.04 10 9.09V15c0 1.1.9 2 2 2h5v5h2v-5.5c0-1.1-.9-2-2-2h-3v-3.45c1.29 1.07 3.25 1.94 5 1.95zm-6.17 5c-.41 1.16-1.52 2-2.83 2-1.66 0-3-1.34-3-3 0-1.31.84-2.41 2-2.83V12.1c-2.28.46-4 2.48-4 4.9 0 2.76 2.24 5 5 5 2.42 0 4.44-1.72 4.9-4h-2.07z"/>
+      </svg>
+    );
+
+    const MapIcon = () => (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/>
+        <line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/>
+      </svg>
+    );
+
+    const ListIcon = () => (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+        <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/>
+        <line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
+      </svg>
+    );
+
+    // Ficha Maestra icons
+    const HeartIcon = ({ filled }) => (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill={filled ? "#E07A5F" : "none"} stroke={filled ? "#E07A5F" : "currentColor"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+      </svg>
+    );
+
+    const ClockIcon = () => (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+      </svg>
+    );
+
+    const EuroIcon = () => (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M17.2 7A6 6 0 0 0 7 12a6 6 0 0 0 10.2 5"/><line x1="4" y1="10" x2="14" y2="10"/><line x1="4" y1="14" x2="14" y2="14"/>
+      </svg>
+    );
+
+    const WheelchairIcon = () => (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" opacity="0.9">
+        <circle cx="12" cy="4" r="2"/><path d="M19 13v-2c-1.54.02-3.09-.75-4.07-1.83l-1.29-1.43c-.17-.19-.38-.34-.61-.45-.01 0-.01-.01-.02-.01H13c-.35-.2-.75-.3-1.19-.26C10.76 7.11 10 8.04 10 9.09V15c0 1.1.9 2 2 2h5v5h2v-5.5c0-1.1-.9-2-2-2h-3v-3.45c1.29 1.07 3.25 1.94 5 1.95zm-6.17 5c-.41 1.16-1.52 2-2.83 2-1.66 0-3-1.34-3-3 0-1.31.84-2.41 2-2.83V12.1c-2.28.46-4 2.48-4 4.9 0 2.76 2.24 5 5 5 2.42 0 4.44-1.72 4.9-4h-2.07z"/>
+      </svg>
+    );
+
+    const ShopIcon = () => (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
+      </svg>
+    );
+
+    const CoffeeIcon = () => (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>
+      </svg>
+    );
+
+    const HeadphonesIcon = () => (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>
+      </svg>
+    );
+
+    const VrIcon = () => (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="7" width="20" height="10" rx="3"/><path d="M10 12a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"/><path d="M18 12a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"/><path d="M10 12h4"/>
+      </svg>
+    );
+
+    const NavigationIcon = () => (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <polygon points="3 11 22 2 13 21 11 13 3 11"/>
+      </svg>
+    );
+
+    const ShareIcon = () => (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+      </svg>
+    );
+
+    const ChevronDownIcon = () => (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+    );
+
+    const StarIcon = () => (
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="#F2CC8F" stroke="#F2CC8F" strokeWidth="1">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+      </svg>
+    );
+
+    // ============================================================
+    // MAP VIEW COMPONENT
+    // ============================================================
+
+    function MapView({ museos, selectedMuseo, onSelectMuseo, onDeselectMuseo }) {
+      const mapContainerRef = useRef(null);
+      const mapInstanceRef = useRef(null);
+      const clusterGroupRef = useRef(null);
+      const markerClickedRef = useRef(false);
+      const callbacksRef = useRef({ onSelectMuseo, onDeselectMuseo });
+      callbacksRef.current = { onSelectMuseo, onDeselectMuseo };
+
+      // Initialize map once
+      useEffect(() => {
+        if (mapInstanceRef.current) return;
+        const map = L.map(mapContainerRef.current, {
+          zoomControl: false,
+          center: [40.0, -3.7],
+          zoom: 6,
+          minZoom: 4,
+          maxZoom: 18,
+        });
+
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
+          subdomains: 'abcd',
+          maxZoom: 20,
+        }).addTo(map);
+
+        L.control.zoom({ position: 'topright' }).addTo(map);
+
+        map.on('click', function() {
+          // Skip if a marker was just clicked (prevents race condition)
+          if (markerClickedRef.current) {
+            markerClickedRef.current = false;
+            return;
+          }
+          callbacksRef.current.onDeselectMuseo();
+        });
+
+        mapInstanceRef.current = map;
+
+        // Fix map size after render
+        setTimeout(() => map.invalidateSize(), 200);
+
+        return () => {
+          map.remove();
+          mapInstanceRef.current = null;
+        };
+      }, []);
+
+      // Update markers when museos changes
+      useEffect(() => {
+        const map = mapInstanceRef.current;
+        if (!map) return;
+
+        // Remove old cluster group
+        if (clusterGroupRef.current) {
+          map.removeLayer(clusterGroupRef.current);
+        }
+
+        const clusterGroup = L.markerClusterGroup({
+          maxClusterRadius: 50,
+          spiderfyOnMaxZoom: true,
+          showCoverageOnHover: false,
+          zoomToBoundsOnClick: true,
+          iconCreateFunction: function(cluster) {
+            const count = cluster.getChildCount();
+            const size = count > 20 ? 'cluster-icon cluster-icon-large' : 'cluster-icon';
+            return L.divIcon({
+              html: '<div class="' + size + '">' + count + '</div>',
+              className: 'custom-cluster-wrapper',
+              iconSize: L.point(count > 20 ? 50 : 40, count > 20 ? 50 : 40),
+            });
+          },
+        });
+
+        museos.forEach(museo => {
+          const color = getCategoryColor(museo.tematica);
+          const isSelected = selectedMuseo && selectedMuseo.id === museo.id;
+          const pinClass = isSelected ? 'custom-pin custom-pin-selected' : 'custom-pin';
+
+          const marker = L.marker([museo.lat, museo.lng], {
+            icon: L.divIcon({
+              html: '<div class="' + pinClass + '" style="background:' + color + '; border-top-color:' + color + '"></div>',
+              className: 'pin-container',
+              iconSize: [isSelected ? 30 : 24, isSelected ? 38 : 30],
+              iconAnchor: [isSelected ? 15 : 12, isSelected ? 38 : 30],
+            }),
+          });
+
+          marker.on('click', function(e) {
+            L.DomEvent.stopPropagation(e);
+            markerClickedRef.current = true;
+            callbacksRef.current.onSelectMuseo(museo);
+          });
+
+          clusterGroup.addLayer(marker);
+        });
+
+        map.addLayer(clusterGroup);
+        clusterGroupRef.current = clusterGroup;
+      }, [museos, selectedMuseo]);
+
+      // Resize map on window resize
+      useEffect(() => {
+        const handleResize = () => {
+          if (mapInstanceRef.current) {
+            mapInstanceRef.current.invalidateSize();
+          }
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+      }, []);
+
+      return (
+        <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+          <div ref={mapContainerRef} style={{ width: '100%', height: '100%' }} />
+
+          {/* Category legend */}
+          <div style={{
+            position: 'absolute', bottom: 16, left: 16, zIndex: 1000,
+            background: 'rgba(15,15,26,0.9)', backdropFilter: 'blur(12px)',
+            borderRadius: 12, padding: '14px 18px',
+            border: '1px solid rgba(255,255,255,0.08)',
+            fontSize: 11, maxHeight: 220, overflowY: 'auto',
+            display: window.innerWidth < 600 ? 'none' : 'block',
+          }}>
+            <div style={{ fontWeight: 600, marginBottom: 8, color: '#aaa', textTransform: 'uppercase', letterSpacing: 1, fontSize: 10 }}>
+              Categorías
+            </div>
+            {Object.entries(CATEGORY_COLORS).map(([cat, color]) => (
+              <div key={cat} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                <div style={{ width: 8, height: 8, borderRadius: '50%', background: color, flexShrink: 0 }}/>
+                <span style={{ color: '#ccc' }}>{cat}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Selected museum card */}
+          {selectedMuseo && (
+            <div style={{
+              position: 'absolute', bottom: 16, left: '50%', transform: 'translateX(-50%)',
+              zIndex: 1001, width: 'calc(100% - 32px)', maxWidth: 420,
+              background: 'rgba(26,26,46,0.95)', backdropFilter: 'blur(16px)',
+              borderRadius: 16, padding: '18px 20px',
+              border: '1px solid rgba(255,255,255,0.1)',
+              boxShadow: '0 12px 40px rgba(0,0,0,0.5)',
+              animation: 'slideUp 0.3s ease',
+            }}>
+              <button onClick={(e) => { e.stopPropagation(); onDeselectMuseo(); }} style={{
+                position: 'absolute', top: 10, right: 10,
+                background: 'rgba(255,255,255,0.08)', border: 'none',
+                borderRadius: 8, padding: 4, cursor: 'pointer', color: '#888', display: 'flex',
+              }}>
+                <CloseIcon />
+              </button>
+
+              <div style={{ display: 'flex', gap: 6, marginBottom: 10, flexWrap: 'wrap' }}>
+                <span style={{
+                  padding: '3px 8px', borderRadius: 6, fontSize: 10, fontWeight: 600,
+                  background: getCategoryColor(selectedMuseo.tematica) + '25',
+                  color: getCategoryColor(selectedMuseo.tematica),
+                }}>{selectedMuseo.tematica}</span>
+                <span style={{
+                  padding: '3px 8px', borderRadius: 6, fontSize: 10,
+                  background: (COMUNIDADES[selectedMuseo.comunidad]?.color || '#666') + '20',
+                  color: COMUNIDADES[selectedMuseo.comunidad]?.color || '#888',
+                }}>{selectedMuseo.comunidad}</span>
+              </div>
+
+              <h3 style={{ margin: '0 0 6px', fontSize: 16, fontWeight: 700, color: '#fff', lineHeight: 1.3, paddingRight: 30,
+                fontFamily: "'Playfair Display', serif" }}>
+                {selectedMuseo.nombre}
+              </h3>
+
+              <div style={{ fontSize: 12, color: '#999', marginBottom: 12 }}>
+                {selectedMuseo.municipio}, {selectedMuseo.provincia}
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ display: 'flex', gap: 12, fontSize: 12, color: '#888' }}>
+                  <span>{selectedMuseo.precio}</span>
+                  <span>{selectedMuseo.titularidad}</span>
+                </div>
+                <button onClick={(e) => {
+                  e.stopPropagation();
+                  // Trigger detail view by dispatching custom event
+                  window.dispatchEvent(new CustomEvent('openMuseoDetail', { detail: selectedMuseo }));
+                }} style={{
+                  padding: '8px 16px', borderRadius: 8, border: 'none', cursor: 'pointer',
+                  background: 'linear-gradient(135deg, #F2CC8F, #E07A5F)',
+                  color: '#0f0f1a', fontSize: 12, fontWeight: 600, fontFamily: 'inherit',
+                }}>
+                  Ver detalles
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // ============================================================
+    // LIST VIEW COMPONENT
+    // ============================================================
+
+    function ListView({ museos, onSelectMuseo }) {
+      return (
+        <div style={{
+          display: 'grid', gap: 12, padding: '4px 0',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+          overflowY: 'auto', maxHeight: '100%',
+        }}>
+          {museos.map((museo, i) => (
+            <div key={museo.id} onClick={() => onSelectMuseo(museo)} style={{
+              background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
+              borderRadius: 14, padding: 20, cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              borderLeft: `3px solid ${COMUNIDADES[museo.comunidad]?.color || '#666'}`,
+              animation: `fadeSlideIn 0.4s ease ${i * 0.03}s both`,
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.03)'; e.currentTarget.style.transform = 'translateY(0)'; }}
+            >
+              <h3 style={{ margin: '0 0 8px', fontSize: 15, fontWeight: 600, color: '#fff', lineHeight: 1.3 }}>
+                {museo.nombre}
+              </h3>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 8 }}>
+                <span style={{
+                  padding: '3px 8px', borderRadius: 6, fontSize: 11,
+                  background: `${COMUNIDADES[museo.comunidad]?.color || '#666'}22`,
+                  color: COMUNIDADES[museo.comunidad]?.color || '#888',
+                }}>{museo.comunidad}</span>
+                <span style={{
+                  padding: '3px 8px', borderRadius: 6, fontSize: 11,
+                  background: getCategoryColor(museo.tematica) + '20',
+                  color: getCategoryColor(museo.tematica),
+                }}>{museo.tematica}</span>
+              </div>
+              <div style={{ fontSize: 12, color: '#888' }}>
+                {museo.municipio} · {museo.precio} · {museo.titularidad}
+              </div>
+            </div>
+          ))}
+          {museos.length === 0 && (
+            <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: 60, color: '#555' }}>
+              <div style={{ fontSize: 40, marginBottom: 12 }}>🔍</div>
+              <div style={{ fontSize: 16 }}>No se encontraron museos</div>
+              <div style={{ fontSize: 13, marginTop: 4 }}>Prueba a cambiar los filtros</div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // ============================================================
+    // STATS VIEW COMPONENT
+    // ============================================================
+
+    function StatsView() {
+      const statsByComunidad = useMemo(() => {
+        const stats = {};
+        MUSEOS.forEach(m => {
+          if (!stats[m.comunidad]) stats[m.comunidad] = { total: 0, publico: 0, privado: 0, gratuito: 0 };
+          stats[m.comunidad].total++;
+          if (m.titularidad === 'Pública') stats[m.comunidad].publico++;
+          if (m.titularidad === 'Privada') stats[m.comunidad].privado++;
+          if (m.precio.toLowerCase().includes('gratuito')) stats[m.comunidad].gratuito++;
+        });
+        return stats;
+      }, []);
+
+      const statsByTematica = useMemo(() => {
+        const stats = {};
+        MUSEOS.forEach(m => { stats[m.tematica] = (stats[m.tematica] || 0) + 1; });
+        return Object.entries(stats).sort((a, b) => b[1] - a[1]);
+      }, []);
+
+      const maxComunidad = Math.max(...Object.values(statsByComunidad).map(s => s.total));
+
+      return (
+        <div style={{ display: 'grid', gap: 24, gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', overflowY: 'auto', maxHeight: '100%', padding: '4px 0' }}>
+          {/* By Comunidad */}
+          <div style={{
+            background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
+            borderRadius: 16, padding: 24,
+          }}>
+            <h3 style={{ margin: '0 0 20px', fontSize: 16, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8 }}>
+              <ChartIcon /> Por Comunidad Autónoma
+            </h3>
+            {Object.entries(statsByComunidad).sort((a,b) => b[1].total - a[1].total).map(([comunidad, stats]) => (
+              <div key={comunidad} style={{ marginBottom: 12 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4, fontSize: 13 }}>
+                  <span style={{ color: COMUNIDADES[comunidad]?.color }}>{comunidad}</span>
+                  <span style={{ color: '#888' }}>{stats.total} museos</span>
+                </div>
+                <div style={{ height: 6, background: 'rgba(255,255,255,0.05)', borderRadius: 3, overflow: 'hidden' }}>
+                  <div style={{
+                    height: '100%', borderRadius: 3,
+                    width: `${(stats.total / maxComunidad) * 100}%`,
+                    background: `linear-gradient(90deg, ${COMUNIDADES[comunidad]?.color}, ${COMUNIDADES[comunidad]?.color}88)`,
+                    transition: 'width 1s ease',
+                  }}/>
+                </div>
+                <div style={{ fontSize: 11, color: '#555', marginTop: 2 }}>
+                  {stats.publico} públicos · {stats.gratuito} gratuitos
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* By Temática */}
+          <div style={{
+            background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
+            borderRadius: 16, padding: 24,
+          }}>
+            <h3 style={{ margin: '0 0 20px', fontSize: 16, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8 }}>
+              <ChartIcon /> Por Temática
+            </h3>
+            {statsByTematica.map(([tematica, count]) => (
+              <div key={tematica} style={{ marginBottom: 14 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4, fontSize: 13 }}>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <span style={{ width: 8, height: 8, borderRadius: '50%', background: getCategoryColor(tematica), display: 'inline-block' }}/>
+                    {tematica}
+                  </span>
+                  <span style={{ color: '#888' }}>{count}</span>
+                </div>
+                <div style={{ height: 6, background: 'rgba(255,255,255,0.05)', borderRadius: 3, overflow: 'hidden' }}>
+                  <div style={{
+                    height: '100%', borderRadius: 3,
+                    width: `${(count / statsByTematica[0][1]) * 100}%`,
+                    background: `linear-gradient(90deg, ${getCategoryColor(tematica)}, ${getCategoryColor(tematica)}88)`,
+                    transition: 'width 1s ease',
+                  }}/>
+                </div>
+              </div>
+            ))}
+
+            {/* Summary cards */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginTop: 24 }}>
+              {[
+                { label: 'Total Museos', value: MUSEOS.length, color: '#E07A5F' },
+                { label: 'Comunidades', value: Object.keys(statsByComunidad).length, color: '#81B29A' },
+                { label: 'Gratuitos', value: MUSEOS.filter(m => m.precio.toLowerCase().includes('gratuito')).length, color: '#F2CC8F' },
+                { label: 'Temáticas', value: TEMATICAS.length, color: '#457B9D' },
+              ].map(card => (
+                <div key={card.label} style={{
+                  background: `${card.color}10`, border: `1px solid ${card.color}22`,
+                  borderRadius: 12, padding: 14, textAlign: 'center',
+                }}>
+                  <div style={{ fontSize: 24, fontWeight: 700, color: card.color, fontFamily: "'Playfair Display', serif" }}>
+                    {card.value}
+                  </div>
+                  <div style={{ fontSize: 11, color: '#888', marginTop: 2 }}>{card.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Social Media Grid */}
+          <div style={{
+            background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
+            borderRadius: 16, padding: 24, gridColumn: '1 / -1',
+          }}>
+            <h3 style={{ margin: '0 0 16px', fontSize: 16, fontWeight: 600 }}>
+              Estrategia Redes Sociales · 17 Cuentas por CCAA
+            </h3>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(190px, 1fr))', gap: 10 }}>
+              {COMUNIDADES_LIST.map(c => (
+                <div key={c} style={{
+                  padding: 12, borderRadius: 10,
+                  background: `${COMUNIDADES[c]?.color}08`,
+                  border: `1px solid ${COMUNIDADES[c]?.color}20`,
+                  fontSize: 12,
+                }}>
+                  <div style={{ fontWeight: 600, color: COMUNIDADES[c]?.color, marginBottom: 4 }}>
+                    @Museos{c.replace(/\s/g, '').replace('Comunidadde', '').replace('Regiónde', '').substring(0, 12)}
+                  </div>
+                  <div style={{ color: '#888' }}>
+                    {countByComunidad[c] || '—'} museos registrados
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ============================================================
+    // SEARCH VIEW COMPONENT (PROMPT 4)
+    // ============================================================
+
+    // Additional icons for Search View
+    const ChildFriendlyIcon = () => (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" opacity="0.9">
+        <circle cx="14.5" cy="10.5" r="1.25"/><path d="M22 16v-1a4.33 4.33 0 0 0-3.5-4.25 3.5 3.5 0 1 0-5 0A4.33 4.33 0 0 0 10 15v1h2v-1c0-1.1.66-2.05 1.61-2.47a1.5 1.5 0 0 0 .89.47 1.5 1.5 0 0 0 .89-.47c.95.42 1.61 1.37 1.61 2.47v1h2z"/>
+        <path d="M10 16H2c0-2.76 2.24-5 5-5 .71 0 1.39.15 2 .42v2.14A3 3 0 0 0 7 16h3z"/>
+        <circle cx="7" cy="8" r="2"/>
+      </svg>
+    );
+
+    const TagIcon = () => (
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>
+      </svg>
+    );
+
+    const StarIconSmall = ({ filled }) => (
+      <svg width="12" height="12" viewBox="0 0 24 24" fill={filled ? "#F2CC8F" : "none"} stroke="#F2CC8F" strokeWidth="1.5">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+      </svg>
+    );
+
+    // Simulated ratings for museums (seeded by id for consistency)
+    const MUSEO_RATINGS = {};
+    MUSEOS.forEach(m => {
+      // Generate a deterministic rating between 3.5 and 5.0
+      const seed = (m.id * 7 + 13) % 16;
+      MUSEO_RATINGS[m.id] = 3.5 + (seed / 16) * 1.5;
+    });
+
+    // Determine if museum is "para niños" based on services/type
+    function isParaNinos(museo) {
+      const extra = getMuseoExtra(museo.id);
+      const kidFriendlyTypes = ["Ciencias Naturales", "Ciencias Naturales y Arqueología", "Etnografía"];
+      const hasWorkshops = museo.servicios.some(s => s.toLowerCase().includes('taller'));
+      return kidFriendlyTypes.includes(museo.tematica) || hasWorkshops || extra.vr;
+    }
+
+    function SearchView({ onSelectMuseo }) {
+      const [localSearch, setLocalSearch] = useState('');
+      const [activeChips, setActiveChips] = useState([]);
+      const [selectedRegion, setSelectedRegion] = useState('Todas');
+      const scrollRef = useRef(null);
+
+      const chipOptions = [
+        { key: 'abierto', label: 'Abierto ahora', icon: <ClockIcon /> },
+        { key: 'gratis', label: 'Gratis', icon: <EuroIcon /> },
+        { key: 'vr', label: 'Con VR', icon: <VrIcon /> },
+        { key: 'ninos', label: 'Para niños', icon: <ChildFriendlyIcon /> },
+      ];
+
+      const toggleChip = (key) => {
+        setActiveChips(prev => prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key]);
+      };
+
+      const results = useMemo(() => {
+        return MUSEOS.filter(m => {
+          const extra = getMuseoExtra(m.id);
+
+          // Text search
+          if (localSearch) {
+            const q = localSearch.toLowerCase();
+            const matchText = m.nombre.toLowerCase().includes(q) ||
+              m.municipio.toLowerCase().includes(q) ||
+              m.comunidad.toLowerCase().includes(q) ||
+              m.provincia.toLowerCase().includes(q) ||
+              m.tematica.toLowerCase().includes(q);
+            if (!matchText) return false;
+          }
+
+          // Region filter
+          if (selectedRegion !== 'Todas' && m.comunidad !== selectedRegion) return false;
+
+          // Chip filters
+          if (activeChips.includes('abierto')) {
+            const hour = new Date().getHours();
+            if (!(extra.abierto && hour >= 9 && hour < 20)) return false;
+          }
+          if (activeChips.includes('gratis')) {
+            if (!m.precio.toLowerCase().includes('gratuito')) return false;
+          }
+          if (activeChips.includes('vr')) {
+            if (!extra.vr) return false;
+          }
+          if (activeChips.includes('ninos')) {
+            if (!isParaNinos(m)) return false;
+          }
+
+          return true;
+        });
+      }, [localSearch, selectedRegion, activeChips]);
+
+      const totalActive = activeChips.length + (selectedRegion !== 'Todas' ? 1 : 0) + (localSearch ? 1 : 0);
+
+      return (
+        <div style={{
+          display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden',
+        }}>
+          {/* Search Header */}
+          <div style={{
+            padding: '16px 24px 0', flexShrink: 0,
+          }}>
+            {/* Big search bar */}
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: 12,
+              background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)',
+              borderRadius: 16, padding: '12px 18px',
+              transition: 'border-color 0.3s',
+            }}>
+              <SearchIcon />
+              <input
+                value={localSearch}
+                onChange={e => setLocalSearch(e.target.value)}
+                placeholder="Buscar por nombre, ciudad o temática..."
+                style={{
+                  background: 'none', border: 'none', outline: 'none', color: '#e8e8f0',
+                  fontSize: 15, fontFamily: 'inherit', width: '100%',
+                }}
+              />
+              {localSearch && (
+                <button onClick={() => setLocalSearch('')} style={{
+                  background: 'none', border: 'none', color: '#666', cursor: 'pointer',
+                  display: 'flex', padding: 2,
+                }}>
+                  <CloseIcon />
+                </button>
+              )}
+            </div>
+
+            {/* Filter Chips */}
+            <div style={{
+              display: 'flex', gap: 8, marginTop: 14, overflowX: 'auto',
+              paddingBottom: 4,
+              msOverflowStyle: 'none', scrollbarWidth: 'none',
+            }}>
+              {chipOptions.map(chip => {
+                const isActive = activeChips.includes(chip.key);
+                return (
+                  <button key={chip.key} onClick={() => toggleChip(chip.key)} style={{
+                    display: 'flex', alignItems: 'center', gap: 6,
+                    padding: '7px 14px', borderRadius: 20, cursor: 'pointer',
+                    fontSize: 12, fontWeight: 500, fontFamily: 'inherit', whiteSpace: 'nowrap',
+                    background: isActive ? 'rgba(242,204,143,0.15)' : 'rgba(255,255,255,0.04)',
+                    border: `1px solid ${isActive ? 'rgba(242,204,143,0.35)' : 'rgba(255,255,255,0.08)'}`,
+                    color: isActive ? '#F2CC8F' : '#999',
+                    transition: 'all 0.25s ease',
+                  }}>
+                    {chip.icon}
+                    {chip.label}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Region Selector */}
+            <div style={{
+              display: 'flex', gap: 10, alignItems: 'center', marginTop: 12, paddingBottom: 14,
+              borderBottom: '1px solid rgba(255,255,255,0.06)',
+            }}>
+              <label style={{ fontSize: 11, color: '#555', textTransform: 'uppercase', letterSpacing: 1, whiteSpace: 'nowrap' }}>
+                Región
+              </label>
+              <select value={selectedRegion} onChange={e => setSelectedRegion(e.target.value)} style={{
+                flex: 1, padding: '7px 12px', background: 'rgba(255,255,255,0.05)',
+                border: '1px solid rgba(255,255,255,0.1)', borderRadius: 10,
+                color: '#e8e8f0', fontSize: 13, fontFamily: 'inherit', cursor: 'pointer', outline: 'none',
+              }}>
+                <option value="Todas">Todas las comunidades</option>
+                {COMUNIDADES_LIST.map(c => <option key={c} value={c}>{c}</option>)}
+              </select>
+              {totalActive > 0 && (
+                <button onClick={() => { setLocalSearch(''); setActiveChips([]); setSelectedRegion('Todas'); }} style={{
+                  padding: '6px 12px', background: 'none',
+                  border: '1px solid rgba(242,204,143,0.25)', borderRadius: 8,
+                  color: '#F2CC8F', fontSize: 11, cursor: 'pointer', fontFamily: 'inherit', whiteSpace: 'nowrap',
+                }}>
+                  Limpiar todo
+                </button>
+              )}
+            </div>
+
+            {/* Results count */}
+            <div style={{ padding: '10px 0 6px', fontSize: 12, color: '#666' }}>
+              {results.length} resultado{results.length !== 1 ? 's' : ''} encontrado{results.length !== 1 ? 's' : ''}
+            </div>
+          </div>
+
+          {/* Results List */}
+          <div ref={scrollRef} style={{
+            flex: 1, overflowY: 'auto', padding: '0 24px 24px',
+          }}>
+            {results.map((museo, i) => {
+              const extra = getMuseoExtra(museo.id);
+              const rating = MUSEO_RATINGS[museo.id];
+              const fullStars = Math.floor(rating);
+              const hasHalf = rating - fullStars >= 0.5;
+              const catColor = getCategoryColor(museo.tematica);
+              const comColor = COMUNIDADES[museo.comunidad]?.color || '#666';
+
+              // Generate hashtag-style tags
+              const tags = [];
+              tags.push('#' + museo.tematica.replace(/\s+/g, ''));
+              if (museo.precio.toLowerCase().includes('gratuito')) tags.push('#Gratis');
+              if (extra.vr) tags.push('#VR');
+              if (extra.exposicionTemporal) tags.push('#ExpoTemporal');
+              if (isParaNinos(museo)) tags.push('#Familiar');
+
+              return (
+                <div key={museo.id} onClick={() => onSelectMuseo(museo)} style={{
+                  display: 'flex', gap: 0, marginBottom: 10,
+                  background: 'rgba(255,255,255,0.03)',
+                  border: '1px solid rgba(255,255,255,0.06)',
+                  borderRadius: 14, overflow: 'hidden', cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  animation: `fadeSlideIn 0.35s ease ${i * 0.04}s both`,
+                }}
+                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; e.currentTarget.style.transform = 'translateX(4px)'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.03)'; e.currentTarget.style.transform = 'translateX(0)'; }}
+                >
+                  {/* Photo */}
+                  <div style={{
+                    width: 110, minHeight: 120, flexShrink: 0,
+                    background: extra.imagen
+                      ? `url(${extra.imagen}) center/cover`
+                      : `linear-gradient(135deg, ${catColor}44, ${comColor}44)`,
+                    position: 'relative',
+                  }}>
+                    {/* Open/Closed badge */}
+                    {(() => {
+                      const hour = new Date().getHours();
+                      const isOpen = extra.abierto && hour >= 9 && hour < 20;
+                      return (
+                        <div style={{
+                          position: 'absolute', top: 8, left: 8,
+                          padding: '2px 7px', borderRadius: 6, fontSize: 9, fontWeight: 600,
+                          background: isOpen ? 'rgba(46,184,92,0.85)' : 'rgba(200,60,60,0.85)',
+                          color: '#fff', backdropFilter: 'blur(4px)',
+                        }}>
+                          {isOpen ? 'Abierto' : 'Cerrado'}
+                        </div>
+                      );
+                    })()}
+                  </div>
+
+                  {/* Content */}
+                  <div style={{ flex: 1, padding: '12px 16px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minWidth: 0 }}>
+                    <div>
+                      <h3 style={{
+                        margin: 0, fontSize: 14, fontWeight: 600, color: '#fff', lineHeight: 1.3,
+                        overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                      }}>
+                        {museo.nombre}
+                      </h3>
+                      <div style={{ fontSize: 12, color: '#888', marginTop: 3 }}>
+                        {museo.municipio}, {museo.provincia}
+                      </div>
+                    </div>
+
+                    {/* Tags */}
+                    <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 8 }}>
+                      {tags.slice(0, 4).map(tag => (
+                        <span key={tag} style={{
+                          fontSize: 10, fontWeight: 500,
+                          color: catColor, opacity: 0.85,
+                        }}>
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    {/* Bottom row: rating + price */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+                        {[1,2,3,4,5].map(star => (
+                          <StarIconSmall key={star} filled={star <= fullStars || (star === fullStars + 1 && hasHalf)} />
+                        ))}
+                        <span style={{ fontSize: 11, color: '#999', marginLeft: 4 }}>
+                          {rating.toFixed(1)}
+                        </span>
+                      </div>
+                      <span style={{
+                        fontSize: 11, fontWeight: 600,
+                        color: museo.precio.toLowerCase().includes('gratuito') ? '#81B29A' : '#F2CC8F',
+                      }}>
+                        {museo.precio}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+
+            {/* Empty state */}
+            {results.length === 0 && (
+              <div style={{ textAlign: 'center', padding: '60px 20px', color: '#555' }}>
+                <div style={{ fontSize: 48, marginBottom: 16, opacity: 0.5 }}>🔍</div>
+                <div style={{ fontSize: 16, fontWeight: 500, color: '#888', marginBottom: 6 }}>
+                  No se encontraron museos
+                </div>
+                <div style={{ fontSize: 13 }}>
+                  Prueba a cambiar tu búsqueda o ajustar los filtros
+                </div>
+                {totalActive > 0 && (
+                  <button onClick={() => { setLocalSearch(''); setActiveChips([]); setSelectedRegion('Todas'); }} style={{
+                    marginTop: 16, padding: '8px 20px',
+                    background: 'rgba(242,204,143,0.12)',
+                    border: '1px solid rgba(242,204,143,0.25)',
+                    borderRadius: 10, color: '#F2CC8F', fontSize: 13,
+                    cursor: 'pointer', fontFamily: 'inherit',
+                  }}>
+                    Limpiar todos los filtros
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    // ============================================================
+    // PASAPORTE CULTURAL (PROMPT 7)
+    // ============================================================
+
+    function PasaporteView({ visitedMuseos, favoriteMuseos, onSelectMuseo }) {
+      const visitedIds = Object.keys(visitedMuseos).map(Number);
+      const favoriteIds = Object.keys(favoriteMuseos).map(Number);
+      const visitedCount = visitedIds.length;
+      const totalMuseos = 1500; // Total museos de España
+      const percentage = Math.round((visitedCount / totalMuseos) * 100);
+      const circumference = 2 * Math.PI * 54;
+      const dashOffset = circumference - (visitedCount / totalMuseos) * circumference;
+
+      return (
+        <div style={{
+          height: '100%', overflowY: 'auto', padding: '24px',
+        }}>
+          {/* Header */}
+          <div style={{ textAlign: 'center', marginBottom: 28 }}>
+            <h2 style={{
+              fontFamily: "'Playfair Display', serif", fontSize: 24, fontWeight: 700,
+              color: '#fff', margin: '0 0 4px',
+              background: 'linear-gradient(135deg, #F2CC8F, #E07A5F)',
+              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+            }}>
+              Pasaporte Cultural
+            </h2>
+            <div style={{ fontSize: 12, color: '#666' }}>Colecciona museos de toda España</div>
+          </div>
+
+          {/* Progress Circle */}
+          <div style={{
+            display: 'flex', justifyContent: 'center', marginBottom: 28,
+          }}>
+            <div style={{ position: 'relative', width: 140, height: 140 }}>
+              <svg width="140" height="140" viewBox="0 0 120 120" style={{ transform: 'rotate(-90deg)' }}>
+                <circle cx="60" cy="60" r="54" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="8"/>
+                <circle cx="60" cy="60" r="54" fill="none"
+                  stroke="url(#progressGradient)" strokeWidth="8" strokeLinecap="round"
+                  strokeDasharray={circumference} strokeDashoffset={dashOffset}
+                  style={{ transition: 'stroke-dashoffset 1s cubic-bezier(0.16, 1, 0.3, 1)' }}
+                />
+                <defs>
+                  <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#F2CC8F"/>
+                    <stop offset="100%" stopColor="#E07A5F"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div style={{
+                position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column',
+                alignItems: 'center', justifyContent: 'center',
+              }}>
+                <div style={{ fontSize: 28, fontWeight: 700, color: '#F2CC8F', fontFamily: "'Playfair Display', serif" }}>
+                  {visitedCount}
+                </div>
+                <div style={{ fontSize: 10, color: '#888' }}>de {totalMuseos}</div>
+                <div style={{ fontSize: 9, color: '#555', marginTop: 2 }}>{percentage}% completado</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Stats row */}
+          <div style={{
+            display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, marginBottom: 24,
+          }}>
+            {[
+              { value: visitedCount, label: 'Visitados', color: '#81B29A' },
+              { value: favoriteIds.length, label: 'Lista deseos', color: '#E07A5F' },
+              { value: Object.keys(visitedMuseos).reduce((acc, id) => {
+                const m = MUSEOS.find(m => m.id === Number(id));
+                return m ? acc.add(m.comunidad) && acc : acc;
+              }, new Set()).size, label: 'Comunidades', color: '#F2CC8F' },
+            ].map(stat => (
+              <div key={stat.label} style={{
+                textAlign: 'center', padding: '14px 8px', borderRadius: 14,
+                background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
+              }}>
+                <div style={{ fontSize: 22, fontWeight: 700, color: stat.color }}>{stat.value}</div>
+                <div style={{ fontSize: 10, color: '#777', marginTop: 2 }}>{stat.label}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Lista de Deseos */}
+          <div style={{ marginBottom: 24 }}>
+            <h4 style={{
+              fontSize: 12, color: '#666', textTransform: 'uppercase',
+              letterSpacing: 1.5, margin: '0 0 12px', fontWeight: 600,
+              display: 'flex', alignItems: 'center', gap: 6,
+            }}>
+              <HeartIcon filled={true} /> Lista de Deseos
+            </h4>
+            {favoriteIds.length === 0 ? (
+              <div style={{
+                padding: '24px 16px', textAlign: 'center', borderRadius: 14,
+                background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)',
+                color: '#555', fontSize: 13,
+              }}>
+                Toca el corazón en un museo para añadirlo a tu lista
+              </div>
+            ) : (
+              favoriteIds.map(id => {
+                const museo = MUSEOS.find(m => m.id === id);
+                if (!museo) return null;
+                const catColor = getCategoryColor(museo.tematica);
+                return (
+                  <div key={id} onClick={() => onSelectMuseo(museo)} style={{
+                    display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px',
+                    background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
+                    borderRadius: 12, marginBottom: 6, cursor: 'pointer',
+                    borderLeft: `3px solid ${catColor}`,
+                    transition: 'background 0.2s',
+                  }}
+                  onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.06)'}
+                  onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.03)'}
+                  >
+                    <HeartIcon filled={true} />
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: 13, fontWeight: 600, color: '#ddd', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {museo.nombre}
+                      </div>
+                      <div style={{ fontSize: 11, color: '#777' }}>{museo.municipio}</div>
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+
+          {/* Historial de Visitas */}
+          <div>
+            <h4 style={{
+              fontSize: 12, color: '#666', textTransform: 'uppercase',
+              letterSpacing: 1.5, margin: '0 0 12px', fontWeight: 600,
+              display: 'flex', alignItems: 'center', gap: 6,
+            }}>
+              <CheckCircleIcon /> Historial de Visitas
+            </h4>
+            {visitedIds.length === 0 ? (
+              <div style={{
+                padding: '24px 16px', textAlign: 'center', borderRadius: 14,
+                background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)',
+                color: '#555', fontSize: 13,
+              }}>
+                Sella tu pasaporte en un museo para empezar tu colección
+              </div>
+            ) : (
+              visitedIds.map(id => {
+                const museo = MUSEOS.find(m => m.id === id);
+                if (!museo) return null;
+                const fecha = visitedMuseos[id];
+                return (
+                  <div key={id} onClick={() => onSelectMuseo(museo)} style={{
+                    display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px',
+                    background: 'rgba(129,178,154,0.04)', border: '1px solid rgba(129,178,154,0.1)',
+                    borderRadius: 12, marginBottom: 6, cursor: 'pointer',
+                    transition: 'background 0.2s',
+                  }}
+                  onMouseEnter={e => e.currentTarget.style.background = 'rgba(129,178,154,0.08)'}
+                  onMouseLeave={e => e.currentTarget.style.background = 'rgba(129,178,154,0.04)'}
+                  >
+                    <div style={{
+                      width: 36, height: 36, borderRadius: 10,
+                      background: 'rgba(129,178,154,0.15)', border: '1px solid rgba(129,178,154,0.25)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      color: '#81B29A', flexShrink: 0,
+                    }}>
+                      <CheckCircleIcon />
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: 13, fontWeight: 600, color: '#ddd', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {museo.nombre}
+                      </div>
+                      <div style={{ fontSize: 11, color: '#777' }}>{museo.municipio}</div>
+                    </div>
+                    <div style={{ fontSize: 10, color: '#555', whiteSpace: 'nowrap' }}>
+                      {fecha}
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    // ============================================================
+    // MUSEO DETAIL PANEL
+    // ============================================================
+
+    function MuseoDetail({ museo, onClose, isVisited, isFav, onToggleVisited, onToggleFavorite }) {
+      if (!museo) return null;
+
+      const isMobile = window.innerWidth < 768;
+      const extra = getMuseoExtra(museo.id);
+      const [isFavorite, setIsFavorite] = useState(isFav || false);
+      const [showStamp, setShowStamp] = useState(false);
+      const [bioExpanded, setBioExpanded] = useState(false);
+      const [showVrModal, setShowVrModal] = useState(false);
+      const [showTicketing, setShowTicketing] = useState(false);
+      const [ticketCounts, setTicketCounts] = useState({});
+      const [ticketExtras, setTicketExtras] = useState({});
+      const miniMapRef = useRef(null);
+      const miniMapInstanceRef = useRef(null);
+      const comColor = COMUNIDADES[museo.comunidad]?.color || '#666';
+      const catColor = getCategoryColor(museo.tematica);
+
+      // Determine open/closed status (simulated)
+      const now = new Date();
+      const hour = now.getHours();
+      const isOpen = extra.abierto && hour >= 9 && hour < 20;
+
+      // Initialize mini map
+      useEffect(() => {
+        if (!miniMapRef.current || miniMapInstanceRef.current) return;
+        const map = L.map(miniMapRef.current, {
+          center: [museo.lat, museo.lng],
+          zoom: 15,
+          zoomControl: false,
+          dragging: false,
+          scrollWheelZoom: false,
+          doubleClickZoom: false,
+          touchZoom: false,
+          attributionControl: false,
+        });
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+          subdomains: 'abcd',
+        }).addTo(map);
+        L.marker([museo.lat, museo.lng], {
+          icon: L.divIcon({
+            html: '<div style="width:14px;height:14px;background:' + catColor + ';border-radius:50%;border:2px solid #fff;box-shadow:0 0 10px rgba(0,0,0,0.5)"></div>',
+            className: '', iconSize: [14, 14], iconAnchor: [7, 7],
+          }),
+        }).addTo(map);
+        miniMapInstanceRef.current = map;
+        setTimeout(() => map.invalidateSize(), 300);
+        return () => { map.remove(); miniMapInstanceRef.current = null; };
+      }, [museo.lat, museo.lng]);
+
+      // Services grid data
+      const serviceItems = [
+        { icon: <WheelchairIcon />, label: 'Accesibilidad', active: museo.accesibilidad.length > 0 && museo.accesibilidad[0] !== 'Parcial' },
+        { icon: <ShopIcon />, label: 'Tienda', active: extra.tienda },
+        { icon: <CoffeeIcon />, label: 'Cafetería', active: extra.cafeteria },
+        { icon: <HeadphonesIcon />, label: 'Audioguía', active: extra.audioguia },
+        { icon: <VrIcon />, label: 'VR Disponible', active: extra.vr },
+      ];
+
+      return (
+        <div style={{
+          position: 'fixed', inset: 0, zIndex: 2000,
+          display: 'flex', justifyContent: 'flex-end',
+        }}>
+          {/* Backdrop */}
+          <div onClick={onClose} style={{
+            position: 'absolute', inset: 0,
+            background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(6px)',
+            animation: 'fadeIn 0.2s ease',
+          }}/>
+
+          {/* Panel */}
+          <div style={{
+            position: 'relative',
+            width: isMobile ? '100%' : '100%',
+            maxWidth: isMobile ? '100%' : 520,
+            height: isMobile ? '92vh' : '100%',
+            alignSelf: isMobile ? 'flex-end' : 'stretch',
+            background: 'linear-gradient(180deg, #151525, #0f0f1a)',
+            borderLeft: isMobile ? 'none' : '1px solid rgba(255,255,255,0.08)',
+            borderTopLeftRadius: isMobile ? 24 : 0,
+            borderTopRightRadius: isMobile ? 24 : 0,
+            overflowY: 'auto', padding: 0,
+            animation: isMobile ? 'slideInRightMobile 0.35s cubic-bezier(0.16, 1, 0.3, 1)' : 'slideInRight 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
+          }}>
+            {/* Mobile drag handle */}
+            {isMobile && (
+              <div style={{ display: 'flex', justifyContent: 'center', padding: '10px 0 0', position: 'relative', zIndex: 10 }}>
+                <div style={{ width: 40, height: 4, borderRadius: 2, background: 'rgba(255,255,255,0.3)' }}/>
+              </div>
+            )}
+
+            {/* =============== 1. CABECERA INMERSIVA =============== */}
+            <div style={{
+              position: 'relative', height: isMobile ? 220 : 260, overflow: 'hidden',
+            }}>
+              {/* Cover image */}
+              {extra.imagen ? (
+                <img src={extra.imagen} alt={museo.nombre} style={{
+                  width: '100%', height: '100%', objectFit: 'cover',
+                  filter: 'brightness(0.6)',
+                }}/>
+              ) : (
+                <div style={{
+                  width: '100%', height: '100%',
+                  background: `linear-gradient(135deg, ${comColor}40, ${catColor}30, #0f0f1a)`,
+                }}/>
+              )}
+
+              {/* Gradient overlay */}
+              <div style={{
+                position: 'absolute', inset: 0,
+                background: 'linear-gradient(transparent 30%, rgba(15,15,26,0.7) 60%, #151525 100%)',
+              }}/>
+
+              {/* Top buttons */}
+              <div style={{
+                position: 'absolute', top: isMobile ? 16 : 16, left: 16, right: 16,
+                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+              }}>
+                <button onClick={onClose} style={{
+                  background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12,
+                  padding: 8, cursor: 'pointer', color: '#fff', display: 'flex',
+                }}>
+                  <CloseIcon />
+                </button>
+
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <button onClick={() => {}} style={{
+                    background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(10px)',
+                    border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12,
+                    padding: 8, cursor: 'pointer', color: '#fff', display: 'flex',
+                  }}>
+                    <ShareIcon />
+                  </button>
+                  <button onClick={() => { setIsFavorite(!isFavorite); if (onToggleFavorite) onToggleFavorite(museo.id); }} style={{
+                    background: isFavorite ? 'rgba(224,122,95,0.2)' : 'rgba(0,0,0,0.5)',
+                    backdropFilter: 'blur(10px)',
+                    border: `1px solid ${isFavorite ? 'rgba(224,122,95,0.3)' : 'rgba(255,255,255,0.1)'}`,
+                    borderRadius: 12, padding: 8, cursor: 'pointer', color: '#fff', display: 'flex',
+                    transition: 'all 0.3s ease',
+                  }}>
+                    <HeartIcon filled={isFavorite} />
+                  </button>
+                </div>
+              </div>
+
+              {/* Title overlay at bottom of image */}
+              <div style={{
+                position: 'absolute', bottom: 0, left: 0, right: 0,
+                padding: '0 20px 16px',
+              }}>
+                <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
+                  <span style={{
+                    padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600,
+                    background: `${comColor}30`, color: comColor,
+                    border: `1px solid ${comColor}40`,
+                  }}>
+                    {museo.comunidad}
+                  </span>
+                  <span style={{
+                    padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600,
+                    background: `${catColor}25`, color: catColor,
+                    border: `1px solid ${catColor}35`,
+                  }}>
+                    {museo.tematica}
+                  </span>
+                </div>
+
+                <h2 style={{
+                  margin: 0, fontSize: isMobile ? 22 : 26, fontWeight: 700,
+                  fontFamily: "'Playfair Display', serif",
+                  color: '#fff', lineHeight: 1.2,
+                  textShadow: '0 2px 20px rgba(0,0,0,0.5)',
+                }}>
+                  {museo.nombre}
+                </h2>
+
+                <div style={{ marginTop: 6, fontSize: 13, color: 'rgba(255,255,255,0.7)', display: 'flex', alignItems: 'center', gap: 6 }}>
+                  📍 {museo.municipio}, {museo.provincia}
+                  {/* Simulated rating */}
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 2, marginLeft: 8 }}>
+                    <StarIcon /><StarIcon /><StarIcon /><StarIcon />
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F2CC8F" strokeWidth="1">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                    <span style={{ fontSize: 12, color: '#F2CC8F', marginLeft: 2 }}>4.{Math.floor(museo.id % 5) + 3}</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* =============== 2. INFO RÁPIDA (Fila de iconos) =============== */}
+            <div style={{
+              display: 'flex', justifyContent: 'space-around', padding: '16px 16px',
+              borderBottom: '1px solid rgba(255,255,255,0.06)',
+              background: 'rgba(255,255,255,0.02)',
+            }}>
+              {/* Estado */}
+              <div style={{ textAlign: 'center' }}>
+                <div style={{
+                  width: 44, height: 44, borderRadius: 12, margin: '0 auto 6px',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  background: isOpen ? 'rgba(129,178,154,0.15)' : 'rgba(224,122,95,0.15)',
+                  border: `1px solid ${isOpen ? 'rgba(129,178,154,0.25)' : 'rgba(224,122,95,0.25)'}`,
+                }}>
+                  <div style={{
+                    width: 10, height: 10, borderRadius: '50%',
+                    background: isOpen ? '#81B29A' : '#E07A5F',
+                    boxShadow: `0 0 8px ${isOpen ? '#81B29A' : '#E07A5F'}60`,
+                    animation: isOpen ? 'pulse 2s ease infinite' : 'none',
+                  }}/>
+                </div>
+                <div style={{ fontSize: 11, fontWeight: 600, color: isOpen ? '#81B29A' : '#E07A5F' }}>
+                  {isOpen ? 'Abierto' : 'Cerrado'}
+                </div>
+              </div>
+
+              {/* Precio */}
+              <div style={{ textAlign: 'center' }}>
+                <div style={{
+                  width: 44, height: 44, borderRadius: 12, margin: '0 auto 6px',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  background: 'rgba(242,204,143,0.12)',
+                  border: '1px solid rgba(242,204,143,0.2)',
+                  color: '#F2CC8F',
+                }}>
+                  <EuroIcon />
+                </div>
+                <div style={{ fontSize: 11, fontWeight: 600, color: '#F2CC8F' }}>
+                  {museo.precio}
+                </div>
+              </div>
+
+              {/* Duración */}
+              <div style={{ textAlign: 'center' }}>
+                <div style={{
+                  width: 44, height: 44, borderRadius: 12, margin: '0 auto 6px',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  background: 'rgba(69,123,157,0.15)',
+                  border: '1px solid rgba(69,123,157,0.25)',
+                  color: '#457B9D',
+                }}>
+                  <ClockIcon />
+                </div>
+                <div style={{ fontSize: 11, fontWeight: 600, color: '#457B9D' }}>
+                  {extra.duracion}
+                </div>
+              </div>
+
+              {/* Titularidad */}
+              <div style={{ textAlign: 'center' }}>
+                <div style={{
+                  width: 44, height: 44, borderRadius: 12, margin: '0 auto 6px',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  background: 'rgba(109,89,122,0.15)',
+                  border: '1px solid rgba(109,89,122,0.25)',
+                  color: '#6D597A', fontSize: 11, fontWeight: 700,
+                }}>
+                  {museo.titularidad === 'Pública' ? 'PUB' : museo.titularidad === 'Privada' ? 'PRV' : 'MIX'}
+                </div>
+                <div style={{ fontSize: 11, fontWeight: 600, color: '#6D597A' }}>
+                  {museo.titularidad}
+                </div>
+              </div>
+            </div>
+
+            {/* =============== AGENDA Y EXPOSICIONES (PROMPT 5) =============== */}
+            {(() => {
+              const expos = EXPOSICIONES[museo.id] || (extra.exposicionTemporal ? [
+                { tipo: 'permanente', titulo: 'Colección Permanente', descripcion: museo.tematica },
+                { tipo: 'temporal', titulo: extra.exposicionTemporal, desde: '2026-01-15', hasta: '2026-05-30' },
+              ] : [{ tipo: 'permanente', titulo: 'Colección Permanente', descripcion: museo.tematica }]);
+              const permanentes = expos.filter(e => e.tipo === 'permanente');
+              const temporales = expos.filter(e => e.tipo === 'temporal');
+              return (
+                <div style={{ padding: '16px 20px 0' }}>
+                  <h4 style={{
+                    fontSize: 12, color: '#666', textTransform: 'uppercase',
+                    letterSpacing: 1.5, margin: '0 0 12px', fontWeight: 600,
+                    display: 'flex', alignItems: 'center', gap: 6,
+                  }}>
+                    <CalendarIcon /> Agenda y Exposiciones
+                  </h4>
+
+                  {/* Permanente */}
+                  {permanentes.map((expo, i) => (
+                    <div key={i} style={{
+                      padding: '12px 14px', borderRadius: 12, marginBottom: 8,
+                      background: 'rgba(109,89,122,0.08)',
+                      border: '1px solid rgba(109,89,122,0.15)',
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                        <span style={{
+                          padding: '2px 8px', borderRadius: 6, fontSize: 9, fontWeight: 700,
+                          background: 'rgba(109,89,122,0.2)', color: '#6D597A',
+                          textTransform: 'uppercase', letterSpacing: 0.5,
+                        }}>Permanente</span>
+                      </div>
+                      <div style={{ fontSize: 13, fontWeight: 600, color: '#ddd' }}>{expo.titulo}</div>
+                      {expo.descripcion && <div style={{ fontSize: 11, color: '#888', marginTop: 2 }}>{expo.descripcion}</div>}
+                    </div>
+                  ))}
+
+                  {/* Temporales */}
+                  {temporales.map((expo, i) => {
+                    const status = getExpoStatus(expo.desde, expo.hasta);
+                    const isFuture = new Date() < new Date(expo.desde);
+                    return (
+                      <div key={i} style={{
+                        padding: '12px 14px', borderRadius: 12, marginBottom: 8,
+                        background: 'linear-gradient(135deg, rgba(242,204,143,0.06), rgba(224,122,95,0.06))',
+                        border: '1px solid rgba(242,204,143,0.12)',
+                      }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
+                          <span style={{
+                            padding: '2px 8px', borderRadius: 6, fontSize: 9, fontWeight: 700,
+                            background: 'rgba(242,204,143,0.15)', color: '#F2CC8F',
+                            textTransform: 'uppercase', letterSpacing: 0.5,
+                          }}>Temporal</span>
+                          <span style={{
+                            padding: '2px 10px', borderRadius: 10, fontSize: 10, fontWeight: 600,
+                            background: status.bg, color: status.color,
+                          }}>{status.label}</span>
+                        </div>
+                        <div style={{ fontSize: 13, fontWeight: 600, color: '#ddd' }}>{expo.titulo}</div>
+                        <div style={{ fontSize: 11, color: '#888', marginTop: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
+                          <CalendarIcon /> {formatDateES(expo.desde)} — {formatDateES(expo.hasta)}
+                        </div>
+                        {isFuture && (
+                          <button style={{
+                            marginTop: 8, padding: '6px 14px', borderRadius: 8,
+                            background: 'rgba(69,123,157,0.12)', border: '1px solid rgba(69,123,157,0.25)',
+                            color: '#457B9D', fontSize: 11, fontWeight: 600,
+                            cursor: 'pointer', fontFamily: 'inherit',
+                            display: 'flex', alignItems: 'center', gap: 5,
+                          }}>
+                            <BellIcon /> Notificarme
+                          </button>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })()}
+
+            {/* =============== 3. BIO (Descripción expandible) =============== */}
+            <div style={{ padding: '20px 20px 0' }}>
+              <h4 style={{
+                fontSize: 12, color: '#666', textTransform: 'uppercase',
+                letterSpacing: 1.5, margin: '0 0 10px', fontWeight: 600,
+              }}>
+                Sobre el museo
+              </h4>
+              <div style={{ position: 'relative' }}>
+                <p style={{
+                  margin: 0, fontSize: 14, lineHeight: 1.7, color: '#bbb',
+                  maxHeight: bioExpanded ? 'none' : 72,
+                  overflow: 'hidden',
+                  transition: 'max-height 0.3s ease',
+                }}>
+                  {extra.descripcion}
+                </p>
+                {!bioExpanded && extra.descripcion.length > 120 && (
+                  <div style={{
+                    position: 'absolute', bottom: 0, left: 0, right: 0, height: 40,
+                    background: 'linear-gradient(transparent, #151525)',
+                  }}/>
+                )}
+              </div>
+              {extra.descripcion.length > 120 && (
+                <button onClick={() => setBioExpanded(!bioExpanded)} style={{
+                  background: 'none', border: 'none', color: '#81B29A',
+                  fontSize: 13, fontWeight: 600, cursor: 'pointer',
+                  padding: '8px 0', display: 'flex', alignItems: 'center', gap: 4,
+                }}>
+                  {bioExpanded ? 'Ver menos' : 'Leer más'} <ChevronDownIcon />
+                </button>
+              )}
+            </div>
+
+            {/* =============== 4. SERVICIOS (Grid de iconos) =============== */}
+            <div style={{ padding: '16px 20px' }}>
+              <h4 style={{
+                fontSize: 12, color: '#666', textTransform: 'uppercase',
+                letterSpacing: 1.5, margin: '0 0 12px', fontWeight: 600,
+              }}>
+                Servicios
+              </h4>
+              <div style={{
+                display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 8,
+              }}>
+                {serviceItems.map(item => (
+                  <div key={item.label} style={{
+                    textAlign: 'center', padding: '12px 4px', borderRadius: 12,
+                    background: item.active ? 'rgba(129,178,154,0.08)' : 'rgba(255,255,255,0.02)',
+                    border: `1px solid ${item.active ? 'rgba(129,178,154,0.15)' : 'rgba(255,255,255,0.05)'}`,
+                    opacity: item.active ? 1 : 0.4,
+                    transition: 'all 0.2s ease',
+                  }}>
+                    <div style={{
+                      margin: '0 auto 6px', color: item.active ? '#81B29A' : '#555',
+                      display: 'flex', justifyContent: 'center',
+                    }}>
+                      {item.icon}
+                    </div>
+                    <div style={{ fontSize: 9, color: item.active ? '#aaa' : '#555', fontWeight: 500 }}>
+                      {item.label}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Accessibility tags */}
+              <div style={{ marginTop: 12, display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                {museo.accesibilidad.map(a => (
+                  <span key={a} style={{
+                    padding: '4px 10px', borderRadius: 20,
+                    background: 'rgba(69,123,157,0.1)',
+                    border: '1px solid rgba(69,123,157,0.2)',
+                    fontSize: 10, color: '#457B9D', fontWeight: 500,
+                  }}>{a}</span>
+                ))}
+              </div>
+            </div>
+
+            {/* =============== CONTACTO =============== */}
+            <div style={{ padding: '0 20px 16px' }}>
+              <h4 style={{
+                fontSize: 12, color: '#666', textTransform: 'uppercase',
+                letterSpacing: 1.5, margin: '0 0 10px', fontWeight: 600,
+              }}>
+                Información de contacto
+              </h4>
+              <div style={{
+                background: 'rgba(255,255,255,0.03)', borderRadius: 14,
+                border: '1px solid rgba(255,255,255,0.06)', padding: 16,
+              }}>
+                <div style={{ fontSize: 13, lineHeight: 2.2, color: '#bbb' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span style={{ opacity: 0.6 }}>📍</span> {museo.direccion}
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span style={{ opacity: 0.6 }}>📞</span> {museo.telefono}
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span style={{ opacity: 0.6 }}>🕐</span> {museo.horario}
+                  </div>
+                  {museo.web && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <span style={{ opacity: 0.6 }}>🌐</span>
+                      <a href={museo.web} target="_blank" rel="noopener noreferrer" style={{
+                        color: '#81B29A', textDecoration: 'none',
+                        display: 'inline-flex', alignItems: 'center', gap: 4,
+                      }}>
+                        Web oficial <ExternalLinkIcon />
+                      </a>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* =============== 5. UBICACIÓN (Mini mapa + Cómo llegar) =============== */}
+            <div style={{ padding: '0 20px 16px' }}>
+              <h4 style={{
+                fontSize: 12, color: '#666', textTransform: 'uppercase',
+                letterSpacing: 1.5, margin: '0 0 12px', fontWeight: 600,
+              }}>
+                Ubicación
+              </h4>
+
+              {/* Mini map */}
+              <div style={{
+                borderRadius: 16, overflow: 'hidden', height: 160,
+                border: '1px solid rgba(255,255,255,0.08)',
+                marginBottom: 12,
+              }}>
+                <div ref={miniMapRef} style={{ width: '100%', height: '100%' }}/>
+              </div>
+
+              {/* GPS coordinates */}
+              <div style={{
+                fontSize: 11, color: '#555', marginBottom: 12, textAlign: 'center',
+              }}>
+                GPS: {museo.lat.toFixed(4)}, {museo.lng.toFixed(4)}
+              </div>
+
+              {/* Big "Cómo llegar" button */}
+              <a
+                href={`https://maps.google.com/maps?daddr=${museo.lat},${museo.lng}`}
+                target="_blank" rel="noopener noreferrer"
+                style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+                  width: '100%', padding: '14px 0', borderRadius: 14,
+                  background: 'linear-gradient(135deg, #81B29A, #457B9D)',
+                  color: '#fff', fontWeight: 700, fontSize: 15,
+                  textDecoration: 'none', border: 'none', cursor: 'pointer',
+                  boxShadow: '0 4px 20px rgba(129,178,154,0.3)',
+                  transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                }}
+                onMouseOver={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 6px 25px rgba(129,178,154,0.4)'; }}
+                onMouseOut={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(129,178,154,0.3)'; }}
+              >
+                <NavigationIcon /> Cómo llegar
+              </a>
+            </div>
+
+            {/* =============== VR EXPERIENCE (PROMPT 6) =============== */}
+            {extra.vr ? (
+              <div style={{ padding: '0 20px 16px' }}>
+                <button onClick={() => setShowVrModal(true)} style={{
+                  width: '100%', padding: '16px 20px', borderRadius: 16, cursor: 'pointer',
+                  background: 'linear-gradient(135deg, #E07A5F, #F2CC8F)',
+                  border: 'none', fontFamily: 'inherit',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+                  boxShadow: '0 4px 20px rgba(224,122,95,0.35)',
+                  transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                }}
+                onMouseOver={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 6px 25px rgba(224,122,95,0.5)'; }}
+                onMouseOut={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(224,122,95,0.35)'; }}
+                >
+                  <Camera360Icon />
+                  <span style={{ fontSize: 15, fontWeight: 700, color: '#0f0f1a' }}>Iniciar Visita 360°</span>
+                </button>
+              </div>
+            ) : (
+              <div style={{ padding: '0 20px 16px' }}>
+                <div style={{
+                  padding: 20, borderRadius: 16,
+                  background: 'linear-gradient(135deg, rgba(224,122,95,0.06), rgba(242,204,143,0.06))',
+                  border: '1px solid rgba(224,122,95,0.1)', textAlign: 'center',
+                }}>
+                  <Camera360Icon />
+                  <div style={{ fontSize: 14, fontWeight: 600, color: '#E07A5F', marginTop: 6, fontFamily: "'Playfair Display', serif" }}>
+                    Visita Virtual 360°
+                  </div>
+                  <div style={{ fontSize: 11, color: '#666', marginTop: 2, marginBottom: 10 }}>
+                    Próximamente · Matterport + Insta360
+                  </div>
+                  <div style={{
+                    display: 'inline-block', padding: '6px 16px', borderRadius: 20,
+                    background: 'rgba(224,122,95,0.12)', border: '1px solid rgba(224,122,95,0.2)',
+                    color: '#E07A5F', fontSize: 11, fontWeight: 600, cursor: 'pointer',
+                  }}>
+                    Notificarme
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* =============== GALERÍA DE VISITANTES (PROMPT 6) =============== */}
+            <div style={{ padding: '0 20px 16px' }}>
+              <h4 style={{
+                fontSize: 12, color: '#666', textTransform: 'uppercase',
+                letterSpacing: 1.5, margin: '0 0 10px', fontWeight: 600,
+                display: 'flex', alignItems: 'center', gap: 6,
+              }}>
+                <InstagramIcon /> Galería de Visitantes
+              </h4>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 6, borderRadius: 12, overflow: 'hidden' }}>
+                {[1,2,3].map(n => (
+                  <div key={n} style={{
+                    paddingBottom: '100%', position: 'relative',
+                    background: `url(https://picsum.photos/seed/gallery${museo.id}${n}/300/300) center/cover`,
+                    cursor: 'pointer',
+                  }}>
+                    <div style={{
+                      position: 'absolute', inset: 0, background: 'rgba(0,0,0,0)',
+                      transition: 'background 0.2s',
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.background = 'rgba(0,0,0,0.3)'}
+                    onMouseLeave={e => e.currentTarget.style.background = 'rgba(0,0,0,0)'}
+                    />
+                  </div>
+                ))}
+              </div>
+              <div style={{ textAlign: 'center', marginTop: 6, fontSize: 11, color: '#555' }}>
+                Comparte tu visita con #{museo.nombre.split(' ').slice(0,2).join('')}
+              </div>
+            </div>
+
+            {/* =============== COMUNIDAD / REDES SOCIALES (PROMPT 6) =============== */}
+            {(() => {
+              const social = SOCIAL_CCAA[museo.comunidad];
+              if (!social) return null;
+              return (
+                <div style={{ padding: '0 20px 16px' }}>
+                  <h4 style={{
+                    fontSize: 12, color: '#666', textTransform: 'uppercase',
+                    letterSpacing: 1.5, margin: '0 0 10px', fontWeight: 600,
+                  }}>
+                    Comunidad · {museo.comunidad}
+                  </h4>
+                  <div style={{ display: 'flex', gap: 8 }}>
+                    <button onClick={() => {}} style={{
+                      flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                      padding: '10px 12px', borderRadius: 12,
+                      background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)',
+                      color: '#ccc', cursor: 'pointer', fontSize: 11, fontFamily: 'inherit',
+                    }}>
+                      <TwitterIcon /> <span>{social.twitter}</span>
+                    </button>
+                    <button onClick={() => {}} style={{
+                      flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                      padding: '10px 12px', borderRadius: 12,
+                      background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)',
+                      color: '#ccc', cursor: 'pointer', fontSize: 11, fontFamily: 'inherit',
+                    }}>
+                      <InstagramIcon /> <span>{social.instagram}</span>
+                    </button>
+                  </div>
+                </div>
+              );
+            })()}
+
+            {/* =============== SELLAR PASAPORTE (PROMPT 7) =============== */}
+            <div style={{ padding: '0 20px 12px', position: 'relative' }}>
+              <button onClick={() => {
+                if (onToggleVisited) onToggleVisited(museo.id);
+                if (!isVisited) { setShowStamp(true); setTimeout(() => setShowStamp(false), 2000); }
+              }} style={{
+                width: '100%', padding: '14px 20px', borderRadius: 14, cursor: 'pointer',
+                background: isVisited
+                  ? 'rgba(129,178,154,0.12)' : 'linear-gradient(135deg, rgba(109,89,122,0.2), rgba(129,178,154,0.2))',
+                border: `1px solid ${isVisited ? 'rgba(129,178,154,0.3)' : 'rgba(109,89,122,0.25)'}`,
+                fontFamily: 'inherit',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+                transition: 'all 0.3s ease',
+              }}>
+                <CheckCircleIcon />
+                <span style={{ fontSize: 14, fontWeight: 600, color: isVisited ? '#81B29A' : '#ccc' }}>
+                  {isVisited ? 'Visitado · Pasaporte sellado' : 'Sellar Pasaporte (Check-in)'}
+                </span>
+              </button>
+
+              {/* Confetti / Stamp animation */}
+              {showStamp && (
+                <div style={{
+                  position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  pointerEvents: 'none', animation: 'fadeIn 0.2s ease',
+                }}>
+                  {/* Confetti particles */}
+                  {Array.from({ length: 20 }).map((_, i) => {
+                    const colors = ['#F2CC8F', '#E07A5F', '#81B29A', '#457B9D', '#6D597A', '#F4A261'];
+                    const angle = (i / 20) * 360;
+                    const distance = 40 + Math.random() * 60;
+                    const x = Math.cos(angle * Math.PI / 180) * distance;
+                    const y = Math.sin(angle * Math.PI / 180) * distance;
+                    return (
+                      <div key={i} style={{
+                        position: 'absolute', width: 6, height: 6, borderRadius: 2,
+                        background: colors[i % colors.length],
+                        left: '50%', top: '50%',
+                        transform: `translate(${x}px, ${y}px) rotate(${angle}deg)`,
+                        animation: `fadeIn 0.15s ease ${i * 0.02}s both`,
+                        opacity: 0.9,
+                      }}/>
+                    );
+                  })}
+                  <div style={{
+                    fontSize: 40, animation: 'fadeSlideIn 0.3s ease',
+                    textShadow: '0 4px 20px rgba(0,0,0,0.5)',
+                  }}>
+                    🏛️
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* =============== COMPRAR ENTRADAS - FIXED BOTTOM (PROMPT 8) =============== */}
+            <div style={{ padding: '0 20px 16px' }}>
+              <button onClick={() => setShowTicketing(true)} style={{
+                width: '100%', padding: '16px 20px', borderRadius: 14, cursor: 'pointer',
+                background: 'linear-gradient(135deg, #F2CC8F, #E07A5F)',
+                border: 'none', fontFamily: 'inherit',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+                boxShadow: '0 4px 20px rgba(242,204,143,0.3)',
+                transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+              }}
+              onMouseOver={e => { e.currentTarget.style.transform = 'translateY(-2px)'; }}
+              onMouseOut={e => { e.currentTarget.style.transform = 'translateY(0)'; }}
+              >
+                <TicketIcon />
+                <span style={{ fontSize: 15, fontWeight: 700, color: '#0f0f1a' }}>Comprar Entradas</span>
+              </button>
+            </div>
+
+            {/* Bottom safe area for mobile */}
+            {isMobile && <div style={{ height: 20 }}/>}
+          </div>
+
+          {/* =============== VR MODAL (PROMPT 6) =============== */}
+          {showVrModal && (
+            <div style={{ position: 'absolute', inset: 0, zIndex: 100, background: 'rgba(0,0,0,0.9)', display: 'flex', flexDirection: 'column' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 16 }}>
+                <span style={{ fontSize: 14, fontWeight: 600, color: '#F2CC8F' }}>Visita Virtual 360° · {museo.nombre}</span>
+                <button onClick={() => setShowVrModal(false)} style={{
+                  background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)',
+                  borderRadius: 10, padding: 8, cursor: 'pointer', color: '#fff', display: 'flex',
+                }}>
+                  <CloseIcon />
+                </button>
+              </div>
+              <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
+                <div style={{
+                  width: '100%', maxWidth: 480, aspectRatio: '16/10', borderRadius: 16,
+                  background: 'linear-gradient(135deg, #1a1a2e, #0f0f1a)',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                  position: 'relative', overflow: 'hidden',
+                }}>
+                  <div style={{
+                    position: 'absolute', inset: 0, opacity: 0.15,
+                    background: `url(${extra.imagen || ''}) center/cover`,
+                    filter: 'blur(10px)',
+                  }}/>
+                  <Camera360Icon />
+                  <div style={{ fontSize: 18, fontWeight: 700, color: '#F2CC8F', marginTop: 12, fontFamily: "'Playfair Display', serif", position: 'relative' }}>
+                    Tour Virtual Matterport
+                  </div>
+                  <div style={{ fontSize: 12, color: '#888', marginTop: 6, position: 'relative', textAlign: 'center', padding: '0 20px' }}>
+                    Simulación de experiencia inmersiva 360°<br/>
+                    Usa el ratón para navegar por el espacio
+                  </div>
+                  <div style={{
+                    marginTop: 16, width: 60, height: 60, borderRadius: '50%',
+                    background: 'rgba(242,204,143,0.2)', border: '2px solid #F2CC8F',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    cursor: 'pointer', position: 'relative',
+                    animation: 'pulse 2s ease infinite',
+                  }}>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="#F2CC8F"><polygon points="9.5 7.5 16.5 12 9.5 16.5 9.5 7.5"/></svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* =============== TICKETING BOTTOM SHEET (PROMPT 8) =============== */}
+          {showTicketing && (
+            <div style={{ position: 'absolute', inset: 0, zIndex: 100, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
+              <div onClick={() => setShowTicketing(false)} style={{
+                flex: 1, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)',
+              }}/>
+              <div style={{
+                background: 'linear-gradient(180deg, #1e1e32, #151525)',
+                borderTopLeftRadius: 24, borderTopRightRadius: 24,
+                padding: '12px 20px 24px',
+                border: '1px solid rgba(255,255,255,0.08)',
+                borderBottom: 'none',
+                animation: 'slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
+                maxHeight: '80vh', overflowY: 'auto',
+              }}>
+                {/* Drag handle */}
+                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 12 }}>
+                  <div style={{ width: 40, height: 4, borderRadius: 2, background: 'rgba(255,255,255,0.2)' }}/>
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                  <h3 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: '#fff', fontFamily: "'Playfair Display', serif" }}>
+                    Comprar Entradas
+                  </h3>
+                  <button onClick={() => setShowTicketing(false)} style={{
+                    background: 'none', border: 'none', color: '#666', cursor: 'pointer', display: 'flex',
+                  }}>
+                    <CloseIcon />
+                  </button>
+                </div>
+
+                {/* Ticket types */}
+                {[
+                  { label: 'General', price: museo.precio.toLowerCase().includes('gratuito') ? 0 : parseInt(museo.precio) || 10, desc: 'Adultos' },
+                  { label: 'Reducida', price: museo.precio.toLowerCase().includes('gratuito') ? 0 : Math.floor((parseInt(museo.precio) || 10) * 0.5), desc: 'Estudiantes, mayores 65' },
+                  { label: 'Gratuita', price: 0, desc: 'Menores de 12, desempleados' },
+                  { label: 'Pack Familiar', price: museo.precio.toLowerCase().includes('gratuito') ? 0 : Math.floor((parseInt(museo.precio) || 10) * 2.5), desc: '2 adultos + 2 niños' },
+                ].map(ticket => {
+                  const key = ticket.label;
+                  const count = ticketCounts[key] || 0;
+                  return (
+                    <div key={key} style={{
+                      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                      padding: '12px 0', borderBottom: '1px solid rgba(255,255,255,0.05)',
+                    }}>
+                      <div>
+                        <div style={{ fontSize: 14, fontWeight: 600, color: '#ddd' }}>{ticket.label}</div>
+                        <div style={{ fontSize: 11, color: '#777' }}>{ticket.desc}</div>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                        <span style={{ fontSize: 14, fontWeight: 700, color: '#F2CC8F', marginRight: 12 }}>
+                          {ticket.price === 0 ? 'Gratis' : `${ticket.price}€`}
+                        </span>
+                        <button onClick={() => setTicketCounts(prev => ({ ...prev, [key]: Math.max(0, (prev[key] || 0) - 1) }))} style={{
+                          width: 32, height: 32, borderRadius: 8,
+                          background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
+                          color: '#aaa', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        }}>
+                          <MinusIcon />
+                        </button>
+                        <span style={{ width: 28, textAlign: 'center', fontSize: 15, fontWeight: 600, color: '#fff' }}>
+                          {count}
+                        </span>
+                        <button onClick={() => setTicketCounts(prev => ({ ...prev, [key]: (prev[key] || 0) + 1 }))} style={{
+                          width: 32, height: 32, borderRadius: 8,
+                          background: 'rgba(242,204,143,0.12)', border: '1px solid rgba(242,204,143,0.25)',
+                          color: '#F2CC8F', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        }}>
+                          <PlusIcon />
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+
+                {/* Extras */}
+                <div style={{ marginTop: 16, marginBottom: 16 }}>
+                  <div style={{ fontSize: 12, color: '#666', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 10, fontWeight: 600 }}>
+                    Extras
+                  </div>
+                  {[
+                    { key: 'audioguia', label: 'Audioguía IA', price: 2 },
+                    { key: 'vrexp', label: 'Experiencia VR', price: 3 },
+                  ].map(ex => (
+                    <label key={ex.key} style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                      padding: '10px 0', cursor: 'pointer', borderBottom: '1px solid rgba(255,255,255,0.04)',
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                        <input type="checkbox" checked={ticketExtras[ex.key] || false}
+                          onChange={() => setTicketExtras(prev => ({ ...prev, [ex.key]: !prev[ex.key] }))}
+                          style={{ accentColor: '#F2CC8F', width: 18, height: 18, cursor: 'pointer' }}
+                        />
+                        <span style={{ fontSize: 13, color: '#ccc' }}>{ex.label}</span>
+                      </div>
+                      <span style={{ fontSize: 13, fontWeight: 600, color: '#F2CC8F' }}>+{ex.price}€</span>
+                    </label>
+                  ))}
+                </div>
+
+                {/* Total */}
+                {(() => {
+                  const ticketTypes = [
+                    { label: 'General', price: museo.precio.toLowerCase().includes('gratuito') ? 0 : parseInt(museo.precio) || 10 },
+                    { label: 'Reducida', price: museo.precio.toLowerCase().includes('gratuito') ? 0 : Math.floor((parseInt(museo.precio) || 10) * 0.5) },
+                    { label: 'Gratuita', price: 0 },
+                    { label: 'Pack Familiar', price: museo.precio.toLowerCase().includes('gratuito') ? 0 : Math.floor((parseInt(museo.precio) || 10) * 2.5) },
+                  ];
+                  const ticketTotal = ticketTypes.reduce((sum, t) => sum + t.price * (ticketCounts[t.label] || 0), 0);
+                  const totalTickets = Object.values(ticketCounts).reduce((a, b) => a + b, 0);
+                  const extrasTotal = (ticketExtras.audioguia ? 2 * totalTickets : 0) + (ticketExtras.vrexp ? 3 * totalTickets : 0);
+                  const total = ticketTotal + extrasTotal;
+                  return (
+                    <div>
+                      <div style={{
+                        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                        padding: '16px 0', borderTop: '1px solid rgba(255,255,255,0.08)',
+                      }}>
+                        <span style={{ fontSize: 16, fontWeight: 700, color: '#fff' }}>Total</span>
+                        <span style={{ fontSize: 22, fontWeight: 700, color: '#F2CC8F' }}>
+                          {total === 0 && totalTickets === 0 ? '0€' : total === 0 ? 'Gratis' : `${total}€`}
+                        </span>
+                      </div>
+
+                      <button onClick={() => {
+                        if (totalTickets === 0) return;
+                        setShowTicketing(false);
+                        alert('Pago simulado completado. ¡Disfruta tu visita!');
+                      }} disabled={totalTickets === 0} style={{
+                        width: '100%', padding: '16px 20px', borderRadius: 14, cursor: totalTickets > 0 ? 'pointer' : 'default',
+                        background: totalTickets > 0 ? '#000' : 'rgba(255,255,255,0.05)',
+                        border: totalTickets > 0 ? '1px solid rgba(255,255,255,0.2)' : '1px solid rgba(255,255,255,0.06)',
+                        fontFamily: 'inherit',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                        opacity: totalTickets > 0 ? 1 : 0.4,
+                        transition: 'all 0.3s ease',
+                      }}>
+                        <ShieldIcon />
+                        <span style={{ fontSize: 15, fontWeight: 700, color: '#fff' }}>
+                          Pagar con Apple / Google Pay
+                        </span>
+                      </button>
+
+                      <div style={{
+                        display: 'flex', justifyContent: 'center', gap: 6, marginTop: 10,
+                        fontSize: 10, color: '#555', alignItems: 'center',
+                      }}>
+                        <ShieldIcon /> Pago seguro cifrado · Cancelación gratuita 24h
+                      </div>
+                    </div>
+                  );
+                })()}
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // ============================================================
+    // MAIN APP COMPONENT
+    // ============================================================
+
+    function App() {
+      const [search, setSearch] = useState('');
+      const [selectedComunidad, setSelectedComunidad] = useState('Todas');
+      const [selectedTematica, setSelectedTematica] = useState('Todas');
+      const [selectedMuseo, setSelectedMuseo] = useState(null);
+      const [detailMuseo, setDetailMuseo] = useState(null);
+      const [view, setView] = useState('mapa');
+      const [showFilters, setShowFilters] = useState(false);
+      const [animateIn, setAnimateIn] = useState(false);
+      const [visitedMuseos, setVisitedMuseos] = useState({});
+      const [favoriteMuseos, setFavoriteMuseos] = useState({});
+
+      useEffect(() => {
+        setTimeout(() => setAnimateIn(true), 100);
+      }, []);
+
+      // Listen for openMuseoDetail event from map card
+      useEffect(() => {
+        const handler = (e) => setDetailMuseo(e.detail);
+        window.addEventListener('openMuseoDetail', handler);
+        return () => window.removeEventListener('openMuseoDetail', handler);
+      }, []);
+
+      const filteredMuseos = useMemo(() => {
+        return MUSEOS.filter(m => {
+          const matchSearch = !search ||
+            m.nombre.toLowerCase().includes(search.toLowerCase()) ||
+            m.municipio.toLowerCase().includes(search.toLowerCase()) ||
+            m.tematica.toLowerCase().includes(search.toLowerCase()) ||
+            m.comunidad.toLowerCase().includes(search.toLowerCase());
+          const matchComunidad = selectedComunidad === 'Todas' || m.comunidad === selectedComunidad;
+          const matchTematica = selectedTematica === 'Todas' || m.tematica === selectedTematica;
+          return matchSearch && matchComunidad && matchTematica;
+        });
+      }, [search, selectedComunidad, selectedTematica]);
+
+      const activeFilters = (selectedComunidad !== 'Todas' ? 1 : 0) + (selectedTematica !== 'Todas' ? 1 : 0);
+
+      return (
+        <div style={{
+          display: 'flex', flexDirection: 'column', height: '100vh',
+          position: 'relative', overflow: 'hidden',
+        }}>
+          {/* Background texture */}
+          <div style={{
+            position: 'fixed', inset: 0, opacity: 0.03, zIndex: 0, pointerEvents: 'none',
+            backgroundImage: 'radial-gradient(circle at 25% 25%, #fff 1px, transparent 1px)',
+            backgroundSize: '30px 30px',
+          }}/>
+
+          {/* Header */}
+          <header style={{
+            position: 'relative', zIndex: 10, padding: '16px 24px',
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            borderBottom: '1px solid rgba(255,255,255,0.06)',
+            backdropFilter: 'blur(20px)',
+            background: 'rgba(15,15,26,0.8)',
+            transform: animateIn ? 'translateY(0)' : 'translateY(-30px)',
+            opacity: animateIn ? 1 : 0,
+            transition: 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1)',
+            flexShrink: 0,
+            flexWrap: 'wrap', gap: 12,
+          }}>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 12 }}>
+              <h1 className="header-title" style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: 26, fontWeight: 700, margin: 0,
+                background: 'linear-gradient(135deg, #F2CC8F, #E07A5F, #81B29A)',
+                WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+                letterSpacing: '-0.5px',
+              }}>
+                Museos de España
+              </h1>
+              <span className="header-subtitle" style={{ fontSize: 13, color: '#666', fontStyle: 'italic' }}>
+                {MUSEOS.length} museos · 17 comunidades
+              </span>
+            </div>
+
+            <div style={{ display: 'flex', gap: 4, background: 'rgba(255,255,255,0.05)', borderRadius: 10, padding: 3 }}>
+              {[
+                { key: 'mapa', label: 'Mapa', icon: <MapIcon /> },
+                { key: 'buscar', label: 'Buscar', icon: <SearchIcon /> },
+                { key: 'lista', label: 'Lista', icon: <ListIcon /> },
+                { key: 'pasaporte', label: 'Pasaporte', icon: <TrophyIcon /> },
+                { key: 'stats', label: 'Datos', icon: <ChartIcon /> },
+              ].map(v => (
+                <button key={v.key} onClick={() => setView(v.key)} style={{
+                  padding: '8px 14px', border: 'none', borderRadius: 8, cursor: 'pointer',
+                  fontSize: 13, fontWeight: 500, fontFamily: 'inherit',
+                  background: view === v.key ? 'rgba(242,204,143,0.15)' : 'transparent',
+                  color: view === v.key ? '#F2CC8F' : '#888',
+                  transition: 'all 0.3s ease',
+                  display: 'flex', alignItems: 'center', gap: 6,
+                }}>
+                  {v.icon} {v.label}
+                </button>
+              ))}
+            </div>
+          </header>
+
+          {/* Search & Filters Bar (hidden on Buscar tab) */}
+          <div className="search-container" style={{
+            position: 'relative', zIndex: 10, padding: '12px 24px',
+            display: (view === 'buscar' || view === 'pasaporte') ? 'none' : 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap',
+            background: 'rgba(15,15,26,0.6)',
+            borderBottom: '1px solid rgba(255,255,255,0.04)',
+            flexShrink: 0,
+            transform: animateIn ? 'translateY(0)' : 'translateY(-20px)',
+            opacity: animateIn ? 1 : 0,
+            transition: 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s',
+          }}>
+            <div style={{
+              flex: '1 1 250px', display: 'flex', alignItems: 'center', gap: 10,
+              background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)',
+              borderRadius: 12, padding: '8px 14px',
+            }}>
+              <SearchIcon />
+              <input
+                value={search} onChange={e => setSearch(e.target.value)}
+                placeholder="Buscar museo, ciudad o temática..."
+                style={{
+                  background: 'none', border: 'none', outline: 'none', color: '#e8e8f0',
+                  fontSize: 14, fontFamily: 'inherit', width: '100%',
+                }}
+              />
+              {search && (
+                <button onClick={() => setSearch('')} style={{
+                  background: 'none', border: 'none', color: '#666', cursor: 'pointer', display: 'flex', padding: 2,
+                }}>
+                  <CloseIcon />
+                </button>
+              )}
+            </div>
+
+            <button onClick={() => setShowFilters(!showFilters)} style={{
+              display: 'flex', alignItems: 'center', gap: 6,
+              padding: '8px 14px', background: showFilters ? 'rgba(242,204,143,0.12)' : 'rgba(255,255,255,0.05)',
+              border: `1px solid ${showFilters ? 'rgba(242,204,143,0.25)' : 'rgba(255,255,255,0.08)'}`,
+              borderRadius: 12, color: showFilters ? '#F2CC8F' : '#aaa',
+              cursor: 'pointer', fontSize: 13, fontFamily: 'inherit',
+              transition: 'all 0.3s ease',
+            }}>
+              <FilterIcon /> Filtros
+              {activeFilters > 0 && (
+                <span style={{
+                  background: '#F2CC8F', color: '#0f0f1a', borderRadius: '50%',
+                  width: 18, height: 18, display: 'flex', alignItems: 'center',
+                  justifyContent: 'center', fontSize: 10, fontWeight: 700,
+                }}>
+                  {activeFilters}
+                </span>
+              )}
+            </button>
+
+            <span style={{ fontSize: 12, color: '#555' }}>
+              {filteredMuseos.length} resultado{filteredMuseos.length !== 1 ? 's' : ''}
+            </span>
+          </div>
+
+          {/* Filters Panel */}
+          {showFilters && view !== 'buscar' && view !== 'pasaporte' && (
+            <div style={{
+              position: 'relative', zIndex: 10, padding: '12px 24px',
+              display: 'flex', gap: 14, flexWrap: 'wrap',
+              background: 'rgba(15,15,26,0.4)',
+              borderBottom: '1px solid rgba(255,255,255,0.04)',
+              animation: 'fadeSlideIn 0.3s ease',
+              flexShrink: 0,
+            }}>
+              <div style={{ flex: '1 1 200px' }}>
+                <label style={{ fontSize: 10, color: '#555', textTransform: 'uppercase', letterSpacing: 1, display: 'block', marginBottom: 4 }}>
+                  Comunidad Autónoma
+                </label>
+                <select value={selectedComunidad} onChange={e => setSelectedComunidad(e.target.value)} style={{
+                  width: '100%', padding: '8px 12px', background: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8,
+                  color: '#e8e8f0', fontSize: 13, fontFamily: 'inherit', cursor: 'pointer', outline: 'none',
+                }}>
+                  <option value="Todas">Todas las comunidades</option>
+                  {COMUNIDADES_LIST.map(c => <option key={c} value={c}>{c}</option>)}
+                </select>
+              </div>
+              <div style={{ flex: '1 1 200px' }}>
+                <label style={{ fontSize: 10, color: '#555', textTransform: 'uppercase', letterSpacing: 1, display: 'block', marginBottom: 4 }}>
+                  Temática
+                </label>
+                <select value={selectedTematica} onChange={e => setSelectedTematica(e.target.value)} style={{
+                  width: '100%', padding: '8px 12px', background: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8,
+                  color: '#e8e8f0', fontSize: 13, fontFamily: 'inherit', cursor: 'pointer', outline: 'none',
+                }}>
+                  <option value="Todas">Todas las temáticas</option>
+                  {TEMATICAS.map(t => <option key={t} value={t}>{t}</option>)}
+                </select>
+              </div>
+              {activeFilters > 0 && (
+                <button onClick={() => { setSelectedComunidad('Todas'); setSelectedTematica('Todas'); }} style={{
+                  alignSelf: 'flex-end', padding: '8px 14px', background: 'none',
+                  border: '1px solid rgba(242,204,143,0.25)', borderRadius: 8,
+                  color: '#F2CC8F', fontSize: 12, cursor: 'pointer', fontFamily: 'inherit',
+                }}>
+                  Limpiar filtros
+                </button>
+              )}
+            </div>
+          )}
+
+          {/* Main Content Area */}
+          <div style={{ flex: 1, position: 'relative', zIndex: 5, overflow: 'hidden', padding: (view !== 'mapa' && view !== 'buscar') ? '16px 24px' : 0 }}>
+            {view === 'mapa' && (
+              <MapView
+                museos={filteredMuseos}
+                selectedMuseo={selectedMuseo}
+                onSelectMuseo={(m) => setSelectedMuseo(m)}
+                onDeselectMuseo={() => setSelectedMuseo(null)}
+              />
+            )}
+            {view === 'buscar' && (
+              <SearchView onSelectMuseo={(m) => setDetailMuseo(m)} />
+            )}
+            {view === 'lista' && (
+              <ListView museos={filteredMuseos} onSelectMuseo={(m) => setDetailMuseo(m)} />
+            )}
+            {view === 'pasaporte' && (
+              <PasaporteView
+                visitedMuseos={visitedMuseos}
+                favoriteMuseos={favoriteMuseos}
+                onSelectMuseo={(m) => setDetailMuseo(m)}
+              />
+            )}
+            {view === 'stats' && <StatsView />}
+          </div>
+
+          {/* Detail Panel */}
+          {detailMuseo && (
+            <MuseoDetail
+              museo={detailMuseo}
+              onClose={() => { setDetailMuseo(null); }}
+              isVisited={!!visitedMuseos[detailMuseo.id]}
+              isFav={!!favoriteMuseos[detailMuseo.id]}
+              onToggleVisited={(id) => setVisitedMuseos(prev => {
+                const next = { ...prev };
+                if (next[id]) delete next[id]; else next[id] = new Date().toISOString().split('T')[0];
+                return next;
+              })}
+              onToggleFavorite={(id) => setFavoriteMuseos(prev => {
+                const next = { ...prev };
+                if (next[id]) delete next[id]; else next[id] = true;
+                return next;
+              })}
+            />
+          )}
+        </div>
+      );
+    }
+
+    // ============================================================
+    // RENDER
+    // ============================================================
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
