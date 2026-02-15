@@ -1,0 +1,480 @@
+
+
+
+
+
+
+
+<!-- Comprobacion de despliegue en cernuda.mcu.es (20090206) -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.cultura.gob.es/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
+<head>
+	<title>Directorio de Museos de Espa�a</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<meta name="DC.title" content="Directorio de Museos de Espa�a" />
+	<meta name="title" content="Directorio de Museos de Espa�a" />
+	<meta name="DC.editor" content="SG de Museos Estatales" />
+	<meta name="editor" content="SG de Museos Estatales" />
+	<meta name="DC.description" content="Directorio con fichas de los museos de Espa�a, permite hacer b�squedas por tipolog�a, titularidad o gesti�n del museo." />
+	<meta name="description" content="Directorio con fichas de los museos de Espa�a, permite hacer b�squedas por tipolog�a, titularidad o gesti�n del museo." />
+	<meta name="DC.keywords" content="DIRECTORIOS, MUSEOS DE ESPA�A, FORMULARIOS DE B�SQUEDA" />
+	<meta name="keywords" content="DIRECTORIOS, MUSEOS DE ESPA�A, FORMULARIOS DE B�SQUEDA" />
+	<meta name="DC.date" content="2009-12-10 16:31:26" />
+	<meta name="date" content="2009-12-10 16:31:26" />
+	<meta name="DC.coverage" content="" />
+	<meta name="coverage" content="" />
+	<meta name="DC.type" content="Text" />
+	<meta name="type" content="Text" />
+	<meta name="MCU.codigo" content="A08.C02" />
+	<meta name="MCU.area" content="Museos" />
+	<meta name="MCU.acanal" content="SI" />
+	<meta name="lenguaje" content="es" />
+	<meta name="traduccion" content="" />
+
+	<!-- HOJAS DE ESTILOS -->
+<link rel="stylesheet" type="text/css" href="./cssDesign/general.css" />
+
+<!-- 
+<link rel="stylesheet" type="text/css" href="./css/bloqueSuperior.css" />
+<link rel="stylesheet" type="text/css" href="./css/bloqueInferior.css" />
+<link rel="stylesheet" type="text/css" href="./css/bloqueContenido.css" />
+<link rel="stylesheet" type="text/css" href="./css/A08.css" />
+<link rel="stylesheet" type="text/css" href="./css/bloqueNavegacion.css" />
+<link rel="stylesheet" type="text/css" href="./css/m_.css" />
+<link rel="stylesheet" type="text/css" href="./css/imprimir.css" media="print"/>
+ -->	
+		<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		
+		_gaq.push(['_setAccount', 'UA-17297954-1']); 
+		_gaq.push(['b._setAccount', 'UA-17297766-1']);
+		_gaq.push(['c._setAccount', 'UA-18322882-1']);
+		_gaq.push(['_setDomainName', '.mcu.es']); 
+		_gaq.push(['b._setDomainName', '.mcu.es']);
+		_gaq.push(['c._setDomainName', '.mcu.es']);
+	
+		_gaq.push(['_setCustomVar', 1,'Nivel_1','Directorio',3], 
+			['b._setCustomVar', 1,'Nivel_1','Directorio',3], 
+			['c._setCustomVar', 1,'Nivel_1','Directorio',3]); 
+			
+		_gaq.push(['_trackPageview']); 
+		_gaq.push(['b._trackPageview']); 
+		_gaq.push(['c._trackPageview']); 
+	
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+		
+		<!-- Google Tag Manager -->
+(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5ZPQT8L8');
+<!-- End Google Tag Manager -->
+		
+	</script>
+
+</head>
+
+
+<body onload="transformaUsername('anonymousUser');">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5ZPQT8L8"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+	<div id="wrapper"> 
+		
+		<!-- header ini-->
+		<div id="header" class="reset">
+			<img src="images/header.jpg" alt="Directorio de Museos de Espa�a" usemap="#imagenCabe" />
+			<map name="imagenCabe" id="imagenCabe">
+				<area shape="rect" coords="4,3,265,50" href="http://www.cultura.gob.es" target="_blank" title="Enlace a la pagina principal del Ministerio de Cultura" />
+				<area shape="poly" coords="265,3,980,3,980,180,4,180,4,50,265,50,265,3" href="/dirmuseos" title="Directorio de Museos de Espa�a" />
+			</map>
+			<div id="msTitulo"><h1>Directorio de Museos y Colecciones de Espa�a</h1></div>
+			<div id="navegador">
+	<div id="msNavPrincipal">
+		<ul>
+			<li><a href="/dirmuseos/mostrarBusquedaSencilla.do"><img src="images/boliches/boliche_1.png" alt="" />B�squeda Sencilla</a></li>
+			<li><a href="/dirmuseos/mostrarBusquedaAvanzada.do"><img src="images/boliches/boliche_2.png" alt="" />B�squeda Avanzada</a></li>
+			<li><a href="/dirmuseos/eldirectorio.jsp"><img src="images/boliches/boliche_8.png" alt="" />El Directorio</a></li>
+			<li><a href="/dirmuseos/loadSolicitudAlta.do"><img src="images/boliches/boliche_3.png" alt="" />Solicitud de Alta</a></li>
+			<li><a href="/dirmuseos/ayuda.jsp"><img src="images/boliches/boliche_4.png" alt="" />Ayuda</a></li>
+			<li><a href="/dirmuseos/enlaces.jsp"><img src="images/boliches/boliche_5.png" alt="" />Enlaces</a></li>
+			<li><a href="/dirmuseos/mostrarDocumentacion.do"><img src="images/boliches/boliche_9.png" alt="" />Documentaci�n</a></li>
+			<li><a target="_blank" href="https://aplicaciones.cultura.gob.es/gesdirmuseos/login.jsp"><img src="images/boliches/boliche_6.png" alt="" />Login</a></li>
+		</ul>
+	</div>
+</div>
+		</div>
+		<!-- header ende--> 
+		
+		<!-- Detalle de un museo -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<div id="content" class="reset">
+		<div id="cnt-nav" class="noBorde">
+			<!-- SI SE ENTR� POR URL NO SE MUESTRA EL LINK "Volver a la lista" -->
+			
+			<div class="right">
+				<a class="imprimirDetalle" target="_blank" href="/dirmuseos/generaPDF.do?tipoPDF=fichaDetalle
+					&id=678">
+					<img src="images/ico-imp.gif" width="16" height="15" alt="Imprimir" />&nbsp;Imprimir
+				</a>
+			</div>
+		</div>
+		
+		<!-- FORMATO NUEVO -->
+		
+		<div class="pag">
+		
+			<h2 class="nomMuseo">AQUARIUM DONOSTIA-SAN SEBASTIAN
+				<script type="text/javascript">
+					var addthis_share = {
+					    url: "http://directoriomuseos.mecd.es/dirmuseos/mostrarMuseoPorCodigo.do?idInternoMuseo=678"
+					}
+				</script>
+				
+				<!-- AddThis Button BEGIN -->
+				<div style="float:right" class="addthis_toolbox addthis_default_style ">
+					<a class="addthis_button_facebook at300b"></a>
+					<a class="addthis_button_twitter at300b"></a>
+					<a class="addthis_button_email at300b"></a>
+					<a class="addthis_button_compact"></a>
+				</div>
+				<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js"></script>
+				<!-- AddThis Button END -->
+			</h2>
+			<p>&nbsp;</p>
+
+			<input type="hidden" name="codigoMuseoPestania" value="678" />
+			
+				<!-- INICIO DE CONTENIDO DE LA PESTA�A: INFORMACION -->
+				<ul id="cn-nav-pesta">
+	
+		
+	
+	
+		
+			<li><img src="images/informacion-on.gif" width="113" height="23" alt="Informaci�n" /></li>
+		
+		
+	
+	
+		
+			
+			
+				<li><a href="/dirmuseos/mostrarDetalleMuseo.do
+						?
+						&orderBy=
+						&orderType=
+						&pag=
+						&idMuseo=678
+						&pestania=visita
+					">
+					<img src="images/visita-off.gif" width="66" height="23" alt="Visita" />
+					</a></li>
+			
+		
+	
+	
+		
+		
+			<li><a href="/dirmuseos/mostrarDetalleMuseo.do
+						?
+						&orderBy=
+						&orderType=
+						&pag=
+						&idMuseo=678
+						&pestania=descripcion
+					">
+					<img src="images/descripcion-off.gif" width="112" height="23" alt="Descripci�n" />
+					</a></li>
+		
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		
+	
+	
+		
+		
+		
+			
+				
+			
+			
+				
+			
+		
+		
+			
+			
+				
+			
+		
+	
+</ul>
+				<div id="cn-pesta" class="segunda">
+					<!-- Imagenes -->
+					<div  class="cn-th-info">
+						<p>
+							
+					      	
+								
+									
+			    	   					<a href="descargarFichero.do?fileName=678/1269442485_3.jpg" target="_blank"><img width="202" height="145" alt="Imagen destacada" src="descargarFichero.do?fileName=678/1269442485_3.jpg"/></a>
+					    	   			
+									
+								
+							
+							
+							
+																			
+						</p>
+					</div>
+		 			<table>
+						<!-- Nombre museo en el idioma de su CCAA -->
+		 				
+						<!-- Museo abierto o cerrado -->
+						
+						<!-- C�digo de estad�stica - Solo para administradores -->
+						
+						<!-- Tipo de centro: Museo o Colecci�n -->
+						
+							<tr>
+								<td class="c1">Museo/Colecci�n:</td>
+								<td class="c2">Museo</td>
+							</tr>
+						
+						<!-- Tipo de centro: Jerarqu�a -->
+						
+							<tr>
+								<td class="c1">Matriz/Filial/Secci�n/Anexo:</td>
+								<td class="c2">Matriz</td>
+							</tr>
+						
+						<!-- Museos matriz o museos asociados-->
+						
+										
+							
+								
+								
+								
+										
+						
+						<!-- Direcci�n -->
+						<tr>
+							<td class="c1">Direcci�n: </td>
+							<td class="c2">
+								
+									Plaza&nbsp;
+									Carlos Blasco de Imaz
+									, 1. 
+								
+								
+								<br />
+								20003
+								
+									Donostia-San Sebasti�n&nbsp;
+									(Guip�zcoa),&nbsp;
+									Pa�s Vasco
+								
+							</td>
+						</tr>
+						<!-- Director -->
+						
+							<tr>
+								<td class="c1">Director/a:</td>
+								<td class="c2">Esther Irigaray</td>
+							</tr>
+						
+						<!-- Tel�fono -->
+						
+							<tr>
+								<td class="c1">Tel�fono: </td>
+								<td class="c2">943 440099</td>
+							</tr>
+						
+						<!-- Fax -->
+						
+							<tr>
+								<td class="c1">Fax:</td>
+								<td class="c2">943 433554</td>
+							</tr>
+						
+						<!-- Correo electr�nico del centro -->
+						
+							<!-- Verifico que el correo del museo no sea el mismo que el de su CCAA -->
+							 
+								<tr>
+									<td class="c1">Correo electr�nico: </td>
+									<td class="c2"><a href="mailto:info@aquariumss.com">info@aquariumss.com</a></td>
+								</tr>
+							
+						
+						<!-- Enlaces web -->
+						
+						
+							
+						
+						
+							<tr>
+								<td class="c1">Internet:</td>
+								<td class="c2">
+									
+										<a href="http://www.aquariumss.com"  target="_blank" title="Se abre en ventana nueva. http://www.aquariumss.com">http://www.aquariumss.com</a>
+										<br/>
+									
+								</td>
+							</tr>
+						
+					</table>
+				</div>
+				<!-- FIN DE CONTENIDO DE LA PESTA�A: INFORMACION -->
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			<div style="padding:20px">
+				<p align="justify">
+	<small>
+		La informaci�n contenida en cada una de las fichas disponibles del Directorio de Museos y Colecciones de Espa�a es responsabilidad en cada caso de la instituci�n correspondiente, que es la que ha generado el contenido informativo
+	</small>
+</p>
+			</div>
+		</div>
+		
+		<!-- SI SE ENTR� POR URL NO SE MUESTRA EL LINK "Volver a la lista" -->
+		
+			
+				<div class="left">&laquo; 
+					<a href="&orderBy=&orderType=&pag=">Volver</a>
+				</div>
+			
+		
+	</div>	
+
+
+	
+
+		<!-- Contenido -->
+
+		<!-- footer ini-->	
+		<div id="footer" class="reset">
+	<div id="ft_nav">
+		<p>
+			<img src="images/boliches/boliche_1.png" alt="" /><a href="/dirmuseos/mostrarBusquedaSencilla.do" class="menu_inf">B�squeda Sencilla</a>&nbsp;
+			<img src="images/boliches/boliche_2.png" alt="" /><a href="/dirmuseos/mostrarBusquedaAvanzada.do" class="menu_inf">B�squeda Avanzada</a>&nbsp;
+			<img src="images/boliches/boliche_8.png" alt="" /><a href="/dirmuseos/eldirectorio.jsp" class="menu_inf">El Directorio</a>&nbsp;			
+			<img src="images/boliches/boliche_3.png" alt="" /><a href="/dirmuseos/loadSolicitudAlta.do" class="menu_inf">Solicitud de Alta</a>&nbsp;
+			<img src="images/boliches/boliche_4.png" alt="" /><a href="/dirmuseos/ayuda.jsp" class="menu_inf">Ayuda</a>&nbsp;
+			<img src="images/boliches/boliche_5.png" alt="" /><a href="/dirmuseos/enlaces.jsp" class="menu_inf">Enlaces</a>&nbsp;
+			<img src="images/boliches/boliche_9.png" alt="" /><a href="/dirmuseos/mostrarDocumentacion.do" class="menu_inf">Documentaci�n</a>&nbsp;
+		</p>		
+		<p>Para cualquier consulta acerca del Directorio de Museos puede ponerse en contacto a trav�s del correo electr�nico: <a href="mailto:directorio.museos@cultura.gob.es">directorio.museos@cultura.gob.es</a></p>
+		<p><a href="https://www.cultura.gob.es/comunes/accesibilidad.html" target="_blank" title="Se abre en ventana nueva">Accesibilidad</a> | <a href="/dirmuseos/mapaWeb.jsp" title="Mapa Web">Mapa Web</a></p>
+	</div>
+</div>
+		<!-- footer end--> 
+
+	</div>
+</body>
+<script language="JavaScript" type="text/javascript" src="js/global.js"></script>
+</html>
