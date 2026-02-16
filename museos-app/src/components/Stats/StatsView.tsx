@@ -51,7 +51,7 @@ export default function StatsView({ museums }: StatsViewProps) {
       {/* Summary cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
         {stats.map(({ label, value, color }) => (
-          <div key={label} className="bg-white dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 rounded-xl p-4 text-center">
+          <div key={label} className="bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 shadow-sm rounded-xl p-4 text-center">
             <p className={`text-2xl font-bold ${color}`}>{value.toLocaleString('es-ES')}</p>
             <p className="text-xs text-gray-500 mt-1">{label}</p>
           </div>
@@ -61,7 +61,7 @@ export default function StatsView({ museums }: StatsViewProps) {
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Bar chart - by comunidad */}
-        <div className="bg-white dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+        <div className="bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 shadow-sm rounded-xl p-6">
           <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Museos por Comunidad Aut&oacute;noma</h3>
           <ResponsiveContainer width="100%" height={400}>
             <BarChart data={comunidadData} layout="vertical" margin={{ left: 10, right: 20 }}>
@@ -77,7 +77,7 @@ export default function StatsView({ museums }: StatsViewProps) {
         </div>
 
         {/* Pie chart - by tematica */}
-        <div className="bg-white dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+        <div className="bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 shadow-sm rounded-xl p-6">
           <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Distribuci&oacute;n por Tem&aacute;tica</h3>
           <ResponsiveContainer width="100%" height={400}>
             <PieChart>

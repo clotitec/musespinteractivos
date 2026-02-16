@@ -44,7 +44,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${dmSans.variable} ${playfair.variable} font-sans antialiased min-h-screen transition-colors duration-300 bg-gray-50 text-gray-900 dark:bg-gray-950 dark:text-gray-100`}>
+      <body className={`${dmSans.variable} ${playfair.variable} font-sans antialiased min-h-screen transition-colors duration-300 bg-slate-50 text-gray-800 dark:bg-gray-950 dark:text-gray-100`}>
         <ThemeProvider>
           <Header />
           <main className="pt-16">

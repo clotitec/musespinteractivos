@@ -44,7 +44,7 @@ export default function PassportView({
   return (
     <div className="space-y-8">
       {/* Passport header */}
-      <div className="bg-gradient-to-r from-purple-600/20 to-amber-600/20 border border-gray-200 dark:border-gray-800 rounded-2xl p-8">
+      <div className="bg-gradient-to-r from-purple-600/20 to-amber-600/20 border border-gray-200 dark:border-gray-700 rounded-2xl p-8">
         <div className="flex items-center gap-4 mb-6">
           <div className="w-16 h-16 bg-purple-500/20 rounded-2xl flex items-center justify-center text-3xl">
             <Trophy />
@@ -74,7 +74,7 @@ export default function PassportView({
         {/* Achievement cards */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {achievements.map(({ icon, label, value, total }) => (
-            <div key={label} className="bg-white/60 dark:bg-gray-900/50 rounded-xl p-4 text-center">
+            <div key={label} className="bg-white/60 dark:bg-gray-800/50 rounded-xl p-4 text-center">
               <span className="text-2xl">{icon}</span>
               <p className="text-xl font-bold text-gray-800 dark:text-gray-200 mt-1">
                 {value}{total !== null ? <span className="text-xs text-gray-500">/{total}</span> : null}

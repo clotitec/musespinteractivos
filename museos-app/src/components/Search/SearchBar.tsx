@@ -17,7 +17,7 @@ export default function SearchBar({ value, onChange, placeholder = 'Buscar museo
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full pl-10 pr-10 py-2.5 bg-white dark:bg-gray-800/50 border border-gray-300 dark:border-gray-700 rounded-xl text-sm text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500/30 transition-all"
+        className="w-full pl-10 pr-10 py-2.5 bg-white dark:bg-gray-800/50 border border-gray-300 dark:border-gray-700 rounded-xl text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500/30 transition-all"
       />
       {value && (
         <button

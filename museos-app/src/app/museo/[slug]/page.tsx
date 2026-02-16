@@ -54,12 +54,12 @@ export default function MuseoDetailPage({ params }: { params: Promise<{ slug: st
       </Link>
 
       {/* Hero */}
-      <div className="bg-gradient-to-br from-purple-600/20 to-amber-600/20 rounded-2xl p-8 border border-gray-200 dark:border-gray-800">
+      <div className="bg-gradient-to-br from-purple-600/20 to-amber-600/20 rounded-2xl p-8 border border-gray-200 dark:border-gray-700">
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-2">
               <span className="text-3xl">{getMuseumIcon(museum.tematica_normalized)}</span>
-              <span className="text-xs bg-gray-200/80 dark:bg-gray-800/80 text-gray-600 dark:text-gray-400 px-2 py-1 rounded-full">
+              <span className="text-xs bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 px-2 py-1 rounded-full">
                 {museum.tipo_centro || 'Museo'}
               </span>
               {museum.es_gratuito && (
@@ -68,7 +68,7 @@ export default function MuseoDetailPage({ params }: { params: Promise<{ slug: st
                 </span>
               )}
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">{museum.nombre}</h1>
+            <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2">{museum.nombre}</h1>
             {museum.municipio && (
               <p className="text-gray-500 dark:text-gray-400 flex items-center gap-1">
                 <MapPin size={14} className="text-purple-500 dark:text-purple-400" />
@@ -95,14 +95,14 @@ export default function MuseoDetailPage({ params }: { params: Promise<{ slug: st
 
       {/* Description */}
       {museum.descripcion && (
-        <div className="bg-white dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+        <div className="bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm">
           <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Descripci&oacute;n</h3>
           <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">{museum.descripcion}</p>
         </div>
       )}
 
       {/* Info grid */}
-      <div className="bg-white dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+      <div className="bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm">
         <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Informaci&oacute;n</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {infoItems.map(({ icon: Icon, label, value }) => (
@@ -131,7 +131,7 @@ export default function MuseoDetailPage({ params }: { params: Promise<{ slug: st
 
       {/* Map preview */}
       {museum.lat && museum.lng && (
-        <div className="bg-white dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+        <div className="bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm">
           <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Ubicaci&oacute;n</h3>
           <a
             href={`https://www.google.com/maps/search/?api=1&query=${museum.lat},${museum.lng}`}

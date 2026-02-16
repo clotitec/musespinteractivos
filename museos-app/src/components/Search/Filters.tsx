@@ -15,7 +15,7 @@ export default function Filters({ filters, onChange, comunidades, provincias, te
     onChange({ ...filters, [key]: value });
   };
 
-  const selectClass = "bg-white dark:bg-gray-800/50 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-gray-300 focus:outline-none focus:border-purple-500 transition-all";
+  const selectClass = "bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-gray-200 focus:outline-none focus:border-purple-500 transition-all";
 
   return (
     <div className="flex flex-wrap gap-3 items-center">

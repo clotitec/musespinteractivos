@@ -18,8 +18,8 @@ export default function Header() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 transition-colors duration-300
-      bg-white/90 border-b border-gray-200 backdrop-blur-md
-      dark:bg-gray-950/90 dark:border-gray-800 dark:backdrop-blur-md">
+      bg-white/95 border-b border-gray-200 shadow-sm backdrop-blur-md
+      dark:bg-gray-900/90 dark:border-gray-800 dark:shadow-none dark:backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3">
           <span className="text-2xl">🏛️</span>

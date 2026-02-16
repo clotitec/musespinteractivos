@@ -15,7 +15,7 @@ interface MuseumCardProps {
 
 export default function MuseumCard({ museum, isVisited, isFavorite, onToggleFavorite, onToggleVisited }: MuseumCardProps) {
   return (
-    <div className="group bg-white dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden hover:border-purple-400/40 dark:hover:border-purple-500/30 transition-all hover:shadow-lg hover:shadow-purple-500/5">
+    <div className="group bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:border-indigo-300 dark:hover:border-rose-800/60 transition-all">
       {/* Header with gradient */}
       <div className="h-32 bg-gradient-to-br from-purple-600/20 to-amber-600/20 relative flex items-end p-4">
         <span className="text-4xl absolute top-3 right-3 opacity-30 group-hover:opacity-60 transition-opacity">
@@ -83,8 +83,8 @@ export default function MuseumCard({ museum, isVisited, isFavorite, onToggleFavo
           )}
         </div>
 
-        <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-200 dark:border-gray-800">
-          <span className="text-[10px] text-gray-500 bg-gray-100 dark:bg-gray-800/50 px-2 py-0.5 rounded-full">
+        <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+          <span className="text-[10px] text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-full">
             {museum.tematica_normalized || museum.tematica || 'General'}
           </span>
           <span className="text-[10px] text-gray-500">

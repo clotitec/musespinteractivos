@@ -28,7 +28,7 @@ export default function MapView({ museums, onMuseumClick }: MapViewProps) {
   const museumsWithCoords = museums.filter((m) => m.lat && m.lng);
 
   return (
-    <div className="relative h-[calc(100vh-8rem)] rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800">
+    <div className="relative h-[calc(100vh-8rem)] rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
       <MapContent museums={museumsWithCoords} onMuseumClick={onMuseumClick} />
 
       {/* Bottom info bar */}
