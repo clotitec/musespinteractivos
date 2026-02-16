@@ -225,7 +225,11 @@ export function filterMuseums(museums: Museum[], filters: MuseumFilters): Museum
       if (museumProv !== filters.provincia) return false;
     }
     if (filters.tematica && m.tematica_normalized !== filters.tematica) return false;
+    if (filters.titularidad && m.titularidad !== filters.titularidad) return false;
     if (filters.gratuito && !m.es_gratuito) return false;
+    if (filters.conServicios && !hasServices(m)) return false;
+    if (filters.accesible && !hasAccessibility(m)) return false;
+    if (filters.conImagen && !m.imagen_url) return false;
     return true;
   });
 }
@@ -245,6 +249,67 @@ export function getUniqueValues(museums: Museum[], field: keyof Museum): string[
     }
   });
   return Array.from(values).sort((a, b) => a.localeCompare(b, 'es'));
+}
+
+// ── Completeness ────────────────────────────────────────────────────
+
+const COMPLETENESS_FIELDS: (keyof Museum)[] = [
+  'nombre', 'tipo_centro', 'direccion', 'municipio', 'provincia',
+  'comunidad', 'lat', 'lng', 'telefono', 'email', 'web', 'director',
+  'horario', 'dias_cierre', 'precio', 'aforo', 'tematica', 'titularidad',
+  'descripcion', 'fecha_creacion', 'visitantes_anuales', 'imagen_url',
+  'servicios', 'accesibilidad', 'redes_sociales', 'clasificacion',
+  'superficie_permanente', 'superficie_temporal', 'gestion', 'tipo_acceso',
+];
+
+export function calculateCompleteness(museum: Museum): number {
+  const filled = COMPLETENESS_FIELDS.filter((f) => {
+    const val = museum[f];
+    if (val === null || val === undefined) return false;
+    if (typeof val === 'string') return val.trim() !== '';
+    if (Array.isArray(val)) return val.length > 0;
+    if (typeof val === 'object') return Object.keys(val).length > 0;
+    return true; // number, boolean
+  });
+  return Math.round((filled.length / COMPLETENESS_FIELDS.length) * 100);
+}
+
+// ── Format helpers ──────────────────────────────────────────────────
+
+export function formatSurface(superficie?: string): string | null {
+  if (!superficie) return null;
+  const num = parseFloat(superficie.replace(/[^\d.,]/g, '').replace(',', '.'));
+  return isNaN(num) ? superficie : `${num.toLocaleString('es-ES')} m²`;
+}
+
+export function formatVisitors(num?: number): string | null {
+  if (!num) return null;
+  if (num >= 1_000_000) return `${(num / 1_000_000).toFixed(1)}M`;
+  if (num >= 1_000) return `${Math.round(num / 1_000)}K`;
+  return num.toLocaleString('es-ES');
+}
+
+export function getSocialPlatform(key: string): string {
+  const k = key.toLowerCase();
+  if (k.includes('twitter') || k.includes('x.com')) return 'Twitter';
+  if (k.includes('facebook') || k.includes('fb')) return 'Facebook';
+  if (k.includes('instagram') || k.includes('insta')) return 'Instagram';
+  if (k.includes('youtube')) return 'YouTube';
+  if (k.includes('linkedin')) return 'LinkedIn';
+  if (k.includes('tiktok')) return 'TikTok';
+  return key;
+}
+
+export function hasServices(museum: Museum): boolean {
+  return Array.isArray(museum.servicios) && museum.servicios.length > 0;
+}
+
+export function hasAccessibility(museum: Museum): boolean {
+  return !!museum.accesibilidad && Object.keys(museum.accesibilidad).length > 0;
+}
+
+export function hasSocialMedia(museum: Museum): boolean {
+  return !!museum.redes_sociales && Object.keys(museum.redes_sociales).length > 0;
 }
 
 // ── Helpers ─────────────────────────────────────────────────────────

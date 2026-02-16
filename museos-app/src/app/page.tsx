@@ -12,13 +12,15 @@ import type { MuseumFilters } from '@/lib/types';
 export default function HomePage() {
   const { museums, loading, error } = useMuseums();
   const [filters, setFilters] = useState<MuseumFilters>({
-    search: '', comunidad: '', provincia: '', tematica: '', gratuito: false,
+    search: '', comunidad: '', provincia: '', tematica: '', titularidad: '',
+    gratuito: false, conServicios: false, accesible: false, conImagen: false,
   });
 
   const filtered = useMemo(() => filterMuseums(museums, filters), [museums, filters]);
   const comunidades = useMemo(() => getUniqueValues(museums, 'comunidad_normalized'), [museums]);
   const provincias = useMemo(() => getUniqueValues(museums, 'provincia'), [museums]);
   const tematicas = useMemo(() => getUniqueValues(museums, 'tematica_normalized'), [museums]);
+  const titularidades = useMemo(() => getUniqueValues(museums, 'titularidad'), [museums]);
 
   if (loading) return <Loading />;
   if (error) return (
@@ -40,6 +42,7 @@ export default function HomePage() {
         comunidades={comunidades}
         provincias={provincias}
         tematicas={tematicas}
+        titularidades={titularidades}
       />
       <div className="flex items-center justify-between text-xs text-gray-500">
         <span>{filtered.length} museos encontrados</span>

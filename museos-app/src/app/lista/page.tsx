@@ -5,7 +5,7 @@ import { useMuseums } from '@/hooks/useMuseums';
 import { usePassport } from '@/hooks/usePassport';
 import MuseumGrid from '@/components/Museum/MuseumGrid';
 import Loading from '@/components/ui/Loading';
-import { getUniqueValues } from '@/lib/utils';
+import { getUniqueValues, normalizeComunidad } from '@/lib/utils';
 
 type SortKey = 'nombre' | 'comunidad' | 'provincia';
 
@@ -21,7 +21,7 @@ export default function ListaPage() {
 
   const filtered = useMemo(() => {
     let result = [...museums];
-    if (selectedCCAA) result = result.filter((m) => m.comunidad_normalized === selectedCCAA);
+    if (selectedCCAA) result = result.filter((m) => normalizeComunidad(m.comunidad_normalized || m.comunidad || '') === selectedCCAA);
     result.sort((a, b) => {
       const aVal = (a[sortBy] || '') as string;
       const bVal = (b[sortBy] || '') as string;

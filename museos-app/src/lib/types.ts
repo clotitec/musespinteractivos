@@ -60,7 +60,11 @@ export interface MuseumFilters {
   comunidad: string;
   provincia: string;
   tematica: string;
+  titularidad: string;
   gratuito: boolean;
+  conServicios: boolean;
+  accesible: boolean;
+  conImagen: boolean;
 }
 
 export interface StatsData {

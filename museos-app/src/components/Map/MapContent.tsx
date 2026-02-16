@@ -5,8 +5,8 @@ import MarkerClusterGroup from 'react-leaflet-cluster';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import Link from 'next/link';
-import { MapPin, Clock, Ticket, ZoomIn, ZoomOut, Locate } from 'lucide-react';
-import { getMuseumIcon, formatPrice } from '@/lib/utils';
+import { MapPin, Clock, Ticket, ZoomIn, ZoomOut, Locate, Globe, Mail, Phone, Share2 } from 'lucide-react';
+import { getMuseumIcon, formatPrice, hasAccessibility, hasServices, hasSocialMedia } from '@/lib/utils';
 import type { Museum } from '@/lib/types';
 
 // Fix default marker icon
@@ -249,6 +249,17 @@ export default function MapContent({ museums, onMuseumClick }: MapContentProps) 
                         <MapPin size={12} className="text-neutral-400 shrink-0" />
                         <span>{museum.municipio}, {museum.provincia}</span>
                       </div>
+
+                      {/* Micro indicators */}
+                      <div className="flex items-center gap-2">
+                        {museum.web && <span title="Web disponible"><Globe size={12} className="text-neutral-400" /></span>}
+                        {museum.email && <span title="Email disponible"><Mail size={12} className="text-neutral-400" /></span>}
+                        {museum.telefono && <span title="Teléfono disponible"><Phone size={12} className="text-neutral-400" /></span>}
+                        {hasSocialMedia(museum) && <span title="Redes sociales"><Share2 size={12} className="text-neutral-400" /></span>}
+                        {hasAccessibility(museum) && <span className="text-[10px] text-neutral-500 bg-neutral-100 px-1.5 py-0.5">♿ Accesible</span>}
+                        {hasServices(museum) && !hasAccessibility(museum) && <span className="text-[10px] text-neutral-500 bg-neutral-100 px-1.5 py-0.5">✓ Servicios</span>}
+                      </div>
+
                       {museum.horario && (
                         <div className="flex items-start gap-2 text-xs text-neutral-500">
                           <Clock size={12} className="text-neutral-400 shrink-0 mt-0.5" />

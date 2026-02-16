@@ -14,13 +14,15 @@ export default function BuscarPage() {
   const { museums, loading } = useMuseums();
   const passport = usePassport();
   const [filters, setFilters] = useState<MuseumFilters>({
-    search: '', comunidad: '', provincia: '', tematica: '', gratuito: false,
+    search: '', comunidad: '', provincia: '', tematica: '', titularidad: '',
+    gratuito: false, conServicios: false, accesible: false, conImagen: false,
   });
 
   const filtered = useMemo(() => filterMuseums(museums, filters), [museums, filters]);
   const comunidades = useMemo(() => getUniqueValues(museums, 'comunidad_normalized'), [museums]);
   const provincias = useMemo(() => getUniqueValues(museums, 'provincia'), [museums]);
   const tematicas = useMemo(() => getUniqueValues(museums, 'tematica_normalized'), [museums]);
+  const titularidades = useMemo(() => getUniqueValues(museums, 'titularidad'), [museums]);
 
   if (loading) return <Loading />;
 
@@ -43,6 +45,7 @@ export default function BuscarPage() {
         comunidades={comunidades}
         provincias={provincias}
         tematicas={tematicas}
+        titularidades={titularidades}
       />
 
       <p className="text-xs text-neutral-400">{filtered.length} resultados</p>
