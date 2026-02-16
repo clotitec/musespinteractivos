@@ -39,14 +39,14 @@ export default function ListaPage() {
     <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Lista de Museos</h2>
-          <p className="text-sm text-gray-500">{filtered.length} centros</p>
+          <h2 className="text-2xl font-display font-bold text-neutral-900">Lista de Museos</h2>
+          <p className="text-sm text-neutral-400">{filtered.length} centros</p>
         </div>
         <div className="flex gap-3">
           <select
             value={selectedCCAA}
             onChange={(e) => { setSelectedCCAA(e.target.value); setPage(1); }}
-            className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-gray-200"
+            className="bg-white border border-neutral-200 px-3 py-2 text-sm text-neutral-700 focus:outline-none focus:border-neutral-900"
           >
             <option value="">Todas las comunidades</option>
             {comunidades.map((c) => <option key={c} value={c}>{c}</option>)}
@@ -54,7 +54,7 @@ export default function ListaPage() {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as SortKey)}
-            className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-gray-200"
+            className="bg-white border border-neutral-200 px-3 py-2 text-sm text-neutral-700 focus:outline-none focus:border-neutral-900"
           >
             <option value="nombre">Ordenar por nombre</option>
             <option value="comunidad">Ordenar por comunidad</option>
@@ -75,7 +75,7 @@ export default function ListaPage() {
         <div className="flex justify-center">
           <button
             onClick={() => setPage((p) => p + 1)}
-            className="px-6 py-2 bg-purple-600/20 text-purple-600 dark:text-purple-400 rounded-lg text-sm hover:bg-purple-600/30 transition-colors border border-purple-500/20"
+            className="px-6 py-2 bg-white text-neutral-900 border border-neutral-900 text-xs uppercase tracking-wider hover:bg-neutral-900 hover:text-white transition-colors"
           >
             Cargar m&aacute;s ({filtered.length - paginated.length} restantes)
           </button>
