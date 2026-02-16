@@ -1,9 +1,10 @@
 'use client';
 
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { normalizeComunidad } from '@/lib/utils';
 import type { Museum } from '@/lib/types';
 
-const COLORS = ['#1a1a1a', '#404040', '#737373', '#991b1b', '#b91c1c', '#dc2626', '#525252', '#a3a3a3', '#d4d4d4', '#7f1d1d', '#450a0a', '#292524', '#78716c', '#57534e', '#44403c'];
+const COLORS = ['#1a1a1a', '#404040', '#737373', '#2563eb', '#3b82f6', '#60a5fa', '#525252', '#a3a3a3', '#1d4ed8', '#93c5fd', '#334155', '#292524', '#78716c', '#57534e', '#44403c'];
 
 interface StatsViewProps {
   museums: Museum[];
@@ -13,7 +14,8 @@ export default function StatsView({ museums }: StatsViewProps) {
   // By comunidad
   const byComunidad: Record<string, number> = {};
   museums.forEach((m) => {
-    const k = m.comunidad_normalized || m.comunidad || 'Sin datos';
+    const raw = m.comunidad_normalized || m.comunidad || 'Sin datos';
+    const k = raw !== 'Sin datos' ? normalizeComunidad(raw) : raw;
     byComunidad[k] = (byComunidad[k] || 0) + 1;
   });
   const comunidadData = Object.entries(byComunidad)

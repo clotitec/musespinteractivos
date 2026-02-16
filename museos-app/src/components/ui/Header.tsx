@@ -37,7 +37,7 @@ export default function Header() {
                 href={href}
                 className={`flex items-center gap-2 px-3 py-2 text-xs uppercase tracking-wider transition-colors ${
                   isActive
-                    ? 'text-red-900 border-b-2 border-red-900'
+                    ? 'text-neutral-900 border-b-2 border-neutral-900'
                     : 'text-neutral-400 hover:text-neutral-900'
                 }`}
               >

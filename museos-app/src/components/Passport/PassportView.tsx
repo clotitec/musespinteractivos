@@ -2,6 +2,7 @@
 
 import { MapPin, Heart, Trophy, Star } from 'lucide-react';
 import MuseumCard from '@/components/Museum/MuseumCard';
+import { normalizeComunidad } from '@/lib/utils';
 import type { Museum } from '@/lib/types';
 
 interface PassportViewProps {
@@ -21,8 +22,8 @@ export default function PassportView({
   const favoriteMuseums = museums.filter((m) => favorites.includes(m.id));
 
   // Achievements
-  const totalCCAA = new Set(museums.map((m) => m.comunidad_normalized)).size;
-  const visitedCCAA = new Set(visitedMuseums.map((m) => m.comunidad_normalized)).size;
+  const totalCCAA = new Set(museums.map((m) => normalizeComunidad(m.comunidad_normalized || m.comunidad || ''))).size;
+  const visitedCCAA = new Set(visitedMuseums.map((m) => normalizeComunidad(m.comunidad_normalized || m.comunidad || ''))).size;
   const visitedProvincias = new Set(visitedMuseums.map((m) => m.provincia)).size;
 
   const achievements = [
@@ -89,7 +90,7 @@ export default function PassportView({
       {favoriteMuseums.length > 0 && (
         <div>
           <h3 className="flex items-center gap-2 text-sm font-semibold text-neutral-900 uppercase tracking-wider mb-4">
-            <Heart size={16} className="text-red-700" /> Favoritos ({favoriteMuseums.length})
+            <Heart size={16} className="text-neutral-900" /> Favoritos ({favoriteMuseums.length})
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {favoriteMuseums.map((m) => (

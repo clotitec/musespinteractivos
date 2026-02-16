@@ -15,7 +15,7 @@ interface MuseumCardProps {
 
 export default function MuseumCard({ museum, isVisited, isFavorite, onToggleFavorite, onToggleVisited }: MuseumCardProps) {
   return (
-    <div className="group bg-white border border-neutral-200 overflow-hidden hover:border-neutral-900 transition-colors">
+    <div className="group bg-white border border-neutral-200 overflow-hidden hover:border-blue-500 transition-colors">
       {/* Header with subtle background */}
       <div className="h-28 bg-neutral-50 relative flex items-end p-4 border-b border-neutral-100">
         <span className="text-4xl absolute top-3 right-3 opacity-20 group-hover:opacity-40 transition-opacity">
@@ -49,7 +49,7 @@ export default function MuseumCard({ museum, isVisited, isFavorite, onToggleFavo
       {/* Content */}
       <div className="p-4">
         <Link href={`/museo/${museum.slug}`}>
-          <h3 className="font-semibold text-sm text-neutral-900 line-clamp-2 group-hover:text-red-900 transition-colors mb-2">
+          <h3 className="font-semibold text-sm text-neutral-900 line-clamp-2 group-hover:text-blue-600 transition-colors mb-2">
             {museum.nombre}
           </h3>
         </Link>

@@ -59,11 +59,11 @@ export default function MuseoDetailPage({ params }: { params: Promise<{ slug: st
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-3">
               <span className="text-3xl">{getMuseumIcon(museum.tematica_normalized)}</span>
-              <span className="text-[10px] text-neutral-500 uppercase tracking-wider border border-neutral-200 px-2 py-0.5">
+              <span className="text-[10px] text-white uppercase tracking-wider bg-neutral-900 px-2 py-0.5">
                 {museum.tipo_centro || 'Museo'}
               </span>
               {museum.es_gratuito && (
-                <span className="text-[10px] text-neutral-900 uppercase tracking-wider border border-neutral-900 px-2 py-0.5 font-medium">
+                <span className="text-[10px] text-white uppercase tracking-wider bg-neutral-900 px-2 py-0.5 font-medium">
                   Gratuito
                 </span>
               )}

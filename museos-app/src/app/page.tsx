@@ -22,7 +22,7 @@ export default function HomePage() {
 
   if (loading) return <Loading />;
   if (error) return (
-    <div className="flex items-center justify-center h-[60vh] text-red-400">
+    <div className="flex items-center justify-center h-[60vh] text-neutral-500">
       <p>Error: {error}</p>
     </div>
   );

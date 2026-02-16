@@ -148,14 +148,14 @@ export default function MapContent({ museums, onMuseumClick }: MapContentProps) 
         .cluster-medium {
           width: 48px;
           height: 48px;
-          background: #991b1b !important;
+          background: #2563eb !important;
           border: 2px solid rgba(255, 255, 255, 0.3);
           font-size: 14px !important;
         }
         .cluster-large {
           width: 56px;
           height: 56px;
-          background: #7f1d1d !important;
+          background: #1d4ed8 !important;
           border: 2px solid rgba(255, 255, 255, 0.3);
           font-size: 15px !important;
         }

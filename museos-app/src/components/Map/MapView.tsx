@@ -34,7 +34,7 @@ export default function MapView({ museums, onMuseumClick }: MapViewProps) {
       {/* Bottom info bar */}
       <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between z-[1000] pointer-events-none">
         <div className="bg-white/95 backdrop-blur-sm px-3 py-2 text-xs text-neutral-500 border border-neutral-200 pointer-events-auto flex items-center gap-2">
-          <Map size={12} className="text-red-900" />
+          <Map size={12} className="text-neutral-900" />
           <span>
             <strong className="text-neutral-900">{museumsWithCoords.length}</strong> museos en el mapa
           </span>
@@ -42,7 +42,7 @@ export default function MapView({ museums, onMuseumClick }: MapViewProps) {
 
         {/* Cluster legend */}
         <div className="bg-white/95 backdrop-blur-sm px-3 py-2 text-xs text-neutral-500 border border-neutral-200 pointer-events-auto flex items-center gap-3">
-          <Layers size={12} className="text-red-900" />
+          <Layers size={12} className="text-neutral-900" />
           <span className="hidden sm:inline">Haz zoom o clic en los grupos para explorar</span>
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1">
@@ -50,11 +50,11 @@ export default function MapView({ museums, onMuseumClick }: MapViewProps) {
               <span className="hidden md:inline">&lt;30</span>
             </div>
             <div className="flex items-center gap-1">
-              <div className="w-3 h-3 rounded-full bg-red-900" />
+              <div className="w-3 h-3 rounded-full bg-blue-600" />
               <span className="hidden md:inline">30-99</span>
             </div>
             <div className="flex items-center gap-1">
-              <div className="w-3 h-3 rounded-full bg-red-700" />
+              <div className="w-3 h-3 rounded-full bg-blue-700" />
               <span className="hidden md:inline">100+</span>
             </div>
           </div>

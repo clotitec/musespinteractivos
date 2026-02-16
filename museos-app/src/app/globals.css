@@ -6,7 +6,7 @@
   --font-sans: var(--font-dm-sans);
   --font-display: var(--font-playfair);
   --color-primary: #1a1a1a;
-  --color-accent: #991b1b;
+  --color-accent: #2563eb;
 }
 
 /* Base body */
@@ -17,7 +17,7 @@ body {
 
 /* Selection */
 ::selection {
-  background: #991b1b;
+  background: #1a1a1a;
   color: white;
 }
 
@@ -77,16 +77,16 @@ body {
   color: white !important;
 }
 .marker-cluster-medium {
-  background-color: rgba(153, 27, 27, 0.15) !important;
+  background-color: rgba(37, 99, 235, 0.12) !important;
 }
 .marker-cluster-medium div {
-  background-color: rgba(153, 27, 27, 0.75) !important;
+  background-color: rgba(37, 99, 235, 0.75) !important;
   color: white !important;
 }
 .marker-cluster-large {
-  background-color: rgba(153, 27, 27, 0.2) !important;
+  background-color: rgba(37, 99, 235, 0.18) !important;
 }
 .marker-cluster-large div {
-  background-color: rgba(153, 27, 27, 0.85) !important;
+  background-color: rgba(37, 99, 235, 0.85) !important;
   color: white !important;
 }
