@@ -34,7 +34,7 @@ export default function MapView({ museums, onMuseumClick }: MapViewProps) {
       {/* Bottom info bar */}
       <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between z-[1000] pointer-events-none">
         <div className="bg-gray-900/90 backdrop-blur-sm rounded-lg px-3 py-2 text-xs text-gray-400 border border-gray-700 pointer-events-auto flex items-center gap-2">
-          <Map size={12} className="text-purple-400" />
+          <Map size={12} className="text-red-400" />
           <span>
             <strong className="text-gray-200">{museumsWithCoords.length}</strong> museos en el mapa
           </span>
@@ -42,19 +42,19 @@ export default function MapView({ museums, onMuseumClick }: MapViewProps) {
 
         {/* Cluster legend */}
         <div className="bg-gray-900/90 backdrop-blur-sm rounded-lg px-3 py-2 text-xs text-gray-400 border border-gray-700 pointer-events-auto flex items-center gap-3">
-          <Layers size={12} className="text-purple-400" />
+          <Layers size={12} className="text-red-400" />
           <span className="hidden sm:inline">Haz zoom o clic en los grupos para explorar</span>
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1">
-              <div className="w-3 h-3 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500" />
+              <div className="w-3 h-3 rounded-full bg-gradient-to-br from-red-950 to-red-800" />
               <span className="hidden md:inline">&lt;30</span>
             </div>
             <div className="flex items-center gap-1">
-              <div className="w-3 h-3 rounded-full bg-gradient-to-br from-purple-500 to-violet-500" />
+              <div className="w-3 h-3 rounded-full bg-gradient-to-br from-red-800 to-red-700" />
               <span className="hidden md:inline">30-99</span>
             </div>
             <div className="flex items-center gap-1">
-              <div className="w-3 h-3 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500" />
+              <div className="w-3 h-3 rounded-full bg-gradient-to-br from-red-700 to-red-600" />
               <span className="hidden md:inline">100+</span>
             </div>
           </div>
