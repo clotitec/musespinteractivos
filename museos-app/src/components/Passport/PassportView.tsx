@@ -44,26 +44,26 @@ export default function PassportView({
   return (
     <div className="space-y-8">
       {/* Passport header */}
-      <div className="bg-gradient-to-r from-purple-600/20 to-amber-600/20 border border-gray-800 rounded-2xl p-8">
+      <div className="bg-gradient-to-r from-purple-600/20 to-amber-600/20 border border-gray-200 dark:border-gray-800 rounded-2xl p-8">
         <div className="flex items-center gap-4 mb-6">
           <div className="w-16 h-16 bg-purple-500/20 rounded-2xl flex items-center justify-center text-3xl">
             <Trophy />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-gray-100">Pasaporte Cultural</h2>
-            <p className="text-sm text-gray-400">
-              Nivel: <span className="text-purple-400 font-semibold">{level}</span>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Pasaporte Cultural</h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Nivel: <span className="text-purple-600 dark:text-purple-400 font-semibold">{level}</span>
             </p>
           </div>
         </div>
 
         {/* Progress bar */}
         <div className="mb-6">
-          <div className="flex justify-between text-xs text-gray-400 mb-1">
+          <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
             <span>{visited.length} de {museums.length} museos</span>
             <span>{progress.toFixed(1)}%</span>
           </div>
-          <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
+          <div className="h-2 bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden">
             <div
               className="h-full bg-gradient-to-r from-purple-500 to-amber-500 rounded-full transition-all duration-500"
               style={{ width: `${progress}%` }}
@@ -74,9 +74,9 @@ export default function PassportView({
         {/* Achievement cards */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {achievements.map(({ icon, label, value, total }) => (
-            <div key={label} className="bg-gray-900/50 rounded-xl p-4 text-center">
+            <div key={label} className="bg-white/60 dark:bg-gray-900/50 rounded-xl p-4 text-center">
               <span className="text-2xl">{icon}</span>
-              <p className="text-xl font-bold text-gray-200 mt-1">
+              <p className="text-xl font-bold text-gray-800 dark:text-gray-200 mt-1">
                 {value}{total !== null ? <span className="text-xs text-gray-500">/{total}</span> : null}
               </p>
               <p className="text-[10px] text-gray-500">{label}</p>
@@ -88,7 +88,7 @@ export default function PassportView({
       {/* Favorites section */}
       {favoriteMuseums.length > 0 && (
         <div>
-          <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-200 mb-4">
+          <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">
             <Heart size={18} className="text-red-400" /> Favoritos ({favoriteMuseums.length})
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -109,7 +109,7 @@ export default function PassportView({
       {/* Visited section */}
       {visitedMuseums.length > 0 && (
         <div>
-          <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-200 mb-4">
+          <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">
             <MapPin size={18} className="text-green-400" /> Visitados ({visitedMuseums.length})
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -129,7 +129,7 @@ export default function PassportView({
 
       {visited.length === 0 && favorites.length === 0 && (
         <div className="text-center py-20 text-gray-500">
-          <Star size={48} className="mx-auto mb-4 text-gray-600" />
+          <Star size={48} className="mx-auto mb-4 text-gray-400 dark:text-gray-600" />
           <p className="text-lg">Tu pasaporte est&aacute; vac&iacute;o</p>
           <p className="text-sm mt-1">Empieza a explorar museos y marca los que visites</p>
         </div>

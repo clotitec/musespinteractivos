@@ -36,15 +36,14 @@ export default function StatsView({ museums }: StatsViewProps) {
   const gratuitos = museums.filter((m) => m.es_gratuito).length;
   const conWeb = museums.filter((m) => m.web).length;
   const conHorario = museums.filter((m) => m.horario).length;
-  const conCoords = museums.filter((m) => m.lat && m.lng).length;
 
   const stats = [
-    { label: 'Total centros', value: museums.length, color: 'text-purple-400' },
-    { label: 'Museos', value: totalMuseos, color: 'text-blue-400' },
-    { label: 'Colecciones', value: totalColecciones, color: 'text-amber-400' },
-    { label: 'Gratuitos', value: gratuitos, color: 'text-green-400' },
-    { label: 'Con web', value: conWeb, color: 'text-cyan-400' },
-    { label: 'Con horario', value: conHorario, color: 'text-orange-400' },
+    { label: 'Total centros', value: museums.length, color: 'text-purple-600 dark:text-purple-400' },
+    { label: 'Museos', value: totalMuseos, color: 'text-blue-600 dark:text-blue-400' },
+    { label: 'Colecciones', value: totalColecciones, color: 'text-amber-600 dark:text-amber-400' },
+    { label: 'Gratuitos', value: gratuitos, color: 'text-green-600 dark:text-green-400' },
+    { label: 'Con web', value: conWeb, color: 'text-cyan-600 dark:text-cyan-400' },
+    { label: 'Con horario', value: conHorario, color: 'text-orange-600 dark:text-orange-400' },
   ];
 
   return (
@@ -52,7 +51,7 @@ export default function StatsView({ museums }: StatsViewProps) {
       {/* Summary cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
         {stats.map(({ label, value, color }) => (
-          <div key={label} className="bg-gray-900/50 border border-gray-800 rounded-xl p-4 text-center">
+          <div key={label} className="bg-white dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 rounded-xl p-4 text-center">
             <p className={`text-2xl font-bold ${color}`}>{value.toLocaleString('es-ES')}</p>
             <p className="text-xs text-gray-500 mt-1">{label}</p>
           </div>
@@ -62,8 +61,8 @@ export default function StatsView({ museums }: StatsViewProps) {
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Bar chart - by comunidad */}
-        <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
-          <h3 className="text-sm font-semibold text-gray-300 mb-4">Museos por Comunidad Aut&oacute;noma</h3>
+        <div className="bg-white dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+          <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Museos por Comunidad Aut&oacute;noma</h3>
           <ResponsiveContainer width="100%" height={400}>
             <BarChart data={comunidadData} layout="vertical" margin={{ left: 10, right: 20 }}>
               <XAxis type="number" tick={{ fill: '#9ca3af', fontSize: 11 }} />
@@ -78,8 +77,8 @@ export default function StatsView({ museums }: StatsViewProps) {
         </div>
 
         {/* Pie chart - by tematica */}
-        <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
-          <h3 className="text-sm font-semibold text-gray-300 mb-4">Distribuci&oacute;n por Tem&aacute;tica</h3>
+        <div className="bg-white dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+          <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Distribuci&oacute;n por Tem&aacute;tica</h3>
           <ResponsiveContainer width="100%" height={400}>
             <PieChart>
               <Pie
@@ -102,7 +101,7 @@ export default function StatsView({ museums }: StatsViewProps) {
           </ResponsiveContainer>
           <div className="flex flex-wrap gap-2 mt-4">
             {tematicaData.map((item, i) => (
-              <span key={item.name} className="text-[10px] text-gray-400 flex items-center gap-1">
+              <span key={item.name} className="text-[10px] text-gray-500 dark:text-gray-400 flex items-center gap-1">
                 <span className="w-2 h-2 rounded-full" style={{ background: COLORS[i % COLORS.length] }} />
                 {item.name} ({item.value})
               </span>

@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #030712;
-  --color-foreground: #f3f4f6;
+  --color-background: #f9fafb;
+  --color-foreground: #111827;
   --font-sans: var(--font-dm-sans);
   --font-display: var(--font-playfair);
   --color-primary: #8b5cf6;
@@ -10,57 +10,95 @@
   --color-accent: #f59e0b;
 }
 
+/* Base body uses Tailwind classes in layout.tsx for theme switching */
 body {
-  background: var(--color-background);
-  color: var(--color-foreground);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Leaflet overrides for dark theme */
+/* ─── Light theme: Leaflet overrides ─── */
 .leaflet-container {
-  background: #1f2937 !important;
+  background: #f3f4f6 !important;
   border-radius: 0.75rem;
 }
 
 .leaflet-popup-content-wrapper {
-  background: #1f2937 !important;
-  color: #f3f4f6 !important;
+  background: #ffffff !important;
+  color: #111827 !important;
   border-radius: 0.75rem !important;
-  border: 1px solid #374151 !important;
+  border: 1px solid #e5e7eb !important;
 }
 
 .leaflet-popup-tip {
-  background: #1f2937 !important;
+  background: #ffffff !important;
 }
 
 .leaflet-control-zoom a {
+  background: #ffffff !important;
+  color: #374151 !important;
+  border-color: #e5e7eb !important;
+}
+
+.leaflet-control-zoom a:hover {
+  background: #f3f4f6 !important;
+}
+
+/* ─── Dark theme: Leaflet overrides ─── */
+.dark .leaflet-container {
+  background: #1f2937 !important;
+}
+
+.dark .leaflet-popup-content-wrapper {
+  background: #1f2937 !important;
+  color: #f3f4f6 !important;
+  border: 1px solid #374151 !important;
+}
+
+.dark .leaflet-popup-tip {
+  background: #1f2937 !important;
+}
+
+.dark .leaflet-control-zoom a {
   background: #1f2937 !important;
   color: #f3f4f6 !important;
   border-color: #374151 !important;
 }
 
-.leaflet-control-zoom a:hover {
+.dark .leaflet-control-zoom a:hover {
   background: #374151 !important;
 }
 
-/* Custom scrollbar */
+/* ─── Custom scrollbar: Light ─── */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #1f2937;
+  background: #f3f4f6;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #4b5563;
+  background: #d1d5db;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* ─── Custom scrollbar: Dark ─── */
+.dark ::-webkit-scrollbar-track {
+  background: #1f2937;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #4b5563;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
   background: #6b7280;
 }
 
-/* Cluster markers */
+/* ─── Cluster markers ─── */
 .marker-cluster-small {
   background-color: rgba(139, 92, 246, 0.3) !important;
 }
