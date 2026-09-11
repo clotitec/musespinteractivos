@@ -64,7 +64,7 @@ export interface Museum {
   wikipedia_es?: string;
   wikidata_q?: string;
   exposiciones?: string[];
-  fuente?: 'MCU' | 'Wikidata' | 'OSM';
+  fuente?: string;
   validado?: boolean;
 }
 
