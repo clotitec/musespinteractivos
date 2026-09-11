@@ -3,9 +3,9 @@ import Link from 'next/link';
 import './para-museos.css';
 
 export const metadata: Metadata = {
-  title: 'Para museos · visita virtual, juegos y presencia digital | Museos de España',
+  title: 'Para museos · visita virtual, juegos y presencia digital',
   description:
-    'Soluciones para museos, ayuntamientos y residencias: visita virtual 360, audioguías por QR, realidad aumentada, juegos, vídeos y presencia en el portal de museos de España. Una solución de CLOTITEC.',
+    'Soluciones para museos, ayuntamientos y residencias: visita virtual 360, audioguías por QR, realidad aumentada, juegos, vídeos y presencia en Muselisto, el portal de museos de España. Una solución de CLOTITEC.',
 };
 
 const NAV = [
@@ -52,7 +52,7 @@ export default function ParaMuseosLayout({ children }: { children: React.ReactNo
           <div className="text-sm text-white/80">
             <p className="pm-label !text-[var(--pink)]">Enlaces</p>
             <ul className="mt-2 space-y-1">
-              <li><Link href="/" className="hover:text-white">Mapa de museos</Link></li>
+              <li><Link href="/" className="hover:text-white">Muselisto · mapa de museos</Link></li>
               <li><Link href="/para-museos#catalogo" className="hover:text-white">Catálogo</Link></li>
               <li><Link href="/para-museos/precios" className="hover:text-white">Lista de precios (con clave)</Link></li>
             </ul>

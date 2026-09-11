@@ -57,7 +57,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 py-14 md:py-24 grid gap-10 md:grid-cols-[1.25fr_1fr] md:items-center">
           <div>
             <span className="inline-block rounded-lg border-2 border-neutral-900 px-3 py-1 text-sm font-bold">
-              Todos los museos de Espa&ntilde;a
+              Muselisto &middot; todos los museos de Espa&ntilde;a
             </span>
             <h1 className="mt-5 font-display font-bold text-5xl leading-[1.02] tracking-tight md:text-7xl">
               Encuentra tu pr&oacute;ximo museo. Todo en un mapa.

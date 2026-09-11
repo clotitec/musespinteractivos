@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Figtree, Outfit } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/ui/Header";
+import Footer from "@/components/ui/Footer";
+import { SITE_DESCRIPCION, SITE_NAME, SITE_TITULO, SITE_URL } from "@/lib/site";
 
 const figtree = Figtree({
   variable: "--font-figtree",
@@ -16,9 +18,12 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Museos de España | Mapa de 6.590 museos y colecciones",
-  description: "Todos los museos de España en un mapa: horarios, precios, fotos, visitas virtuales y fichas oficiales del Directorio de Museos. Busca por comunidad, provincia o temática.",
-  keywords: ["museos", "españa", "cultura", "arte", "mapa", "colecciones", "visita virtual"],
+  metadataBase: new URL(SITE_URL),
+  applicationName: SITE_NAME,
+  title: { default: SITE_TITULO, template: `%s | ${SITE_NAME}` },
+  description: SITE_DESCRIPCION,
+  keywords: ["muselisto", "museos", "españa", "cultura", "arte", "mapa", "colecciones", "visita virtual"],
+  openGraph: { siteName: SITE_NAME, locale: "es_ES", type: "website", title: SITE_TITULO, description: SITE_DESCRIPCION },
 };
 
 export default function RootLayout({
@@ -33,6 +38,7 @@ export default function RootLayout({
         <main className="pt-16">
           {children}
         </main>
+        <Footer />
       </body>
     </html>
   );

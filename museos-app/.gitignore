@@ -36,6 +36,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# worker de MapLibre copiado en prebuild (scripts/copiar-worker-maplibre.mjs)
+/public/maplibre/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

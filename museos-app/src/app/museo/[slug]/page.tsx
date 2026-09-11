@@ -9,6 +9,7 @@ import AccessibilityGrid from '@/components/Museum/AccessibilityGrid';
 import ServiceBadges from '@/components/Museum/ServiceBadges';
 import SocialLinks from '@/components/Museum/SocialLinks';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import {
   ArrowLeft, MapPin, Phone, Mail, Globe, Clock, Euro, Users,
   Heart, Check, Calendar, Building2, Palette, ExternalLink,
@@ -18,6 +19,8 @@ import {
   getMuseumIcon, formatPrice, calculateCompleteness, formatSurface,
   formatVisitors, hasServices, hasAccessibility, hasSocialMedia,
 } from '@/lib/utils';
+
+const MiniMapa3D = dynamic(() => import('@/components/Map/MiniMapa3D'), { ssr: false });
 
 type TabId = 'info' | 'instalaciones' | 'accesibilidad' | 'contacto';
 
@@ -382,6 +385,11 @@ export default function MuseoDetailPage({ params }: { params: Promise<{ slug: st
             </div>
           )}
         </div>
+        {museum.lat && museum.lng && (
+          <div className="mb-4">
+            <MiniMapa3D lat={museum.lat} lng={museum.lng} nombre={museum.nombre} />
+          </div>
+        )}
         {museum.lat && museum.lng && (
           <div className="pt-3 border-t border-neutral-100">
             <a

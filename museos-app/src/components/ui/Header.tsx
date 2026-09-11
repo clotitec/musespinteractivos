@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Map, Search, List, Stamp, BarChart3 } from 'lucide-react';
+import { SITE_NAME } from '@/lib/site';
 
 const NAV_ITEMS = [
   { href: '/', label: 'Mapa', icon: Map },
@@ -18,10 +19,10 @@ export default function Header() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-neutral-200">
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
-        <Link href="/" className="flex items-center gap-2 shrink-0">
+        <Link href="/" className="flex items-center gap-2 shrink-0" aria-label={`${SITE_NAME}, inicio`}>
           <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-pink-500 text-neutral-900 font-display font-extrabold text-base">M</span>
           <p className="font-display font-bold text-neutral-900 text-lg leading-none tracking-tight">
-            Museos de Espa&ntilde;a
+            {SITE_NAME}
           </p>
         </Link>
 

@@ -31,33 +31,19 @@ export default function MapView({ museums, onMuseumClick }: MapViewProps) {
     <div className="relative h-[70vh] min-h-[480px] overflow-hidden rounded-2xl border border-neutral-200">
       <MapContent museums={museumsWithCoords} onMuseumClick={onMuseumClick} />
 
-      {/* Bottom info bar */}
-      <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between z-[1000] pointer-events-none">
-        <div className="bg-white/95 backdrop-blur-sm px-3 py-2 text-xs text-neutral-500 border border-neutral-200 pointer-events-auto flex items-center gap-2">
+      {/* Barra inferior: por encima de la atribución de MapLibre (≈32 px) para no taparla */}
+      <div className="absolute bottom-10 left-4 right-4 flex items-center justify-between z-[1000] pointer-events-none">
+        <div className="bg-white/95 backdrop-blur-sm px-3 py-2 text-xs text-neutral-500 border border-neutral-200 rounded-lg pointer-events-auto flex items-center gap-2">
           <Map size={12} className="text-neutral-900" />
           <span>
             <strong className="text-neutral-900">{museumsWithCoords.length}</strong> museos en el mapa
           </span>
         </div>
 
-        {/* Cluster legend */}
-        <div className="bg-white/95 backdrop-blur-sm px-3 py-2 text-xs text-neutral-500 border border-neutral-200 pointer-events-auto flex items-center gap-3">
+        <div className="bg-white/95 backdrop-blur-sm px-3 py-2 text-xs text-neutral-500 border border-neutral-200 rounded-lg pointer-events-auto flex items-center gap-2">
           <Layers size={12} className="text-neutral-900" />
-          <span className="hidden sm:inline">Haz zoom o clic en los grupos para explorar</span>
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1">
-              <div className="w-3 h-3 rounded-full bg-neutral-900" />
-              <span className="hidden md:inline">&lt;30</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <div className="w-3 h-3 rounded-full bg-pink-500" />
-              <span className="hidden md:inline">30-99</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <div className="w-3 h-3 rounded-full bg-pink-600" />
-              <span className="hidden md:inline">100+</span>
-            </div>
-          </div>
+          <span className="hidden sm:inline">Relieve y edificios 3D &middot; pulsa un museo para volar a su ubicaci&oacute;n</span>
+          <span className="sm:hidden">Pulsa un museo</span>
         </div>
       </div>
     </div>
