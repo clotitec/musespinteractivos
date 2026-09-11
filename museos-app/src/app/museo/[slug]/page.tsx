@@ -123,6 +123,32 @@ export default function MuseoDetailPage({ params }: { params: Promise<{ slug: st
         </div>
       )}
 
+      {/* Visita virtual y exposiciones detectadas en la web oficial */}
+      {(museum.url_vv || (museum.exposiciones && museum.exposiciones.length > 0)) && (
+        <div className="border border-neutral-200 p-6 space-y-4">
+          {museum.url_vv && (
+            <a
+              href={museum.url_vv}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-xs uppercase tracking-wider border border-neutral-900 px-4 py-2 hover:bg-neutral-900 hover:text-white transition-colors"
+            >
+              Visita virtual <ExternalLink size={12} />
+            </a>
+          )}
+          {museum.exposiciones && museum.exposiciones.length > 0 && (
+            <div>
+              <h3 className="text-xs font-semibold text-neutral-900 uppercase tracking-wider mb-3">Exposiciones y agenda (seg&uacute;n su web)</h3>
+              <ul className="space-y-1">
+                {museum.exposiciones.map((e) => (
+                  <li key={e} className="text-sm text-neutral-600">{e}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Tab Navigation */}
       <div className="border-b border-neutral-200">
         <div className="flex gap-0 overflow-x-auto">
@@ -165,6 +191,7 @@ export default function MuseoDetailPage({ params }: { params: Promise<{ slug: st
               <h3 className="text-xs font-semibold text-neutral-900 uppercase tracking-wider mb-4">Detalles</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <InfoRow icon={Palette} label="Tem\u00e1tica" value={museum.tematica} />
+                <InfoRow icon={Building2} label="Depende de" value={museum.dependencia} />
                 <InfoRow icon={Building2} label="Titularidad" value={museum.titularidad} />
                 <InfoRow icon={BookOpen} label="Clasificaci\u00f3n" value={museum.clasificacion} />
                 <InfoRow icon={Landmark} label="Gesti\u00f3n" value={museum.gestion} />
@@ -349,6 +376,13 @@ export default function MuseoDetailPage({ params }: { params: Promise<{ slug: st
             </a>
             <p className="text-xs text-neutral-400 mt-1">
               Coordenadas: {museum.lat?.toFixed(4)}, {museum.lng?.toFixed(4)}
+            </p>
+            <p className="text-xs text-neutral-400 mt-2">
+              Fuente: {museum.fuente === 'MCU' ? 'Directorio de Museos y Colecciones de España (Ministerio de Cultura)' : museum.fuente}
+              {museum.validado === false && museum.fuente === 'MCU' ? ' · ficha no validada' : ''}
+              {museum.wikipedia_es && (
+                <> &middot; <a href={museum.wikipedia_es} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-neutral-900">Wikipedia</a></>
+              )}
             </p>
           </div>
         )}

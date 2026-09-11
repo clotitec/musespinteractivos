@@ -53,6 +53,19 @@ export interface Museum {
   servicios?: string[];
   accesibilidad?: Record<string, boolean>;
   redes_sociales?: Record<string, string>;
+
+  // Enriquecimiento 2026 (OSM, Wikidata, webs oficiales)
+  nombre_oficial?: string;
+  horario_fuente?: string;
+  dependencia?: string;
+  actividades?: string[];
+  visita_virtual?: boolean;
+  url_vv?: string;
+  wikipedia_es?: string;
+  wikidata_q?: string;
+  exposiciones?: string[];
+  fuente?: 'MCU' | 'Wikidata' | 'OSM';
+  validado?: boolean;
 }
 
 export interface MuseumFilters {
