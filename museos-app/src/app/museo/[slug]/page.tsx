@@ -22,7 +22,7 @@ import {
 type TabId = 'info' | 'instalaciones' | 'accesibilidad' | 'contacto';
 
 const TABS: { id: TabId; label: string }[] = [
-  { id: 'info', label: 'Informaci\u00f3n' },
+  { id: 'info', label: 'Información' },
   { id: 'instalaciones', label: 'Instalaciones' },
   { id: 'accesibilidad', label: 'Accesibilidad' },
   { id: 'contacto', label: 'Contacto y Redes' },
@@ -170,7 +170,7 @@ export default function MuseoDetailPage({ params }: { params: Promise<{ slug: st
 
       {/* Tab Content */}
       <div className="min-h-[200px]">
-        {/* ── TAB: Informaci\u00f3n ── */}
+        {/* ── TAB: Información ── */}
         {activeTab === 'info' && (
           <div className="space-y-6">
             {/* Visit info */}
@@ -178,7 +178,7 @@ export default function MuseoDetailPage({ params }: { params: Promise<{ slug: st
               <h3 className="text-xs font-semibold text-neutral-900 uppercase tracking-wider mb-4">Datos de visita</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <InfoRow icon={Clock} label="Horario" value={museum.horario} />
-                <InfoRow icon={Calendar} label="D\u00edas de cierre" value={museum.dias_cierre} />
+                <InfoRow icon={Calendar} label="Días de cierre" value={museum.dias_cierre} />
                 <InfoRow icon={Key} label="Tipo de acceso" value={museum.tipo_acceso} />
                 <InfoRow icon={Euro} label="Precio" value={formatPrice(museum.precio)} />
                 <InfoRow icon={Euro} label="Precio reducido" value={museum.precio_reducido} />
@@ -190,12 +190,12 @@ export default function MuseoDetailPage({ params }: { params: Promise<{ slug: st
             <div className="border border-neutral-200 p-6">
               <h3 className="text-xs font-semibold text-neutral-900 uppercase tracking-wider mb-4">Detalles</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <InfoRow icon={Palette} label="Tem\u00e1tica" value={museum.tematica} />
+                <InfoRow icon={Palette} label="Temática" value={museum.tematica} />
                 <InfoRow icon={Building2} label="Depende de" value={museum.dependencia} />
                 <InfoRow icon={Building2} label="Titularidad" value={museum.titularidad} />
-                <InfoRow icon={BookOpen} label="Clasificaci\u00f3n" value={museum.clasificacion} />
-                <InfoRow icon={Landmark} label="Gesti\u00f3n" value={museum.gestion} />
-                <InfoRow icon={Calendar} label="Fecha de creaci\u00f3n" value={museum.fecha_creacion} />
+                <InfoRow icon={BookOpen} label="Clasificación" value={museum.clasificacion} />
+                <InfoRow icon={Landmark} label="Gestión" value={museum.gestion} />
+                <InfoRow icon={Calendar} label="Fecha de creación" value={museum.fecha_creacion} />
                 <InfoRow icon={Users} label="Visitantes anuales" value={museum.visitantes_anuales} />
               </div>
             </div>
@@ -250,10 +250,10 @@ export default function MuseoDetailPage({ params }: { params: Promise<{ slug: st
             <div className="border border-neutral-200 p-6">
               <h3 className="text-xs font-semibold text-neutral-900 uppercase tracking-wider mb-4">Datos adicionales</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <InfoRow icon={Landmark} label="Gesti\u00f3n" value={museum.gestion} />
+                <InfoRow icon={Landmark} label="Gestión" value={museum.gestion} />
                 <InfoRow icon={Key} label="Tipo de acceso" value={museum.tipo_acceso} />
                 <InfoRow icon={Shield} label="Tipo de centro" value={museum.tipo_centro} />
-                <InfoRow icon={BookOpen} label="Clasificaci\u00f3n" value={museum.clasificacion} />
+                <InfoRow icon={BookOpen} label="Clasificación" value={museum.clasificacion} />
               </div>
             </div>
           </div>
@@ -291,7 +291,7 @@ export default function MuseoDetailPage({ params }: { params: Promise<{ slug: st
             <div className="border border-neutral-200 p-6">
               <h3 className="text-xs font-semibold text-neutral-900 uppercase tracking-wider mb-4">Contacto</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <InfoRow icon={Phone} label="Tel\u00e9fono" value={museum.telefono} />
+                <InfoRow icon={Phone} label="Teléfono" value={museum.telefono} />
                 <InfoRow icon={Phone} label="Fax" value={museum.fax} />
                 <InfoRow icon={Mail} label="Email" value={museum.email} />
                 <InfoRow icon={User} label="Director/a" value={museum.director} />
