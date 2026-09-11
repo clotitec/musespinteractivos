@@ -121,8 +121,14 @@ export default function MuseumCard({ museum, isVisited, isFavorite, onToggleFavo
         <MicroData museum={museum} />
 
         <div className="flex items-center justify-between mt-3 pt-3 border-t border-neutral-100">
-          <span className="text-[10px] text-neutral-500 uppercase tracking-wider">
+          <span className="text-[10px] text-neutral-500 uppercase tracking-wider flex items-center gap-1.5">
             {museum.tematica_normalized || museum.tematica || 'General'}
+            {museum.fuente && museum.fuente !== 'MCU' && (
+              <span className="text-[9px] text-neutral-400 border border-neutral-200 px-1 normal-case tracking-normal" title="Fuera del directorio oficial; datos de fuentes abiertas">{museum.fuente}</span>
+            )}
+            {museum.fuente === 'MCU' && museum.validado === false && (
+              <span className="text-[9px] text-neutral-400 border border-neutral-200 px-1 normal-case tracking-normal" title="Ficha del directorio pendiente de validación">no validado</span>
+            )}
           </span>
           <div className="flex items-center gap-2">
             {hasSocialMedia(museum) && (

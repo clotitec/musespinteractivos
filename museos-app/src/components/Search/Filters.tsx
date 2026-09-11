@@ -18,7 +18,7 @@ export default function Filters({ filters, onChange, comunidades, provincias, te
 
   const selectClass = "bg-white border border-neutral-200 px-3 py-2 text-sm text-neutral-700 focus:outline-none focus:border-neutral-900 transition-colors";
 
-  const hasActiveFilters = filters.comunidad || filters.provincia || filters.tematica || filters.titularidad || filters.gratuito || filters.conServicios || filters.accesible || filters.conImagen;
+  const hasActiveFilters = filters.comunidad || filters.provincia || filters.tematica || filters.titularidad || filters.gratuito || filters.conServicios || filters.accesible || filters.conImagen || filters.soloOficial;
 
   return (
     <div className="space-y-3">
@@ -113,12 +113,22 @@ export default function Filters({ filters, onChange, comunidades, provincias, te
           Con imagen
         </label>
 
+        <label className="flex items-center gap-2 text-sm text-neutral-600 cursor-pointer" title="Solo museos y colecciones reconocidos en el Directorio de Museos de España (Ministerio de Cultura)">
+          <input
+            type="checkbox"
+            checked={filters.soloOficial}
+            onChange={(e) => update('soloOficial', e.target.checked)}
+            className="rounded-sm border-neutral-300 text-neutral-900 focus:ring-neutral-900/30"
+          />
+          Solo directorio oficial
+        </label>
+
         {hasActiveFilters && (
           <button
             onClick={() => onChange({
               ...filters,
               comunidad: '', provincia: '', tematica: '', titularidad: '',
-              gratuito: false, conServicios: false, accesible: false, conImagen: false,
+              gratuito: false, conServicios: false, accesible: false, conImagen: false, soloOficial: false,
             })}
             className="text-xs text-neutral-500 hover:text-neutral-900 underline underline-offset-2 transition-colors"
           >

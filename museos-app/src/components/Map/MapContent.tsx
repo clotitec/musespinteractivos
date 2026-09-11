@@ -235,6 +235,8 @@ export default function MapContent({ museums, onMuseumClick }: MapContentProps) 
                       <span className="text-xl">{getMuseumIcon(museum.tematica_normalized)}</span>
                       <span className="text-[10px] text-neutral-400 font-medium uppercase tracking-wider">
                         {museum.tematica_normalized || 'General'}
+                        {museum.fuente && museum.fuente !== 'MCU' ? ` · ${museum.fuente}` : ''}
+                        {museum.fuente === 'MCU' && museum.validado === false ? ' · no validado' : ''}
                       </span>
                     </div>
                   </div>

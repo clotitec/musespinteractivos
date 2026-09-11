@@ -13,7 +13,7 @@ export default function HomePage() {
   const { museums, loading, error } = useMuseums();
   const [filters, setFilters] = useState<MuseumFilters>({
     search: '', comunidad: '', provincia: '', tematica: '', titularidad: '',
-    gratuito: false, conServicios: false, accesible: false, conImagen: false,
+    gratuito: false, conServicios: false, accesible: false, conImagen: false, soloOficial: false,
   });
 
   const filtered = useMemo(() => filterMuseums(museums, filters), [museums, filters]);

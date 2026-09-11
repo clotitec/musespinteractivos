@@ -15,7 +15,7 @@ export default function BuscarPage() {
   const passport = usePassport();
   const [filters, setFilters] = useState<MuseumFilters>({
     search: '', comunidad: '', provincia: '', tematica: '', titularidad: '',
-    gratuito: false, conServicios: false, accesible: false, conImagen: false,
+    gratuito: false, conServicios: false, accesible: false, conImagen: false, soloOficial: false,
   });
 
   const filtered = useMemo(() => filterMuseums(museums, filters), [museums, filters]);

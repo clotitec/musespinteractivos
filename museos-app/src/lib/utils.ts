@@ -230,6 +230,7 @@ export function filterMuseums(museums: Museum[], filters: MuseumFilters): Museum
     if (filters.conServicios && !hasServices(m)) return false;
     if (filters.accesible && !hasAccessibility(m)) return false;
     if (filters.conImagen && !m.imagen_url) return false;
+    if (filters.soloOficial && m.fuente && m.fuente !== 'MCU') return false;
     return true;
   });
 }

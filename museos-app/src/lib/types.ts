@@ -78,6 +78,7 @@ export interface MuseumFilters {
   conServicios: boolean;
   accesible: boolean;
   conImagen: boolean;
+  soloOficial: boolean;
 }
 
 export interface StatsData {
