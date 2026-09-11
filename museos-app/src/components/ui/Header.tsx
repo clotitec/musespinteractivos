@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Map, Search, List, Stamp, BarChart3 } from 'lucide-react';
+import { Map, Search, List, Stamp, BarChart3, Sparkles } from 'lucide-react';
 
 const NAV_ITEMS = [
   { href: '/', label: 'Mapa', icon: Map },
@@ -10,6 +10,7 @@ const NAV_ITEMS = [
   { href: '/lista', label: 'Lista', icon: List },
   { href: '/pasaporte', label: 'Pasaporte', icon: Stamp },
   { href: '/estadisticas', label: 'Datos', icon: BarChart3 },
+  { href: '/para-museos', label: 'Para museos', icon: Sparkles },
 ];
 
 export default function Header() {
@@ -21,16 +22,16 @@ export default function Header() {
         <Link href="/" className="flex items-center gap-3">
           <span className="text-2xl">🏛️</span>
           <div>
-            <h1 className="text-lg font-display font-bold text-neutral-900 leading-tight tracking-tight">
+            <p className="text-lg font-display font-bold text-neutral-900 leading-tight tracking-tight">
               Museos de Espa&ntilde;a
-            </h1>
+            </p>
             <p className="text-[10px] text-neutral-400 uppercase tracking-[0.15em] leading-tight">Plataforma Interactiva</p>
           </div>
         </Link>
 
         <nav className="flex items-center gap-1">
           {NAV_ITEMS.map(({ href, label, icon: Icon }) => {
-            const isActive = pathname === href;
+            const isActive = href === '/' ? pathname === '/' : pathname.startsWith(href);
             return (
               <Link
                 key={href}

@@ -323,6 +323,24 @@ export default function MuseoDetailPage({ params }: { params: Promise<{ slug: st
         )}
       </div>
 
+      {/* Para el museo */}
+      {museum.fuente === 'MCU' && (
+        <div className="border border-neutral-900 p-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="text-[10px] text-neutral-400 uppercase tracking-wider">¿Es tu museo?</p>
+            <p className="text-sm text-neutral-700 mt-1">
+              Reclama la ficha, corrige horarios y precios, y añade visita virtual, agenda y juegos.
+            </p>
+          </div>
+          <Link
+            href={`/para-museos?museo=${museum.slug}#contacto`}
+            className="shrink-0 inline-flex items-center justify-center gap-2 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-medium uppercase tracking-wider px-4 py-2.5 transition-colors"
+          >
+            Servicios y ficha premium
+          </Link>
+        </div>
+      )}
+
       {/* Location */}
       <div className="border border-neutral-200 p-6">
         <h3 className="text-xs font-semibold text-neutral-900 uppercase tracking-wider mb-4">Ubicaci&oacute;n</h3>
