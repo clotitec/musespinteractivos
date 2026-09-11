@@ -48,6 +48,7 @@
 
     /* Leaflet overrides for dark theme */
     .leaflet-container { background: #0f0f1a !important; }
+    .leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) brightness(0.8) contrast(0.9) saturate(0.5); }
     .leaflet-control-zoom a {
       background: rgba(15,15,26,0.9) !important;
       color: #e8e8f0 !important;
@@ -155,6 +156,7 @@
 <body>
   <div id="root"></div>
 
+  <script src="data/museos-demo.js"></script>
   <script type="text/babel">
     const { useState, useMemo, useEffect, useRef, useCallback } = React;
 
@@ -180,18 +182,25 @@
       "Navarra": { color: "#355070" },
       "País Vasco": { color: "#EAAC8B" },
       "La Rioja": { color: "#BC4749" },
+      "Ceuta": { color: "#8D99AE" },
+      "Melilla": { color: "#B5838D" },
     };
 
     const CATEGORY_COLORS = {
-      "Arqueológico": "#E07A5F",
+      "Arqueología": "#E07A5F",
       "Bellas Artes": "#F2CC8F",
       "Arte Contemporáneo": "#81B29A",
       "Ciencias Naturales": "#457B9D",
       "Etnografía": "#F4A261",
-      "Escultura": "#6D597A",
+      "Histórico": "#6D597A",
       "Casa-Museo": "#EAAC8B",
-      "Bellas Artes y Arqueología": "#D4A373",
-      "Ciencias Naturales y Arqueología": "#2A9D8F",
+      "Ciencia y Tecnología": "#2A9D8F",
+      "Artes Decorativas": "#D4A373",
+      "De Sitio": "#A8DADC",
+      "Especializado": "#B56576",
+      "General": "#8D99AE",
+      "Textiles": "#E9C46A",
+      "Otros": "#B0B0C8",
     };
 
     const getCategoryColor = (cat) => CATEGORY_COLORS[cat] || "#B0B0C8";
@@ -199,41 +208,10 @@
     const COMUNIDADES_LIST = Object.keys(COMUNIDADES).sort();
 
     // ============================================================
-    // MUSEUM DATA (30 real museums)
+    // MUSEUM DATA: 1.540 museos oficiales cargados desde data/museos-demo.js
     // ============================================================
 
-    const MUSEOS = [
-      { id: 1, nombre: "Museo de Bellas Artes de Sevilla", comunidad: "Andalucía", provincia: "Sevilla", municipio: "Sevilla", lat: 37.3886, lng: -5.9966, tipo: "Museo", tematica: "Bellas Artes", titularidad: "Pública", web: "http://www.museosdeandalucia.es/web/museodebellasartesdesevilla", horario: "Mar-Sáb 9:00-21:00, Dom 9:00-15:00", direccion: "Plaza del Museo, 9", telefono: "955 542 942", accesibilidad: ["Silla de ruedas", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres", "Biblioteca"], precio: "Gratuito UE" },
-      { id: 2, nombre: "Museo Picasso Málaga", comunidad: "Andalucía", provincia: "Málaga", municipio: "Málaga", lat: 36.7214, lng: -4.4185, tipo: "Museo", tematica: "Arte Contemporáneo", titularidad: "Privada", web: "https://www.museopicassomalaga.org", horario: "Lun-Dom 10:00-19:00", direccion: "Palacio de Buenavista, C/ San Agustín, 8", telefono: "952 127 600", accesibilidad: ["Silla de ruedas", "Audioguías", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres", "Tienda", "Cafetería"], precio: "12€" },
-      { id: 3, nombre: "Museo de la Alhambra", comunidad: "Andalucía", provincia: "Granada", municipio: "Granada", lat: 37.1760, lng: -3.5881, tipo: "Museo", tematica: "Arqueológico", titularidad: "Pública", web: "http://www.alhambra-patronato.es", horario: "Mar-Sáb 8:30-18:00", direccion: "Recinto de la Alhambra", telefono: "958 027 900", accesibilidad: ["Parcial"], servicios: ["Visitas guiadas", "Audioguías"], precio: "Gratuito" },
-      { id: 4, nombre: "Centro Andaluz de Arte Contemporáneo", comunidad: "Andalucía", provincia: "Sevilla", municipio: "Sevilla", lat: 37.3857, lng: -6.0045, tipo: "Museo", tematica: "Arte Contemporáneo", titularidad: "Pública", web: "http://www.caac.es", horario: "Mar-Sáb 11:00-21:00", direccion: "Avda. Américo Vespucio, 2", telefono: "955 037 070", accesibilidad: ["Silla de ruedas", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres", "Biblioteca", "Cafetería"], precio: "Gratuito" },
-      { id: 5, nombre: "Museo de Zaragoza", comunidad: "Aragón", provincia: "Zaragoza", municipio: "Zaragoza", lat: 41.6488, lng: -0.8891, tipo: "Museo", tematica: "Bellas Artes y Arqueología", titularidad: "Pública", web: "http://www.museodezaragoza.es", horario: "Mar-Sáb 10:00-14:00 y 17:00-20:00", direccion: "Plaza de los Sitios, 6", telefono: "976 222 181", accesibilidad: ["Silla de ruedas"], servicios: ["Visitas guiadas", "Talleres"], precio: "Gratuito" },
-      { id: 6, nombre: "Museo Pablo Gargallo", comunidad: "Aragón", provincia: "Zaragoza", municipio: "Zaragoza", lat: 41.6528, lng: -0.8780, tipo: "Museo", tematica: "Escultura", titularidad: "Pública", web: "http://www.zaragoza.es/museogargallo", horario: "Mar-Sáb 10:00-14:00 y 17:00-21:00", direccion: "Plaza de San Felipe, 3", telefono: "976 724 922", accesibilidad: ["Parcial"], servicios: ["Visitas guiadas"], precio: "Gratuito" },
-      { id: 7, nombre: "Museo de Bellas Artes de Asturias", comunidad: "Asturias", provincia: "Asturias", municipio: "Oviedo", lat: 43.3619, lng: -5.8445, tipo: "Museo", tematica: "Bellas Artes", titularidad: "Pública", web: "http://www.museobbaa.com", horario: "Mar-Sáb 10:30-14:00 y 16:30-20:30", direccion: "C/ Santa Ana, 1", telefono: "985 213 061", accesibilidad: ["Silla de ruedas", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres", "Biblioteca"], precio: "Gratuito" },
-      { id: 8, nombre: "Es Baluard Museu d'Art Contemporani", comunidad: "Illes Balears", provincia: "Illes Balears", municipio: "Palma", lat: 39.5696, lng: 2.6246, tipo: "Museo", tematica: "Arte Contemporáneo", titularidad: "Mixta", web: "https://www.esbaluard.org", horario: "Mar-Sáb 10:00-20:00", direccion: "Plaça Porta de Santa Catalina, 10", telefono: "971 908 200", accesibilidad: ["Silla de ruedas", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres", "Cafetería", "Tienda"], precio: "6€" },
-      { id: 9, nombre: "Museo de la Naturaleza y Arqueología", comunidad: "Canarias", provincia: "Santa Cruz de Tenerife", municipio: "Santa Cruz de Tenerife", lat: 28.4682, lng: -16.2546, tipo: "Museo", tematica: "Ciencias Naturales y Arqueología", titularidad: "Pública", web: "https://www.museosdetenerife.org/muna", horario: "Mar-Sáb 9:00-20:00", direccion: "C/ Fuente Morales, s/n", telefono: "922 535 816", accesibilidad: ["Silla de ruedas", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres"], precio: "5€" },
-      { id: 10, nombre: "Museo de Prehistoria y Arqueología de Cantabria", comunidad: "Cantabria", provincia: "Cantabria", municipio: "Santander", lat: 43.4623, lng: -3.7907, tipo: "Museo", tematica: "Arqueológico", titularidad: "Pública", web: "https://museosdecantabria.es", horario: "Mar-Dom 10:00-14:00 y 17:00-20:00", direccion: "C/ Hernán Cortés, 4", telefono: "942 209 922", accesibilidad: ["Silla de ruedas"], servicios: ["Visitas guiadas", "Talleres"], precio: "Gratuito" },
-      { id: 11, nombre: "Museo Nacional de Escultura", comunidad: "Castilla y León", provincia: "Valladolid", municipio: "Valladolid", lat: 41.6538, lng: -4.7277, tipo: "Museo", tematica: "Escultura", titularidad: "Pública", web: "http://www.museoscultura.mcu.es", horario: "Mar-Sáb 10:00-14:00 y 16:00-19:30", direccion: "C/ Cadenas de San Gregorio, 1", telefono: "983 250 375", accesibilidad: ["Silla de ruedas", "Audioguías", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres", "Biblioteca", "Tienda"], precio: "3€" },
-      { id: 12, nombre: "Museo de la Evolución Humana", comunidad: "Castilla y León", provincia: "Burgos", municipio: "Burgos", lat: 42.3411, lng: -3.7007, tipo: "Museo", tematica: "Ciencias Naturales", titularidad: "Pública", web: "https://www.museoevolucionhumana.com", horario: "Mar-Dom 10:00-14:30 y 16:30-20:00", direccion: "Paseo Sierra de Atapuerca, s/n", telefono: "947 421 000", accesibilidad: ["Silla de ruedas", "Audioguías", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres", "Cafetería", "Tienda"], precio: "6€" },
-      { id: 13, nombre: "Museo de Arte Abstracto Español", comunidad: "Castilla-La Mancha", provincia: "Cuenca", municipio: "Cuenca", lat: 40.0784, lng: -2.1304, tipo: "Museo", tematica: "Arte Contemporáneo", titularidad: "Privada", web: "https://www.march.es/es/cuenca", horario: "Mar-Sáb 11:00-14:00 y 16:00-18:00", direccion: "C/ Canónigos, s/n, Casas Colgadas", telefono: "969 212 983", accesibilidad: ["Parcial"], servicios: ["Visitas guiadas", "Tienda"], precio: "3€" },
-      { id: 14, nombre: "Museu Nacional d'Art de Catalunya", comunidad: "Cataluña", provincia: "Barcelona", municipio: "Barcelona", lat: 41.3685, lng: 2.1527, tipo: "Museo", tematica: "Bellas Artes", titularidad: "Pública", web: "https://www.museunacional.cat", horario: "Mar-Sáb 10:00-18:00, Dom 10:00-15:00", direccion: "Palau Nacional, Parc de Montjuïc", telefono: "936 220 376", accesibilidad: ["Silla de ruedas", "Audioguías", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres", "Biblioteca", "Cafetería", "Tienda"], precio: "12€" },
-      { id: 15, nombre: "Fundació Joan Miró", comunidad: "Cataluña", provincia: "Barcelona", municipio: "Barcelona", lat: 41.3688, lng: 2.1600, tipo: "Museo", tematica: "Arte Contemporáneo", titularidad: "Privada", web: "https://www.fmirobcn.org", horario: "Mar-Sáb 10:00-20:00, Dom 10:00-15:00", direccion: "Parc de Montjuïc, s/n", telefono: "934 439 470", accesibilidad: ["Silla de ruedas", "Audioguías", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres", "Biblioteca", "Cafetería", "Tienda"], precio: "14€" },
-      { id: 16, nombre: "Teatre-Museu Dalí", comunidad: "Cataluña", provincia: "Girona", municipio: "Figueres", lat: 42.2671, lng: 2.9585, tipo: "Museo", tematica: "Arte Contemporáneo", titularidad: "Privada", web: "https://www.salvador-dali.org", horario: "Mar-Dom 10:30-18:00", direccion: "Plaça Gala-Salvador Dalí, 5", telefono: "972 677 500", accesibilidad: ["Parcial"], servicios: ["Audioguías", "Tienda"], precio: "14€" },
-      { id: 17, nombre: "IVAM - Institut Valencià d'Art Modern", comunidad: "Comunidad Valenciana", provincia: "Valencia", municipio: "Valencia", lat: 39.4789, lng: -0.3818, tipo: "Museo", tematica: "Arte Contemporáneo", titularidad: "Pública", web: "https://www.ivam.es", horario: "Mar-Dom 10:00-19:00", direccion: "C/ Guillem de Castro, 118", telefono: "963 176 600", accesibilidad: ["Silla de ruedas", "Audioguías", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres", "Biblioteca", "Cafetería", "Tienda"], precio: "Gratuito" },
-      { id: 18, nombre: "Museo Nacional de Arte Romano", comunidad: "Extremadura", provincia: "Badajoz", municipio: "Mérida", lat: 38.9141, lng: -6.3418, tipo: "Museo", tematica: "Arqueológico", titularidad: "Pública", web: "http://museoarteromano.mcu.es", horario: "Mar-Sáb 9:30-20:00, Dom 10:00-15:00", direccion: "C/ José Ramón Mélida, s/n", telefono: "924 311 690", accesibilidad: ["Silla de ruedas", "Audioguías", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres", "Biblioteca", "Tienda"], precio: "3€" },
-      { id: 19, nombre: "Museo de las Peregrinaciones y de Santiago", comunidad: "Galicia", provincia: "A Coruña", municipio: "Santiago de Compostela", lat: 42.8806, lng: -8.5443, tipo: "Museo", tematica: "Etnografía", titularidad: "Pública", web: "http://museoperegrinacions.xunta.gal", horario: "Mar-Sáb 9:30-20:30, Dom 10:15-14:45", direccion: "Praza das Praterías, 2", telefono: "981 566 110", accesibilidad: ["Silla de ruedas", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres"], precio: "2.40€" },
-      { id: 20, nombre: "Museo Nacional del Prado", comunidad: "Comunidad de Madrid", provincia: "Madrid", municipio: "Madrid", lat: 40.4138, lng: -3.6921, tipo: "Museo", tematica: "Bellas Artes", titularidad: "Pública", web: "https://www.museodelprado.es", horario: "Lun-Sáb 10:00-20:00, Dom 10:00-19:00", direccion: "C/ Ruiz de Alarcón, 23", telefono: "913 302 800", accesibilidad: ["Silla de ruedas", "Audioguías", "Signoguías", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres", "Biblioteca", "Cafetería", "Tienda", "Auditorio"], precio: "15€" },
-      { id: 21, nombre: "Museo Nacional Centro de Arte Reina Sofía", comunidad: "Comunidad de Madrid", provincia: "Madrid", municipio: "Madrid", lat: 40.4083, lng: -3.6943, tipo: "Museo", tematica: "Arte Contemporáneo", titularidad: "Pública", web: "https://www.museoreinasofia.es", horario: "Lun-Sáb 10:00-21:00, Dom 10:00-14:30", direccion: "C/ Santa Isabel, 52", telefono: "917 741 000", accesibilidad: ["Silla de ruedas", "Audioguías", "Signoguías", "Aseos adaptados", "Bucle magnético"], servicios: ["Visitas guiadas", "Talleres", "Biblioteca", "Cafetería", "Tienda", "Auditorio"], precio: "12€" },
-      { id: 22, nombre: "Museo Thyssen-Bornemisza", comunidad: "Comunidad de Madrid", provincia: "Madrid", municipio: "Madrid", lat: 40.4160, lng: -3.6940, tipo: "Museo", tematica: "Bellas Artes", titularidad: "Mixta", web: "https://www.museothyssen.org", horario: "Lun 12:00-16:00, Mar-Dom 10:00-19:00", direccion: "Paseo del Prado, 8", telefono: "917 911 370", accesibilidad: ["Silla de ruedas", "Audioguías", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres", "Biblioteca", "Cafetería", "Tienda"], precio: "13€" },
-      { id: 23, nombre: "Museo Arqueológico Nacional", comunidad: "Comunidad de Madrid", provincia: "Madrid", municipio: "Madrid", lat: 40.4238, lng: -3.6884, tipo: "Museo", tematica: "Arqueológico", titularidad: "Pública", web: "http://www.man.es", horario: "Mar-Sáb 9:30-20:00, Dom 9:30-15:00", direccion: "C/ Serrano, 13", telefono: "915 777 912", accesibilidad: ["Silla de ruedas", "Audioguías", "Signoguías", "Recorridos táctiles", "Aseos adaptados", "Bucle magnético"], servicios: ["Visitas guiadas", "Talleres", "Biblioteca", "Auditorio"], precio: "3€" },
-      { id: 24, nombre: "Museo Sorolla", comunidad: "Comunidad de Madrid", provincia: "Madrid", municipio: "Madrid", lat: 40.4352, lng: -3.6925, tipo: "Museo", tematica: "Casa-Museo", titularidad: "Pública", web: "http://museosorolla.mcu.es", horario: "Mar-Sáb 9:30-20:00, Dom 10:00-15:00", direccion: "Paseo General Martínez Campos, 37", telefono: "913 101 584", accesibilidad: ["Parcial"], servicios: ["Visitas guiadas", "Tienda"], precio: "3€" },
-      { id: 25, nombre: "Museo Salzillo", comunidad: "Región de Murcia", provincia: "Murcia", municipio: "Murcia", lat: 37.9836, lng: -1.1296, tipo: "Museo", tematica: "Escultura", titularidad: "Pública", web: "http://www.museosalzillo.es", horario: "Mar-Sáb 10:00-17:00, Dom 11:00-14:00", direccion: "Plaza de San Agustín, 3", telefono: "968 291 893", accesibilidad: ["Silla de ruedas", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres", "Tienda"], precio: "5€" },
-      { id: 26, nombre: "Museo de Navarra", comunidad: "Navarra", provincia: "Navarra", municipio: "Pamplona", lat: 42.8207, lng: -1.6430, tipo: "Museo", tematica: "Bellas Artes y Arqueología", titularidad: "Pública", web: "https://www.navarra.es/museodenavarra", horario: "Mar-Sáb 9:30-14:00 y 17:00-19:00", direccion: "C/ Santo Domingo, 47", telefono: "848 426 492", accesibilidad: ["Silla de ruedas", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres", "Biblioteca"], precio: "2€" },
-      { id: 27, nombre: "Museo Guggenheim Bilbao", comunidad: "País Vasco", provincia: "Vizcaya", municipio: "Bilbao", lat: 43.2687, lng: -2.9340, tipo: "Museo", tematica: "Arte Contemporáneo", titularidad: "Privada", web: "https://www.guggenheim-bilbao.eus", horario: "Mar-Dom 10:00-19:00", direccion: "Abandoibarra Etorb., 2", telefono: "944 359 000", accesibilidad: ["Silla de ruedas", "Audioguías", "Signoguías", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres", "Cafetería", "Tienda", "Auditorio"], precio: "16€" },
-      { id: 28, nombre: "Museo de Bellas Artes de Bilbao", comunidad: "País Vasco", provincia: "Vizcaya", municipio: "Bilbao", lat: 43.2631, lng: -2.9389, tipo: "Museo", tematica: "Bellas Artes", titularidad: "Pública", web: "https://www.museobilbao.com", horario: "Lun-Sáb 10:00-20:00, Dom 10:00-15:00", direccion: "Museo Plaza, 2", telefono: "944 396 060", accesibilidad: ["Silla de ruedas", "Audioguías", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres", "Biblioteca", "Cafetería", "Tienda"], precio: "10€" },
-      { id: 29, nombre: "Museo de La Rioja", comunidad: "La Rioja", provincia: "La Rioja", municipio: "Logroño", lat: 42.4666, lng: -2.4456, tipo: "Museo", tematica: "Bellas Artes y Arqueología", titularidad: "Pública", web: "https://www.museodelarioja.es", horario: "Mar-Sáb 10:00-14:00 y 16:00-21:00", direccion: "Plaza de San Agustín, 23", telefono: "941 291 259", accesibilidad: ["Silla de ruedas", "Aseos adaptados"], servicios: ["Visitas guiadas", "Talleres"], precio: "Gratuito" },
-      { id: 30, nombre: "Museo del Teatro Romano de Cartagena", comunidad: "Región de Murcia", provincia: "Murcia", municipio: "Cartagena", lat: 37.5993, lng: -0.9856, tipo: "Museo", tematica: "Arqueológico", titularidad: "Mixta", web: "https://www.teatroromanocartagena.org", horario: "Mar-Sáb 10:00-18:00, Dom 10:00-14:00", direccion: "Plaza del Ayuntamiento, 9", telefono: "968 500 093", accesibilidad: ["Parcial"], servicios: ["Visitas guiadas", "Audioguías", "Tienda"], precio: "6€" },
-    ];
+    const MUSEOS = window.MUSEOS_DATA;
 
     const TEMATICAS = [...new Set(MUSEOS.map(m => m.tematica))].sort();
 
@@ -248,43 +226,12 @@
     // Ready to connect with Ministerio backend
     // ============================================================
 
-    const MUSEO_EXTRA = {
-      1: { duracion: "1.5h", descripcion: "Fundado en 1835, es el museo de bellas artes más importante de Andalucía. Alberga obras maestras de Murillo, Zurbarán y Valdés Leal, entre otros pintores del Siglo de Oro español. Su sede en el antiguo Convento de la Merced es un monumento en sí mismo.", imagen: "https://picsum.photos/seed/museo1/800/400", abierto: true, cafeteria: false, tienda: false, audioguia: false, vr: false, exposicionTemporal: "Zurbarán: Luz y Sombra" },
-      2: { duracion: "2h", descripcion: "El Museo Picasso Málaga acoge la colección más extensa de obras de Picasso en su ciudad natal. Más de 200 obras donadas por Christine y Bernard Ruiz-Picasso ilustran la revolución artística del genio malagueño, desde sus primeros estudios hasta las obras finales.", imagen: "https://picsum.photos/seed/museo2/800/400", abierto: true, cafeteria: true, tienda: true, audioguia: true, vr: false, exposicionTemporal: "Picasso Escultor: Materia y Cuerpo" },
-      3: { duracion: "1h", descripcion: "Situado en el corazón de la Alhambra, este museo exhibe piezas excepcionales del arte hispanomusulmán nazarí. Cerámicas, yeserías, tejidos y carpintería revelan la sofisticación de la última corte islámica de la Península Ibérica.", imagen: "https://picsum.photos/seed/museo3/800/400", abierto: true, cafeteria: false, tienda: false, audioguia: true, vr: false, exposicionTemporal: null },
-      4: { duracion: "1.5h", descripcion: "Ubicado en el Monasterio de la Cartuja, el CAAC es el centro de referencia para el arte contemporáneo en Andalucía. Combina exposiciones internacionales con una potente programación de artistas emergentes españoles.", imagen: "https://picsum.photos/seed/museo4/800/400", abierto: true, cafeteria: true, tienda: false, audioguia: false, vr: false, exposicionTemporal: "Geometrías del Sur: Arte Latinoamericano" },
-      5: { duracion: "1.5h", descripcion: "El Museo de Zaragoza reúne arqueología y bellas artes en un imponente edificio de la Exposición de 1908. Sus fondos van desde los íberos hasta Goya, pasando por mosaicos romanos y arte mudéjar.", imagen: "https://picsum.photos/seed/museo5/800/400", abierto: true, cafeteria: false, tienda: false, audioguia: false, vr: false, exposicionTemporal: null },
-      6: { duracion: "1h", descripcion: "Dedicado al escultor aragonés Pablo Gargallo, este museo ocupa el Palacio de los Condes de Argillo. Exhibe esculturas en hierro, cobre y bronce que revolucionaron la escultura moderna del siglo XX.", imagen: "https://picsum.photos/seed/museo6/800/400", abierto: true, cafeteria: false, tienda: false, audioguia: false, vr: false, exposicionTemporal: "Gargallo y la Vanguardia Parisina" },
-      7: { duracion: "1.5h", descripcion: "El Museo de Bellas Artes de Asturias es uno de los mejores museos de arte de España. Su colección abarca desde El Greco y Zurbarán hasta Dalí y Picasso, en un conjunto de tres edificios históricos del casco antiguo de Oviedo.", imagen: "https://picsum.photos/seed/museo7/800/400", abierto: true, cafeteria: false, tienda: false, audioguia: false, vr: false, exposicionTemporal: null },
-      8: { duracion: "2h", descripcion: "Es Baluard es el museo de arte moderno y contemporáneo de Palma, integrado en las murallas renacentistas de la ciudad. Su colección incluye obras de Picasso, Miró, Barceló y otros artistas fundamentales del arte mediterráneo.", imagen: "https://picsum.photos/seed/museo8/800/400", abierto: true, cafeteria: true, tienda: true, audioguia: false, vr: false, exposicionTemporal: "Mediterráneo: Un Mar de Arte" },
-      9: { duracion: "1.5h", descripcion: "El MUNA presenta la historia natural y arqueológica de las Islas Canarias. Destaca su colección de momias guanches y fósiles endémicos que documentan la singularidad biológica del archipiélago.", imagen: "https://picsum.photos/seed/museo9/800/400", abierto: true, cafeteria: false, tienda: false, audioguia: false, vr: false, exposicionTemporal: "Volcanes: Fuerza Creadora" },
-      10: { duracion: "1h", descripcion: "Alberga una de las mejores colecciones de prehistoria de la Península. Las pinturas rupestres de Altamira, estelas cántabras y materiales del Paleolítico muestran la riqueza arqueológica de Cantabria.", imagen: "https://picsum.photos/seed/museo10/800/400", abierto: true, cafeteria: false, tienda: false, audioguia: false, vr: true, exposicionTemporal: null },
-      11: { duracion: "2h", descripcion: "Joya del patrimonio español, este museo alberga la mayor colección de escultura policromada del mundo. Obras de Berruguete, Juni y Gregorio Fernández conviven en el espléndido Colegio de San Gregorio.", imagen: "https://picsum.photos/seed/museo11/800/400", abierto: true, cafeteria: false, tienda: true, audioguia: true, vr: false, exposicionTemporal: "El Retablo Mayor: Arquitectura y Devoción" },
-      12: { duracion: "2.5h", descripcion: "El MEH presenta de forma interactiva la evolución humana a partir de los hallazgos de Atapuerca, Patrimonio de la Humanidad. Un viaje fascinante de millones de años con réplicas a tamaño real y tecnología inmersiva.", imagen: "https://picsum.photos/seed/museo12/800/400", abierto: true, cafeteria: true, tienda: true, audioguia: true, vr: true, exposicionTemporal: "Homo Antecessor: Cara a Cara" },
-      13: { duracion: "1h", descripcion: "Ubicado en las icónicas Casas Colgadas de Cuenca, este museo es pionero del arte abstracto en España. Obras de Chillida, Tàpies, Saura y Zóbel en un marco arquitectónico único sobre la hoz del Huécar.", imagen: "https://picsum.photos/seed/museo13/800/400", abierto: true, cafeteria: false, tienda: true, audioguia: false, vr: false, exposicionTemporal: null },
-      14: { duracion: "2.5h", descripcion: "El MNAC posee la colección más completa de arte románico del mundo, junto a obras góticas, renacentistas y modernas. Su sede en el Palau Nacional de Montjuïc ofrece vistas panorámicas de Barcelona.", imagen: "https://picsum.photos/seed/museo14/800/400", abierto: true, cafeteria: true, tienda: true, audioguia: true, vr: false, exposicionTemporal: "Románico Pirineo: Arte y Territorio" },
-      15: { duracion: "2h", descripcion: "Creada por el propio Miró, esta fundación es un espacio total donde arquitectura, arte y paisaje se funden. Alberga más de 14.000 obras entre pinturas, esculturas y obra gráfica del artista barcelonés.", imagen: "https://picsum.photos/seed/museo15/800/400", abierto: true, cafeteria: true, tienda: true, audioguia: true, vr: false, exposicionTemporal: "Miró y la Tierra" },
-      16: { duracion: "2h", descripcion: "El mayor objeto surrealista del mundo, diseñado por Dalí como su gran obra testamentaria. Cada sala es una instalación total que sumerge al visitante en el universo onírico del genio de Figueres.", imagen: "https://picsum.photos/seed/museo16/800/400", abierto: true, cafeteria: false, tienda: true, audioguia: true, vr: false, exposicionTemporal: null },
-      17: { duracion: "1.5h", descripcion: "El IVAM fue el primer museo de arte moderno creado en España. Su colección permanente incluye obras de Julio González, el padre de la escultura en hierro, junto a piezas fundamentales del arte contemporáneo internacional.", imagen: "https://picsum.photos/seed/museo17/800/400", abierto: true, cafeteria: true, tienda: true, audioguia: true, vr: false, exposicionTemporal: "Pop Art Valencia" },
-      18: { duracion: "2h", descripcion: "Obra maestra de Rafael Moneo, este museo es uno de los mejores del mundo dedicado a la civilización romana. Mosaicos, esculturas y objetos de Augusta Emerita te transportan a la Hispania romana.", imagen: "https://picsum.photos/seed/museo18/800/400", abierto: true, cafeteria: false, tienda: true, audioguia: true, vr: true, exposicionTemporal: "Gladiadores: Héroes del Anfiteatro" },
-      19: { duracion: "1.5h", descripcion: "Este museo narra la historia de las peregrinaciones a Santiago desde la Edad Media. Objetos votivos, arte jacobeo y testimonios de peregrinos de toda Europa muestran el impacto cultural del Camino.", imagen: "https://picsum.photos/seed/museo19/800/400", abierto: true, cafeteria: false, tienda: false, audioguia: false, vr: false, exposicionTemporal: null },
-      20: { duracion: "3h", descripcion: "Una de las pinacotecas más importantes del mundo. Velázquez, Goya, El Greco, Rubens y Tiziano forman un conjunto inigualable de la pintura europea. Las Meninas y El Jardín de las Delicias son solo el comienzo.", imagen: "https://picsum.photos/seed/museo20/800/400", abierto: true, cafeteria: true, tienda: true, audioguia: true, vr: false, exposicionTemporal: "Velázquez y la Corte de Felipe IV" },
-      21: { duracion: "2.5h", descripcion: "El Reina Sofía alberga el Guernica de Picasso y la mayor colección de arte contemporáneo español. Dalí, Miró, Juan Gris y artistas actuales dialogan en un edificio que fusiona historia y vanguardia.", imagen: "https://picsum.photos/seed/museo21/800/400", abierto: true, cafeteria: true, tienda: true, audioguia: true, vr: false, exposicionTemporal: "Picasso: Política y Arte" },
-      22: { duracion: "2h", descripcion: "Del impresionismo al pop art, el Thyssen ofrece un recorrido único por la historia del arte occidental. Van Gogh, Monet, Hopper y Lichtenstein forman una colección sin parangón en Europa.", imagen: "https://picsum.photos/seed/museo22/800/400", abierto: true, cafeteria: true, tienda: true, audioguia: true, vr: false, exposicionTemporal: "Impresionismo Americano" },
-      23: { duracion: "2h", descripcion: "El MAN custodia el patrimonio arqueológico de España desde la Prehistoria hasta la Edad Moderna. La Dama de Elche, los tesoros visigodos y la colección numismática son referentes mundiales.", imagen: "https://picsum.photos/seed/museo23/800/400", abierto: true, cafeteria: false, tienda: false, audioguia: true, vr: true, exposicionTemporal: "Iberos: Nuestros Antepasados" },
-      24: { duracion: "1h", descripcion: "La casa-estudio del pintor Joaquín Sorolla conserva intacta la atmósfera donde creó sus obras luminosas. Jardines andaluces, azulejos y la luz de Madrid inspiran el recorrido por esta casa-museo única.", imagen: "https://picsum.photos/seed/museo24/800/400", abierto: true, cafeteria: false, tienda: true, audioguia: false, vr: false, exposicionTemporal: null },
-      25: { duracion: "1h", descripcion: "Dedicado al escultor barroco Francisco Salzillo, maestro de la imaginería procesional murciana. Sus pasos de Semana Santa son obras maestras de expresividad y realismo que emocionan al visitante.", imagen: "https://picsum.photos/seed/museo25/800/400", abierto: true, cafeteria: false, tienda: true, audioguia: false, vr: false, exposicionTemporal: "Salzillo: Devoto y Artista" },
-      26: { duracion: "1.5h", descripcion: "Instalado en un antiguo hospital medieval, el Museo de Navarra recorre la historia del reino desde la prehistoria. Capiteles románicos, pintura gótica y obras de Goya conforman una colección excepcional.", imagen: "https://picsum.photos/seed/museo26/800/400", abierto: true, cafeteria: false, tienda: false, audioguia: false, vr: false, exposicionTemporal: null },
-      27: { duracion: "2.5h", descripcion: "Icono de la arquitectura contemporánea diseñado por Frank Gehry, el Guggenheim Bilbao transformó la ciudad. Instalaciones monumentales de Richard Serra, Hockney y Koons dialogan con un edificio que es arte en sí mismo.", imagen: "https://picsum.photos/seed/museo27/800/400", abierto: true, cafeteria: true, tienda: true, audioguia: true, vr: true, exposicionTemporal: "La Materia del Tiempo: Richard Serra" },
-      28: { duracion: "1.5h", descripcion: "Uno de los museos de bellas artes más destacados de España, con obras desde el siglo XII. El Greco, Goya, Zurbarán y artistas vascos contemporáneos en un edificio renovado junto a la ría.", imagen: "https://picsum.photos/seed/museo28/800/400", abierto: true, cafeteria: true, tienda: true, audioguia: true, vr: false, exposicionTemporal: "Arte Vasco: Identidad y Vanguardia" },
-      29: { duracion: "1h", descripcion: "El Museo de La Rioja presenta la historia y el arte de la región vinícola por excelencia. Desde hallazgos paleontológicos hasta pintura contemporánea, con especial atención al arte sacro medieval.", imagen: "https://picsum.photos/seed/museo29/800/400", abierto: true, cafeteria: false, tienda: false, audioguia: false, vr: false, exposicionTemporal: null },
-      30: { duracion: "1.5h", descripcion: "Integrado en el propio yacimiento arqueológico, este museo ofrece un recorrido espectacular desde la calle hasta las gradas del teatro romano del siglo I a.C. Una experiencia inmersiva en la Carthago Nova.", imagen: "https://picsum.photos/seed/museo30/800/400", abierto: true, cafeteria: false, tienda: true, audioguia: true, vr: true, exposicionTemporal: "Cartagena Romana: Vida Cotidiana" },
-    };
+    const MUSEO_EXTRA = {};
 
     // Helper to get enriched museo data
     function getMuseoExtra(museoId) {
       return MUSEO_EXTRA[museoId] || {
-        duracion: "1.5h", descripcion: "Información detallada próximamente disponible.", imagen: null,
+        duracion: "—", descripcion: "Ficha oficial del Directorio de Museos de España. Descripción ampliada próximamente.", imagen: null,
         abierto: true, cafeteria: false, tienda: false, audioguia: false, vr: false, exposicionTemporal: null
       };
     }
@@ -293,56 +240,7 @@
     // EXPOSICIONES DATA (PROMPT 5)
     // ============================================================
 
-    const EXPOSICIONES = {
-      1: [
-        { tipo: 'permanente', titulo: 'Colección Permanente: Siglo de Oro Sevillano', descripcion: 'Murillo, Zurbarán y Valdés Leal' },
-        { tipo: 'temporal', titulo: 'Zurbarán: Luz y Sombra', desde: '2026-01-15', hasta: '2026-04-30' },
-        { tipo: 'temporal', titulo: 'Sevilla Ilustrada: Grabados del XVIII', desde: '2026-05-15', hasta: '2026-08-20' },
-      ],
-      2: [
-        { tipo: 'permanente', titulo: 'Picasso: Obras de la Colección Familiar', descripcion: 'Más de 200 obras del genio malagueño' },
-        { tipo: 'temporal', titulo: 'Picasso Escultor: Materia y Cuerpo', desde: '2025-11-01', hasta: '2026-03-15' },
-      ],
-      12: [
-        { tipo: 'permanente', titulo: 'La Evolución Humana: De Atapuerca al Futuro', descripcion: 'Recorrido interactivo por millones de años' },
-        { tipo: 'temporal', titulo: 'Homo Antecessor: Cara a Cara', desde: '2026-01-10', hasta: '2026-05-31' },
-        { tipo: 'temporal', titulo: 'ADN: La Molécula de la Vida', desde: '2026-07-01', hasta: '2026-10-15' },
-      ],
-      14: [
-        { tipo: 'permanente', titulo: 'Arte Románico y Gótico Catalán', descripcion: 'La mejor colección románica del mundo' },
-        { tipo: 'temporal', titulo: 'Románico Pirineo: Arte y Territorio', desde: '2026-02-01', hasta: '2026-06-30' },
-      ],
-      15: [
-        { tipo: 'permanente', titulo: 'Joan Miró: Universo Creativo', descripcion: '14.000 obras del artista barcelonés' },
-        { tipo: 'temporal', titulo: 'Miró y la Tierra', desde: '2025-12-01', hasta: '2026-02-28' },
-      ],
-      20: [
-        { tipo: 'permanente', titulo: 'Colección Permanente: Velázquez, Goya, El Greco', descripcion: 'Pinacoteca de referencia mundial' },
-        { tipo: 'temporal', titulo: 'Velázquez y la Corte de Felipe IV', desde: '2026-01-20', hasta: '2026-05-18' },
-        { tipo: 'temporal', titulo: 'Goya: Caprichos y Disparates', desde: '2026-06-15', hasta: '2026-09-30' },
-      ],
-      21: [
-        { tipo: 'permanente', titulo: 'Guernica y Arte del Siglo XX', descripcion: 'La obra maestra de Picasso y contemporáneos' },
-        { tipo: 'temporal', titulo: 'Picasso: Política y Arte', desde: '2026-02-05', hasta: '2026-04-20' },
-      ],
-      22: [
-        { tipo: 'permanente', titulo: 'Del Impresionismo al Pop Art', descripcion: 'Van Gogh, Monet, Hopper, Lichtenstein' },
-        { tipo: 'temporal', titulo: 'Impresionismo Americano', desde: '2026-03-01', hasta: '2026-07-15' },
-      ],
-      27: [
-        { tipo: 'permanente', titulo: 'La Materia del Tiempo: Richard Serra', descripcion: 'Instalaciones monumentales en acero' },
-        { tipo: 'temporal', titulo: 'La Materia del Tiempo: Richard Serra', desde: '2025-10-01', hasta: '2026-02-15' },
-        { tipo: 'temporal', titulo: 'Inteligencia Artificial y Arte', desde: '2026-04-01', hasta: '2026-08-30' },
-      ],
-      18: [
-        { tipo: 'permanente', titulo: 'Augusta Emerita: Vida en la Hispania Romana', descripcion: 'Mosaicos y esculturas romanas' },
-        { tipo: 'temporal', titulo: 'Gladiadores: Héroes del Anfiteatro', desde: '2026-01-01', hasta: '2026-03-31' },
-      ],
-      23: [
-        { tipo: 'permanente', titulo: 'De la Prehistoria a la Edad Moderna', descripcion: 'La Dama de Elche y tesoros visigodos' },
-        { tipo: 'temporal', titulo: 'Iberos: Nuestros Antepasados', desde: '2026-02-10', hasta: '2026-06-10' },
-      ],
-    };
+    const EXPOSICIONES = {};
 
     function getExpoStatus(desde, hasta) {
       const now = new Date();
@@ -598,10 +496,9 @@
           maxZoom: 18,
         });
 
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
-          subdomains: 'abcd',
-          maxZoom: 20,
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+          maxZoom: 19,
         }).addTo(map);
 
         L.control.zoom({ position: 'topright' }).addTo(map);
@@ -789,13 +686,13 @@
           gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
           overflowY: 'auto', maxHeight: '100%',
         }}>
-          {museos.map((museo, i) => (
+          {museos.slice(0, 150).map((museo, i) => (
             <div key={museo.id} onClick={() => onSelectMuseo(museo)} style={{
               background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
               borderRadius: 14, padding: 20, cursor: 'pointer',
               transition: 'all 0.3s ease',
               borderLeft: `3px solid ${COMUNIDADES[museo.comunidad]?.color || '#666'}`,
-              animation: `fadeSlideIn 0.4s ease ${i * 0.03}s both`,
+              animation: `fadeSlideIn 0.4s ease ${Math.min(i, 20) * 0.03}s both`,
             }}
             onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
             onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.03)'; e.currentTarget.style.transform = 'translateY(0)'; }}
@@ -820,6 +717,11 @@
               </div>
             </div>
           ))}
+          {museos.length > 150 && (
+            <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: 16, color: '#666', fontSize: 12 }}>
+              Se muestran 150 de {museos.length} museos · usa el buscador o los filtros para acotar
+            </div>
+          )}
           {museos.length === 0 && (
             <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: 60, color: '#555' }}>
               <div style={{ fontSize: 40, marginBottom: 12 }}>🔍</div>
@@ -1014,7 +916,6 @@
       const scrollRef = useRef(null);
 
       const chipOptions = [
-        { key: 'abierto', label: 'Abierto ahora', icon: <ClockIcon /> },
         { key: 'gratis', label: 'Gratis', icon: <EuroIcon /> },
         { key: 'vr', label: 'Con VR', icon: <VrIcon /> },
         { key: 'ninos', label: 'Para niños', icon: <ChildFriendlyIcon /> },
@@ -1152,7 +1053,7 @@
 
             {/* Results count */}
             <div style={{ padding: '10px 0 6px', fontSize: 12, color: '#666' }}>
-              {results.length} resultado{results.length !== 1 ? 's' : ''} encontrado{results.length !== 1 ? 's' : ''}
+              {results.length} resultado{results.length !== 1 ? 's' : ''} encontrado{results.length !== 1 ? 's' : ''}{results.length > 120 ? ' · se muestran los 120 primeros; afina la búsqueda o los filtros' : ''}
             </div>
           </div>
 
@@ -1160,7 +1061,7 @@
           <div ref={scrollRef} style={{
             flex: 1, overflowY: 'auto', padding: '0 24px 24px',
           }}>
-            {results.map((museo, i) => {
+            {results.slice(0, 120).map((museo, i) => {
               const extra = getMuseoExtra(museo.id);
               const rating = MUSEO_RATINGS[museo.id];
               const fullStars = Math.floor(rating);
@@ -1196,21 +1097,6 @@
                       : `linear-gradient(135deg, ${catColor}44, ${comColor}44)`,
                     position: 'relative',
                   }}>
-                    {/* Open/Closed badge */}
-                    {(() => {
-                      const hour = new Date().getHours();
-                      const isOpen = extra.abierto && hour >= 9 && hour < 20;
-                      return (
-                        <div style={{
-                          position: 'absolute', top: 8, left: 8,
-                          padding: '2px 7px', borderRadius: 6, fontSize: 9, fontWeight: 600,
-                          background: isOpen ? 'rgba(46,184,92,0.85)' : 'rgba(200,60,60,0.85)',
-                          color: '#fff', backdropFilter: 'blur(4px)',
-                        }}>
-                          {isOpen ? 'Abierto' : 'Cerrado'}
-                        </div>
-                      );
-                    })()}
                   </div>
 
                   {/* Content */}
@@ -1241,14 +1127,7 @@
 
                     {/* Bottom row: rating + price */}
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-                        {[1,2,3,4,5].map(star => (
-                          <StarIconSmall key={star} filled={star <= fullStars || (star === fullStars + 1 && hasHalf)} />
-                        ))}
-                        <span style={{ fontSize: 11, color: '#999', marginLeft: 4 }}>
-                          {rating.toFixed(1)}
-                        </span>
-                      </div>
+                      <span style={{ fontSize: 11, color: '#999' }}>{museo.tipo}</span>
                       <span style={{
                         fontSize: 11, fontWeight: 600,
                         color: museo.precio.toLowerCase().includes('gratuito') ? '#81B29A' : '#F2CC8F',
@@ -1516,8 +1395,9 @@
           touchZoom: false,
           attributionControl: false,
         });
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-          subdomains: 'abcd',
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+          maxZoom: 19,
         }).addTo(map);
         L.marker([museo.lat, museo.lng], {
           icon: L.divIcon({
@@ -1661,14 +1541,6 @@
 
                 <div style={{ marginTop: 6, fontSize: 13, color: 'rgba(255,255,255,0.7)', display: 'flex', alignItems: 'center', gap: 6 }}>
                   📍 {museo.municipio}, {museo.provincia}
-                  {/* Simulated rating */}
-                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 2, marginLeft: 8 }}>
-                    <StarIcon /><StarIcon /><StarIcon /><StarIcon />
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F2CC8F" strokeWidth="1">
-                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                    </svg>
-                    <span style={{ fontSize: 12, color: '#F2CC8F', marginLeft: 2 }}>4.{Math.floor(museo.id % 5) + 3}</span>
-                  </span>
                 </div>
               </div>
             </div>
@@ -1694,8 +1566,8 @@
                     animation: isOpen ? 'pulse 2s ease infinite' : 'none',
                   }}/>
                 </div>
-                <div style={{ fontSize: 11, fontWeight: 600, color: isOpen ? '#81B29A' : '#E07A5F' }}>
-                  {isOpen ? 'Abierto' : 'Cerrado'}
+                <div style={{ fontSize: 11, fontWeight: 600, color: '#81B29A' }}>
+                  Horario en ficha
                 </div>
               </div>
 
@@ -2458,7 +2330,7 @@
                 Museos de España
               </h1>
               <span className="header-subtitle" style={{ fontSize: 13, color: '#666', fontStyle: 'italic' }}>
-                {MUSEOS.length} museos · 17 comunidades
+                {MUSEOS.length} museos · 19 comunidades
               </span>
             </div>
 
