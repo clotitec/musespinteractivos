@@ -4,7 +4,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pi
 import { normalizeComunidad, calculateCompleteness, hasServices, hasAccessibility, hasSocialMedia } from '@/lib/utils';
 import type { Museum } from '@/lib/types';
 
-const COLORS = ['#1a1a1a', '#404040', '#737373', '#2563eb', '#3b82f6', '#60a5fa', '#525252', '#a3a3a3', '#1d4ed8', '#93c5fd', '#334155', '#292524', '#78716c', '#57534e', '#44403c'];
+const COLORS = ['#121117', '#404040', '#6b6a70', '#ff7aac', '#ff9cc2', '#ffb8d3', '#525252', '#8b8a90', '#e8548d', '#ffd6e5', '#334155', '#292524', '#78716c', '#57534e', '#44403c'];
 const COMPLETENESS_COLORS = ['#dc2626', '#f97316', '#ca8a04', '#22c55e', '#16a34a'];
 
 interface StatsViewProps {
@@ -86,7 +86,7 @@ export default function StatsView({ museums }: StatsViewProps) {
     { label: 'Con servicios', value: conServicios },
   ];
 
-  const tooltipStyle = { background: '#ffffff', border: '1px solid #e5e5e5', borderRadius: '0', color: '#1a1a1a' };
+  const tooltipStyle = { background: '#ffffff', border: '1px solid #e4e3e7', borderRadius: '0', color: '#121117' };
 
   return (
     <div className="space-y-8">
@@ -107,10 +107,10 @@ export default function StatsView({ museums }: StatsViewProps) {
           <h3 className="text-xs font-semibold text-neutral-900 uppercase tracking-wider mb-4">Museos por Comunidad Aut&oacute;noma</h3>
           <ResponsiveContainer width="100%" height={400}>
             <BarChart data={comunidadData} layout="vertical" margin={{ left: 10, right: 20 }}>
-              <XAxis type="number" tick={{ fill: '#a3a3a3', fontSize: 11 }} />
-              <YAxis type="category" dataKey="name" width={120} tick={{ fill: '#a3a3a3', fontSize: 10 }} />
+              <XAxis type="number" tick={{ fill: '#8b8a90', fontSize: 11 }} />
+              <YAxis type="category" dataKey="name" width={120} tick={{ fill: '#8b8a90', fontSize: 10 }} />
               <Tooltip contentStyle={tooltipStyle} formatter={(value) => [String(value), 'Centros']} />
-              <Bar dataKey="value" fill="#1a1a1a" radius={[0, 2, 2, 0]} />
+              <Bar dataKey="value" fill="#121117" radius={[0, 2, 2, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -146,10 +146,10 @@ export default function StatsView({ museums }: StatsViewProps) {
           <h3 className="text-xs font-semibold text-neutral-900 uppercase tracking-wider mb-4">Distribuci&oacute;n por Titularidad</h3>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={titularidadData} layout="vertical" margin={{ left: 10, right: 20 }}>
-              <XAxis type="number" tick={{ fill: '#a3a3a3', fontSize: 11 }} />
-              <YAxis type="category" dataKey="name" width={140} tick={{ fill: '#a3a3a3', fontSize: 10 }} />
+              <XAxis type="number" tick={{ fill: '#8b8a90', fontSize: 11 }} />
+              <YAxis type="category" dataKey="name" width={140} tick={{ fill: '#8b8a90', fontSize: 10 }} />
               <Tooltip contentStyle={tooltipStyle} formatter={(value) => [String(value), 'Centros']} />
-              <Bar dataKey="value" fill="#2563eb" radius={[0, 2, 2, 0]} />
+              <Bar dataKey="value" fill="#ff7aac" radius={[0, 2, 2, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -159,8 +159,8 @@ export default function StatsView({ museums }: StatsViewProps) {
           <h3 className="text-xs font-semibold text-neutral-900 uppercase tracking-wider mb-4">Calidad de datos (completitud)</h3>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={completenessData} margin={{ left: 0, right: 20, bottom: 10 }}>
-              <XAxis dataKey="name" tick={{ fill: '#a3a3a3', fontSize: 11 }} />
-              <YAxis tick={{ fill: '#a3a3a3', fontSize: 11 }} />
+              <XAxis dataKey="name" tick={{ fill: '#8b8a90', fontSize: 11 }} />
+              <YAxis tick={{ fill: '#8b8a90', fontSize: 11 }} />
               <Tooltip contentStyle={tooltipStyle} formatter={(value) => [String(value), 'Museos']} />
               <Bar dataKey="value" radius={[2, 2, 0, 0]}>
                 {completenessData.map((_, i) => (

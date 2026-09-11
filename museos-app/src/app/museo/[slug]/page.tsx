@@ -158,7 +158,7 @@ export default function MuseoDetailPage({ params }: { params: Promise<{ slug: st
               onClick={() => setActiveTab(tab.id)}
               className={`px-5 py-3 text-xs uppercase tracking-wider whitespace-nowrap transition-colors border-b-2 ${
                 activeTab === tab.id
-                  ? 'border-blue-600 text-neutral-900 font-semibold'
+                  ? 'border-pink-500 text-neutral-900 font-semibold'
                   : 'border-transparent text-neutral-400 hover:text-neutral-700'
               }`}
             >

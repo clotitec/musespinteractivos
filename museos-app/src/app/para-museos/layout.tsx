@@ -1,9 +1,6 @@
 import type { Metadata } from 'next';
-import { Baloo_2 } from 'next/font/google';
 import Link from 'next/link';
 import './para-museos.css';
-
-const baloo = Baloo_2({ subsets: ['latin'], weight: ['600', '700', '800'], variable: '--f-tit' });
 
 export const metadata: Metadata = {
   title: 'Para museos · visita virtual, juegos y presencia digital | Museos de España',
@@ -20,7 +17,7 @@ const NAV = [
 
 export default function ParaMuseosLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className={`pm ${baloo.variable}`}>
+    <div className="pm">
       <nav className="pm-nav">
         <div className="pm-wrap flex h-12 items-center justify-between gap-4">
           <Link href="/para-museos" className="pm-label whitespace-nowrap">
@@ -48,12 +45,12 @@ export default function ParaMuseosLayout({ children }: { children: React.ReactNo
             <p className="text-sm text-white/80">Una solución de CLOTITEC. Potenciamos tu patrimonio con innovación y tecnología.</p>
           </div>
           <div className="text-sm text-white/80">
-            <p className="pm-label !text-[var(--arena)]">Contacto</p>
+            <p className="pm-label !text-[var(--pink)]">Contacto</p>
             <p className="mt-2">info@clotitec.com</p>
             <p>clotitec.com · Santander, Cantabria</p>
           </div>
           <div className="text-sm text-white/80">
-            <p className="pm-label !text-[var(--arena)]">Enlaces</p>
+            <p className="pm-label !text-[var(--pink)]">Enlaces</p>
             <ul className="mt-2 space-y-1">
               <li><Link href="/" className="hover:text-white">Mapa de museos</Link></li>
               <li><Link href="/para-museos#catalogo" className="hover:text-white">Catálogo</Link></li>

@@ -19,7 +19,7 @@ export default function MuseumCard({ museum, isVisited, isFavorite, onToggleFavo
   const completeness = calculateCompleteness(museum);
 
   return (
-    <div className="group bg-white border border-neutral-200 overflow-hidden hover:border-blue-500 transition-colors">
+    <div className="group bg-white border border-neutral-200 rounded-xl overflow-hidden hover:border-neutral-900 transition-colors">
       {/* Header with image or subtle background */}
       <div className="h-32 relative flex items-end p-4 border-b border-neutral-100">
         {hasImage ? (
@@ -45,9 +45,7 @@ export default function MuseumCard({ museum, isVisited, isFavorite, onToggleFavo
 
         {/* Gratuito badge */}
         {museum.es_gratuito && (
-          <span className={`absolute top-3 left-3 text-[10px] font-medium uppercase tracking-wider px-2 py-0.5 ${
-            hasImage ? 'bg-white/90 text-neutral-900' : 'bg-white text-neutral-900 border border-neutral-200'
-          }`}>
+          <span className="absolute top-3 left-3 rounded-md bg-pink-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-neutral-900">
             Gratuito
           </span>
         )}
@@ -83,7 +81,7 @@ export default function MuseumCard({ museum, isVisited, isFavorite, onToggleFavo
       {/* Content */}
       <div className="p-4">
         <Link href={`/museo/${museum.slug}`}>
-          <h3 className="font-semibold text-sm text-neutral-900 line-clamp-2 group-hover:text-blue-600 transition-colors mb-2">
+          <h3 className="font-semibold text-sm text-neutral-900 line-clamp-2 group-hover:text-pink-600 transition-colors mb-2">
             {museum.nombre}
           </h3>
         </Link>

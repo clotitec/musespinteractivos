@@ -1,25 +1,25 @@
 .pm {
-  --verde: #0e8a72;
-  --verde-600: #0a6355;
-  --verde-700: #085042;
-  --verde-100: #e2f2ee;
-  --arena: #ede5d6;
-  --arena-50: #fcfaf6;
-  --arena-100: #f7f3ec;
-  --tinta: #1a1a1a;
-  --gris: #5f5f5f;
-  --borde: #e1dbda;
-  color: var(--tinta);
-  font-family: var(--font-dm-sans), system-ui, sans-serif;
+  --pink: #ff7aac;
+  --pink-100: #ffe3ef;
+  --pink-600: #e8548d;
+  --ink: #121117;
+  --ink-700: #34333a;
+  --gris: #6b6a70;
+  --gris-50: #f6f6f7;
+  --gris-100: #eeedf0;
+  --borde: #e4e3e7;
+  --f-tit: var(--font-outfit);
+  color: var(--ink);
+  font-family: var(--font-figtree), system-ui, sans-serif;
   background: #fff;
 }
 
 .pm h1,
 .pm h2,
 .pm h3 {
-  font-family: var(--f-tit), var(--font-dm-sans), system-ui, sans-serif;
-  letter-spacing: -0.01em;
-  line-height: 1.1;
+  font-family: var(--f-tit), var(--font-figtree), system-ui, sans-serif;
+  letter-spacing: -0.02em;
+  line-height: 1.06;
 }
 
 .pm-wrap {
@@ -28,11 +28,15 @@
   padding-inline: 1.25rem;
 }
 
+.pm-hero {
+  background: var(--pink);
+}
+
 .pm-nav {
   position: sticky;
   top: 4rem;
   z-index: 40;
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.94);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--borde);
 }
@@ -41,15 +45,29 @@
   width: 56px;
   height: 8px;
   border-radius: 4px;
-  background: var(--verde);
+  background: var(--ink);
+}
+
+.pm-hero .pm-acento {
+  background: var(--ink);
 }
 
 .pm-label {
   font-weight: 700;
-  font-size: 0.7rem;
-  letter-spacing: 0.14em;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--verde-600);
+  color: var(--gris);
+}
+
+.pm-tag {
+  display: inline-block;
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  padding: 0.3rem 0.8rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--ink);
 }
 
 .pm-btn,
@@ -57,79 +75,90 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  border-radius: 999px;
-  padding: 0.85rem 1.5rem;
+  border-radius: 8px;
+  padding: 0.85rem 1.4rem;
   font-weight: 700;
   font-size: 0.95rem;
-  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
 }
 
 .pm-btn {
-  background: var(--verde-600);
+  background: var(--ink);
   color: #fff;
 }
 
 .pm-btn:hover {
-  background: var(--verde-700);
+  background: var(--ink-700);
 }
 
 .pm-btn-sec {
-  border: 1.5px solid var(--tinta);
-  color: var(--tinta);
+  border: 2px solid var(--ink);
+  color: var(--ink);
   background: transparent;
 }
 
 .pm-btn-sec:hover {
-  background: var(--tinta);
+  background: var(--ink);
+  color: #fff;
+}
+
+.pm-btn-pink {
+  background: var(--pink);
+  color: var(--ink);
+}
+
+.pm-btn-pink:hover {
+  background: var(--pink-600);
   color: #fff;
 }
 
 .pm-card {
-  background: var(--arena-50);
+  background: #fff;
   border: 1px solid var(--borde);
   border-radius: 12px;
   padding: 1.35rem;
-  transition: border-color 0.2s, transform 0.2s;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
 }
 
 a.pm-card:hover {
-  border-color: var(--verde);
+  border-color: var(--ink);
   transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(18, 17, 23, 0.08);
 }
 
 .pm-chip {
   display: inline-block;
   border-radius: 999px;
-  padding: 0.2rem 0.6rem;
-  font-size: 0.7rem;
+  padding: 0.2rem 0.65rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  background: var(--verde-100);
-  color: var(--verde-600);
+  background: var(--pink-100);
+  color: var(--ink);
 }
 
 .pm-band {
-  background: var(--tinta);
+  background: var(--ink);
   color: #fff;
 }
 
 .pm-arena {
-  background: var(--arena-100);
+  background: var(--gris-50);
 }
 
 .pm-input {
   width: 100%;
   border: 1px solid var(--borde);
   border-radius: 8px;
-  padding: 0.75rem 0.9rem;
+  padding: 0.8rem 0.9rem;
   font-size: 0.95rem;
   background: #fff;
-  color: var(--tinta);
+  color: var(--ink);
 }
 
 .pm-input:focus {
-  outline: 2px solid var(--verde);
+  outline: 2px solid var(--ink);
   outline-offset: 1px;
-  border-color: var(--verde);
+  border-color: var(--ink);
 }
 
 .pm-tabla {
@@ -141,13 +170,13 @@ a.pm-card:hover {
 .pm-tabla th,
 .pm-tabla td {
   text-align: left;
-  padding: 0.7rem 0.75rem;
+  padding: 0.75rem;
   border-bottom: 1px solid var(--borde);
   vertical-align: top;
 }
 
 .pm-tabla th {
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--gris);

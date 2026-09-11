@@ -2,55 +2,78 @@
 
 @theme inline {
   --color-background: #ffffff;
-  --color-foreground: #1a1a1a;
-  --font-sans: var(--font-dm-sans);
-  --font-display: var(--font-playfair);
-  --color-primary: #1a1a1a;
-  --color-accent: #2563eb;
+  --color-foreground: #121117;
+  --font-sans: var(--font-figtree);
+  --font-display: var(--font-outfit);
+
+  /* Sistema visual (inspirado en Preply): tinta + rosa + grises suaves */
+  --color-ink: #121117;
+  --color-pink-100: #ffe3ef;
+  --color-pink-200: #ffc2d9;
+  --color-pink-400: #ff9cc2;
+  --color-pink-500: #ff7aac;
+  --color-pink-600: #e8548d;
+  --color-pink-700: #c93f76;
+
+  --color-neutral-50: #f6f6f7;
+  --color-neutral-100: #eeedf0;
+  --color-neutral-200: #e4e3e7;
+  --color-neutral-300: #cfced4;
+  --color-neutral-400: #8b8a90;
+  --color-neutral-500: #6b6a70;
+  --color-neutral-600: #4e4d53;
+  --color-neutral-700: #34333a;
+  --color-neutral-800: #222126;
+  --color-neutral-900: #121117;
+
+  --color-primary: #121117;
+  --color-accent: #ff7aac;
 }
 
-/* Base body */
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "ss01", "cv11";
 }
 
-/* Selection */
+h1, h2, h3, .font-display {
+  letter-spacing: -0.01em;
+}
+
 ::selection {
-  background: #1a1a1a;
-  color: white;
+  background: #ff7aac;
+  color: #121117;
 }
 
-/* Leaflet overrides — clean white */
+/* Leaflet */
 .leaflet-container {
-  background: #f5f5f4 !important;
+  background: #f6f6f7 !important;
   border-radius: 0;
 }
 
 .leaflet-popup-content-wrapper {
   background: #ffffff !important;
-  color: #1a1a1a !important;
-  border-radius: 2px !important;
-  border: 1px solid #e5e5e5 !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+  color: #121117 !important;
+  border-radius: 12px !important;
+  border: 1px solid #e4e3e7 !important;
+  box-shadow: 0 8px 24px rgba(18, 17, 23, 0.12) !important;
 }
 
 .leaflet-popup-tip {
   background: #ffffff !important;
-  border: 1px solid #e5e5e5 !important;
+  border: 1px solid #e4e3e7 !important;
 }
 
 .leaflet-control-zoom a {
   background: #ffffff !important;
-  color: #1a1a1a !important;
-  border-color: #e5e5e5 !important;
+  color: #121117 !important;
+  border-color: #e4e3e7 !important;
 }
 
 .leaflet-control-zoom a:hover {
-  background: #f5f5f5 !important;
+  background: #f6f6f7 !important;
 }
 
-/* Scrollbar — minimal */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -60,33 +83,32 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #d4d4d4;
+  background: #cfced4;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #a3a3a3;
+  background: #8b8a90;
 }
 
-/* Cluster markers — monochrome museum style */
 .marker-cluster-small {
-  background-color: rgba(26, 26, 26, 0.15) !important;
+  background-color: rgba(18, 17, 23, 0.12) !important;
 }
 .marker-cluster-small div {
-  background-color: rgba(26, 26, 26, 0.75) !important;
+  background-color: #121117 !important;
   color: white !important;
 }
 .marker-cluster-medium {
-  background-color: rgba(37, 99, 235, 0.12) !important;
+  background-color: rgba(255, 122, 172, 0.25) !important;
 }
 .marker-cluster-medium div {
-  background-color: rgba(37, 99, 235, 0.75) !important;
-  color: white !important;
+  background-color: #ff7aac !important;
+  color: #121117 !important;
 }
 .marker-cluster-large {
-  background-color: rgba(37, 99, 235, 0.18) !important;
+  background-color: rgba(232, 84, 141, 0.25) !important;
 }
 .marker-cluster-large div {
-  background-color: rgba(37, 99, 235, 0.85) !important;
+  background-color: #e8548d !important;
   color: white !important;
 }

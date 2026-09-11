@@ -106,7 +106,7 @@ export default function MapContent({ museums, onMuseumClick }: MapContentProps) 
           display: flex;
           align-items: center;
           justify-content: center;
-          background: #1a1a1a;
+          background: #121117;
           border-radius: 50% 50% 50% 0;
           transform: rotate(-45deg);
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
@@ -133,7 +133,7 @@ export default function MapContent({ museums, onMuseumClick }: MapContentProps) 
           color: white;
           font-weight: 600;
           font-size: 13px;
-          font-family: var(--font-dm-sans), system-ui, sans-serif;
+          font-family: var(--font-figtree), system-ui, sans-serif;
           transition: transform 0.2s ease;
         }
         .custom-cluster-icon div:hover {
@@ -142,20 +142,20 @@ export default function MapContent({ museums, onMuseumClick }: MapContentProps) 
         .cluster-small {
           width: 40px;
           height: 40px;
-          background: #1a1a1a !important;
+          background: #121117 !important;
           border: 2px solid rgba(255, 255, 255, 0.3);
         }
         .cluster-medium {
           width: 48px;
           height: 48px;
-          background: #2563eb !important;
+          background: #ff7aac !important;
           border: 2px solid rgba(255, 255, 255, 0.3);
           font-size: 14px !important;
         }
         .cluster-large {
           width: 56px;
           height: 56px;
-          background: #1d4ed8 !important;
+          background: #e8548d !important;
           border: 2px solid rgba(255, 255, 255, 0.3);
           font-size: 15px !important;
         }
@@ -163,7 +163,7 @@ export default function MapContent({ museums, onMuseumClick }: MapContentProps) 
         /* Popup styling — clean white */
         .leaflet-popup-content-wrapper {
           background: #ffffff !important;
-          border: 1px solid #e5e5e5 !important;
+          border: 1px solid #e4e3e7 !important;
           border-radius: 0 !important;
           box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
           padding: 0 !important;
@@ -175,17 +175,17 @@ export default function MapContent({ museums, onMuseumClick }: MapContentProps) 
         }
         .leaflet-popup-tip {
           background: #ffffff !important;
-          border: 1px solid #e5e5e5 !important;
+          border: 1px solid #e4e3e7 !important;
         }
         .leaflet-popup-close-button {
-          color: #a3a3a3 !important;
+          color: #8b8a90 !important;
           font-size: 18px !important;
           top: 8px !important;
           right: 10px !important;
           z-index: 10;
         }
         .leaflet-popup-close-button:hover {
-          color: #1a1a1a !important;
+          color: #121117 !important;
         }
         .marker-cluster-anim .leaflet-marker-icon,
         .marker-cluster-anim .leaflet-marker-shadow {

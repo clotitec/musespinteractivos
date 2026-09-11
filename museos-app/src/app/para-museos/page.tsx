@@ -35,32 +35,33 @@ export default async function ParaMuseosPage({ searchParams }: { searchParams: P
   return (
     <>
       {/* Hero */}
-      <section className="pm-wrap py-16 md:py-24">
-        <span className="pm-label">Para museos, ayuntamientos y residencias</span>
-        <h1 className="mt-3 max-w-4xl text-4xl font-bold md:text-6xl">
-          Su museo, abierto a todo el mundo: visita virtual, juegos y presencia donde ya le buscan.
-        </h1>
-        <div className="pm-acento mt-6" />
-        <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[var(--gris)]">
-          Una captura 360 alimenta la ficha en el portal, la visita virtual, los juegos en sala y las sesiones en residencias.
-          Contratación sencilla, precios cerrados y una licencia mensual sin sorpresas.
-        </p>
-        <div className="mt-8 flex flex-wrap gap-3">
-          <Link href="#catalogo" className="pm-btn">Ver el catálogo</Link>
-          <Link href="#contacto" className="pm-btn-sec">Pedir propuesta</Link>
+      <section className="pm-hero">
+        <div className="pm-wrap py-16 md:py-24">
+          <span className="pm-tag">Para museos, ayuntamientos y residencias</span>
+          <h1 className="mt-5 max-w-4xl text-4xl font-bold md:text-6xl">
+            Su museo, abierto a todo el mundo: visita virtual, juegos y presencia donde ya le buscan.
+          </h1>
+          <p className="mt-6 max-w-2xl text-lg leading-relaxed">
+            Una captura 360 alimenta la ficha en el portal, la visita virtual, los juegos en sala y las sesiones en residencias.
+            Contratación sencilla, precios cerrados y una licencia mensual sin sorpresas.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link href="#catalogo" className="pm-btn">Ver el catálogo</Link>
+            <Link href="#contacto" className="pm-btn-sec">Pedir propuesta</Link>
+          </div>
+          <dl className="mt-12 grid max-w-3xl grid-cols-1 gap-4 sm:grid-cols-3">
+            {[
+              ['6.590', 'centros en el mapa de museos'],
+              ['2.220', 'fichas del directorio oficial'],
+              ['95 %', 'de los museos sin visita virtual'],
+            ].map(([n, t]) => (
+              <div key={t} className="pm-card !py-4">
+                <dt className="text-3xl font-bold" style={{ fontFamily: 'var(--f-tit)' }}>{n}</dt>
+                <dd className="text-sm text-[var(--gris)]">{t}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
-        <dl className="mt-12 grid max-w-3xl grid-cols-1 gap-4 sm:grid-cols-3">
-          {[
-            ['6.590', 'centros en el mapa de museos'],
-            ['2.220', 'fichas del directorio oficial'],
-            ['95 %', 'de los museos sin visita virtual'],
-          ].map(([n, t]) => (
-            <div key={t} className="pm-card !py-4">
-              <dt className="text-3xl font-bold" style={{ fontFamily: 'var(--f-tit)' }}>{n}</dt>
-              <dd className="text-sm text-[var(--gris)]">{t}</dd>
-            </div>
-          ))}
-        </dl>
       </section>
 
       {/* Para quién */}

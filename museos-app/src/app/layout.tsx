@@ -1,22 +1,24 @@
 import type { Metadata } from "next";
-import { DM_Sans, Playfair_Display } from "next/font/google";
+import { Figtree, Outfit } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/ui/Header";
 
-const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
+const figtree = Figtree({
+  variable: "--font-figtree",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
+const outfit = Outfit({
+  variable: "--font-outfit",
   subsets: ["latin"],
+  weight: ["500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
-  title: "Museos de Espa\u00f1a | Plataforma Interactiva",
-  description: "Explora m\u00e1s de 1.500 museos y colecciones de Espa\u00f1a. Mapa interactivo, b\u00fasqueda avanzada, pasaporte cultural y estad\u00edsticas.",
-  keywords: ["museos", "espa\u00f1a", "cultura", "arte", "mapa", "colecciones"],
+  title: "Museos de España | Mapa de 6.590 museos y colecciones",
+  description: "Todos los museos de España en un mapa: horarios, precios, fotos, visitas virtuales y fichas oficiales del Directorio de Museos. Busca por comunidad, provincia o temática.",
+  keywords: ["museos", "españa", "cultura", "arte", "mapa", "colecciones", "visita virtual"],
 };
 
 export default function RootLayout({
@@ -26,7 +28,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body className={`${dmSans.variable} ${playfair.variable} font-sans antialiased min-h-screen bg-white text-neutral-900`}>
+      <body className={`${figtree.variable} ${outfit.variable} font-sans antialiased min-h-screen bg-white text-neutral-900`}>
         <Header />
         <main className="pt-16">
           {children}

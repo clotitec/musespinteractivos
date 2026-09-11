@@ -24,7 +24,7 @@ export default function CompletenessRing({ value, size = 20 }: CompletenessRingP
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="#e5e5e5"
+          stroke="#e4e3e7"
           strokeWidth={strokeWidth}
         />
         <circle
